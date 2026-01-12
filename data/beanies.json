@@ -1,0 +1,546 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2025-01-11",
+  "beanies": [
+    {
+      "name": "Princess",
+      "animal_type": "Bear",
+      "style_number": "4300",
+      "birthday": "1997-10-29",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Purple bear with white rose on chest, made to honor Princess Diana",
+      "visual_identifiers": ["purple/violet color", "white rose embroidered on chest", "purple ribbon around neck"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 20 },
+        "3rd_gen": { "min": 20, "max": 50 },
+        "2nd_gen": { "min": 50, "max": 100 },
+        "1st_gen": { "min": 100, "max": 300 }
+      },
+      "special_notes": "Indonesian PE pellet version most common ($5-20). 1st edition with space in poem and PVC pellets worth more. Despite myths, most Princess bears are worth under $20."
+    },
+    {
+      "name": "Peace",
+      "animal_type": "Bear",
+      "style_number": "4053",
+      "birthday": "1996-02-01",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Tie-dye bear with peace symbol on chest",
+      "visual_identifiers": ["tie-dye pattern", "peace symbol embroidered on chest", "multi-colored pastel fur"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 15 },
+        "3rd_gen": { "min": 20, "max": 50 },
+        "2nd_gen": { "min": 50, "max": 150 },
+        "1st_gen": { "min": 100, "max": 300 }
+      },
+      "special_notes": "Neon/bright 'pajama' color variations worth 2x. 99% have 4th/5th gen tags. Each tie-dye pattern is unique."
+    },
+    {
+      "name": "Valentino",
+      "animal_type": "Bear",
+      "style_number": "4058",
+      "birthday": "1994-02-14",
+      "introduced": "1995",
+      "retired": "1999",
+      "description": "White bear with red heart on chest",
+      "visual_identifiers": ["white fur", "red heart embroidered on chest", "red ribbon around neck"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 75 },
+        "2nd_gen": { "min": 75, "max": 200 },
+        "1st_gen": { "min": 150, "max": 400 }
+      },
+      "special_notes": "Brown nose versions slightly more valuable. Misspelled tags (Origiinal) are rare errors worth 2-3x."
+    },
+    {
+      "name": "Legs",
+      "animal_type": "Frog",
+      "style_number": "4020",
+      "birthday": "1993-04-25",
+      "introduced": "1994",
+      "retired": "1997",
+      "description": "Green frog with orange belly, one of the Original 9",
+      "visual_identifiers": ["bright green body", "orange/peach belly", "sitting frog pose"],
+      "values": {
+        "no_tag": { "min": 3, "max": 8 },
+        "4th_gen_plus": { "min": 8, "max": 20 },
+        "3rd_gen": { "min": 40, "max": 100 },
+        "2nd_gen": { "min": 150, "max": 350 },
+        "1st_gen": { "min": 300, "max": 800 }
+      },
+      "special_notes": "Original 9 member. Early versions with darker green worth more. 1st gen hang tags extremely rare."
+    },
+    {
+      "name": "Squealer",
+      "animal_type": "Pig",
+      "style_number": "4005",
+      "birthday": "1993-04-23",
+      "introduced": "1994",
+      "retired": "1998",
+      "description": "Pink pig with curly tail, one of the Original 9",
+      "visual_identifiers": ["pink body", "curly tail", "standing pig pose", "darker pink snout"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 30, "max": 80 },
+        "2nd_gen": { "min": 100, "max": 250 },
+        "1st_gen": { "min": 250, "max": 600 }
+      },
+      "special_notes": "Original 9 member. One of the longer-produced Original 9 members."
+    },
+    {
+      "name": "Spot",
+      "animal_type": "Dog",
+      "style_number": "4000",
+      "birthday": "1993-01-03",
+      "introduced": "1994",
+      "retired": "1997",
+      "description": "White dog with black spot on back, one of the Original 9",
+      "visual_identifiers": ["white body", "black spot on back", "floppy ears", "black ear tips"],
+      "values": {
+        "no_tag": { "min": 3, "max": 8 },
+        "4th_gen_plus": { "min": 10, "max": 25 },
+        "3rd_gen": { "min": 50, "max": 120 },
+        "2nd_gen": { "min": 200, "max": 500 },
+        "1st_gen": { "min": 500, "max": 1500 }
+      },
+      "special_notes": "Original 9 member. 'Spot without a spot' (all white, no spot) extremely rare, worth $1000+. Most have the spot."
+    },
+    {
+      "name": "Flash",
+      "animal_type": "Dolphin",
+      "style_number": "4021",
+      "birthday": "1993-05-13",
+      "introduced": "1994",
+      "retired": "1997",
+      "description": "Gray dolphin with white belly, one of the Original 9",
+      "visual_identifiers": ["gray body", "white belly", "curved dolphin shape", "dorsal fin"],
+      "values": {
+        "no_tag": { "min": 3, "max": 8 },
+        "4th_gen_plus": { "min": 10, "max": 25 },
+        "3rd_gen": { "min": 50, "max": 125 },
+        "2nd_gen": { "min": 150, "max": 400 },
+        "1st_gen": { "min": 400, "max": 1000 }
+      },
+      "special_notes": "Original 9 member. Retired relatively early making older generations scarcer."
+    },
+    {
+      "name": "Splash",
+      "animal_type": "Whale",
+      "style_number": "4022",
+      "birthday": "1993-07-08",
+      "introduced": "1994",
+      "retired": "1997",
+      "description": "Black and white orca whale, one of the Original 9",
+      "visual_identifiers": ["black top", "white belly", "orca/killer whale pattern", "white eye patches"],
+      "values": {
+        "no_tag": { "min": 3, "max": 8 },
+        "4th_gen_plus": { "min": 10, "max": 25 },
+        "3rd_gen": { "min": 50, "max": 125 },
+        "2nd_gen": { "min": 150, "max": 400 },
+        "1st_gen": { "min": 400, "max": 1000 }
+      },
+      "special_notes": "Original 9 member. One of the more popular Original 9 designs."
+    },
+    {
+      "name": "Chocolate",
+      "animal_type": "Moose",
+      "style_number": "4015",
+      "birthday": "1993-04-27",
+      "introduced": "1994",
+      "retired": "1999",
+      "description": "Brown moose with large antlers, one of the Original 9",
+      "visual_identifiers": ["brown body", "large flat antlers", "darker brown nose", "standing pose"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 25, "max": 60 },
+        "2nd_gen": { "min": 80, "max": 200 },
+        "1st_gen": { "min": 200, "max": 500 }
+      },
+      "special_notes": "Original 9 member. One of the longest-produced Original 9, so more common overall."
+    },
+    {
+      "name": "Patti",
+      "animal_type": "Platypus",
+      "style_number": "4025",
+      "birthday": "1993-01-06",
+      "introduced": "1994",
+      "retired": "1998",
+      "description": "Magenta/fuschia platypus, one of the Original 9",
+      "visual_identifiers": ["magenta/fuschia body", "orange bill", "flat tail", "webbed feet"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 30, "max": 80 },
+        "2nd_gen": { "min": 100, "max": 300 },
+        "1st_gen": { "min": 300, "max": 700 }
+      },
+      "special_notes": "Original 9 member. Early deep magenta versions more valuable than later raspberry color."
+    },
+    {
+      "name": "Cubbie",
+      "animal_type": "Bear",
+      "style_number": "4010",
+      "birthday": "1993-11-14",
+      "introduced": "1994",
+      "retired": "1998",
+      "description": "Brown bear, originally named Brownie, one of the Original 9",
+      "visual_identifiers": ["brown fur", "black nose", "basic bear shape", "no accessories"],
+      "values": {
+        "no_tag": { "min": 3, "max": 8 },
+        "4th_gen_plus": { "min": 8, "max": 20 },
+        "3rd_gen": { "min": 40, "max": 100 },
+        "2nd_gen": { "min": 150, "max": 400 },
+        "1st_gen": { "min": 400, "max": 1200 }
+      },
+      "special_notes": "Original 9 member. Originally named 'Brownie' - true Brownie tags extremely rare ($2000+). Name changed to Cubbie in 1994."
+    },
+    {
+      "name": "Pinchers",
+      "animal_type": "Lobster",
+      "style_number": "4026",
+      "birthday": "1993-06-19",
+      "introduced": "1994",
+      "retired": "1998",
+      "description": "Red lobster with claws, one of the Original 9",
+      "visual_identifiers": ["red body", "large claws", "segmented tail", "antennae"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 30, "max": 80 },
+        "2nd_gen": { "min": 100, "max": 300 },
+        "1st_gen": { "min": 300, "max": 700 }
+      },
+      "special_notes": "Original 9 member. Originally named 'Punchers' - original Punchers tags very rare ($1500+)."
+    },
+    {
+      "name": "Mystic",
+      "animal_type": "Unicorn",
+      "style_number": "4007",
+      "birthday": "1994-05-21",
+      "introduced": "1994",
+      "retired": "1999",
+      "description": "White unicorn with iridescent horn and mane",
+      "visual_identifiers": ["white body", "iridescent/rainbow horn", "flowing mane", "rainbow or tan mane variations"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 70 },
+        "2nd_gen": { "min": 80, "max": 200 },
+        "1st_gen": { "min": 180, "max": 450 }
+      },
+      "special_notes": "Fine yarn mane version more valuable than coarse. Brown horn version rare. Iridescent horn most common."
+    },
+    {
+      "name": "Stripes",
+      "animal_type": "Tiger",
+      "style_number": "4065",
+      "birthday": "1995-06-11",
+      "introduced": "1995",
+      "retired": "1999",
+      "description": "Orange tiger with black stripes",
+      "visual_identifiers": ["orange body", "black stripes", "white belly", "striped tail"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 15, "max": 40 },
+        "2nd_gen": { "min": 50, "max": 150 },
+        "1st_gen": { "min": 120, "max": 300 }
+      },
+      "special_notes": "Dark gold 'fuzzy belly' version slightly more valuable. Light orange version most common."
+    },
+    {
+      "name": "Inch",
+      "animal_type": "Inchworm",
+      "style_number": "4044",
+      "birthday": "1995-09-03",
+      "introduced": "1995",
+      "retired": "1998",
+      "description": "Multi-colored inchworm with yarn antennae",
+      "visual_identifiers": ["rainbow/multi-colored segments", "yarn antennae", "long worm body", "felt antennae on some versions"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 60 },
+        "2nd_gen": { "min": 80, "max": 200 },
+        "1st_gen": { "min": 150, "max": 400 }
+      },
+      "special_notes": "Yarn antennae version more valuable than felt antennae. Colors can vary significantly."
+    },
+    {
+      "name": "Lucky",
+      "animal_type": "Ladybug",
+      "style_number": "4040",
+      "birthday": "1995-05-01",
+      "introduced": "1994",
+      "retired": "1999",
+      "description": "Red ladybug with black spots",
+      "visual_identifiers": ["red body", "black spots", "black head", "small antennae"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 12 },
+        "3rd_gen": { "min": 20, "max": 50 },
+        "2nd_gen": { "min": 60, "max": 175 },
+        "1st_gen": { "min": 150, "max": 400 }
+      },
+      "special_notes": "7-spot version (printed spots) most common. 11-spot and 21-spot (glued felt spots) versions more valuable."
+    },
+    {
+      "name": "Peanut",
+      "animal_type": "Elephant",
+      "style_number": "4062",
+      "birthday": "1995-01-25",
+      "introduced": "1995",
+      "retired": "1999",
+      "description": "Light blue elephant",
+      "visual_identifiers": ["light blue body", "large floppy ears", "trunk", "small tail"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 15, "max": 40 },
+        "2nd_gen": { "min": 50, "max": 150 },
+        "1st_gen": { "min": 120, "max": 300 }
+      },
+      "special_notes": "Royal blue version extremely rare ($3000+). Light blue version is standard and common."
+    },
+    {
+      "name": "Garcia",
+      "animal_type": "Bear",
+      "style_number": "4051",
+      "birthday": "1995-08-01",
+      "introduced": "1996",
+      "retired": "1997",
+      "description": "Tie-dye bear, tribute to Jerry Garcia",
+      "visual_identifiers": ["tie-dye pattern", "multi-colored", "peace symbol NOT present", "similar to Peace but no embroidery"],
+      "values": {
+        "no_tag": { "min": 5, "max": 12 },
+        "4th_gen_plus": { "min": 15, "max": 40 },
+        "3rd_gen": { "min": 60, "max": 150 },
+        "2nd_gen": { "min": 150, "max": 350 },
+        "1st_gen": { "min": 300, "max": 600 }
+      },
+      "special_notes": "Retired early due to Jerry Garcia estate issues. No peace symbol - that's Peace bear. Shorter production run than Peace."
+    },
+    {
+      "name": "Maple",
+      "animal_type": "Bear",
+      "style_number": "4600",
+      "birthday": "1996-07-01",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "White bear with Canadian flag on chest",
+      "visual_identifiers": ["white fur", "Canadian maple leaf flag on chest", "red ribbon"],
+      "values": {
+        "no_tag": { "min": 3, "max": 8 },
+        "4th_gen_plus": { "min": 8, "max": 25 },
+        "3rd_gen": { "min": 35, "max": 80 },
+        "2nd_gen": { "min": 80, "max": 200 },
+        "1st_gen": { "min": 175, "max": 400 }
+      },
+      "special_notes": "Canadian exclusive initially. 'Pride' tush tag version worth more. Special Olympics versions exist."
+    },
+    {
+      "name": "Erin",
+      "animal_type": "Bear",
+      "style_number": "4186",
+      "birthday": "1997-03-17",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Green bear with white shamrock on chest",
+      "visual_identifiers": ["bright green fur", "white shamrock embroidered on chest", "white ribbon"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 30, "max": 75 },
+        "1st_gen": { "min": 60, "max": 150 }
+      },
+      "special_notes": "Irish bear, very common due to large production. One of the most over-produced bears."
+    },
+    {
+      "name": "Hope",
+      "animal_type": "Bear",
+      "style_number": "4213",
+      "birthday": "1998-03-23",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Praying bear in kneeling position",
+      "visual_identifiers": ["tan/light brown fur", "kneeling prayer pose", "paws together", "bowed head"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 50, "max": 120 }
+      },
+      "special_notes": "Religious/spiritual theme. Later production so mostly 4th/5th gen tags exist."
+    },
+    {
+      "name": "Glory",
+      "animal_type": "Bear",
+      "style_number": "4188",
+      "birthday": "1997-07-04",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "White bear with American flag stars pattern",
+      "visual_identifiers": ["white fur with blue star pattern", "patriotic theme", "red and blue accents"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 20, "max": 50 },
+        "2nd_gen": { "min": 50, "max": 120 },
+        "1st_gen": { "min": 100, "max": 250 }
+      },
+      "special_notes": "Patriotic bear with stars printed on fur. Part of the patriotic bear series with Spangle and Britannia."
+    },
+    {
+      "name": "Gobbles",
+      "animal_type": "Turkey",
+      "style_number": "4123",
+      "birthday": "1996-11-27",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Brown turkey with colorful tail feathers",
+      "visual_identifiers": ["brown body", "multi-colored tail feathers", "red wattle", "yellow beak"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 80 },
+        "1st_gen": { "min": 70, "max": 175 }
+      },
+      "special_notes": "Popular Thanksgiving-themed Beanie. Very common, large production run."
+    },
+    {
+      "name": "Quackers",
+      "animal_type": "Duck",
+      "style_number": "4024",
+      "birthday": "1994-04-19",
+      "introduced": "1994",
+      "retired": "1999",
+      "description": "Yellow duck with orange bill",
+      "visual_identifiers": ["yellow body", "orange bill", "orange feet", "wings with or without wings variation"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 20, "max": 50 },
+        "2nd_gen": { "min": 60, "max": 175 },
+        "1st_gen": { "min": 150, "max": 450 }
+      },
+      "special_notes": "Early 'wingless' version more valuable ($500+). With wings version is standard."
+    },
+    {
+      "name": "Zip",
+      "animal_type": "Cat",
+      "style_number": "4004",
+      "birthday": "1994-03-28",
+      "introduced": "1995",
+      "retired": "1999",
+      "description": "Black cat with pink ears",
+      "visual_identifiers": ["all black body", "pink inner ears", "white or black face variations", "green eyes"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 60 },
+        "2nd_gen": { "min": 80, "max": 200 },
+        "1st_gen": { "min": 180, "max": 450 }
+      },
+      "special_notes": "All black version more valuable. White face version is more common. White paws variation exists."
+    },
+    {
+      "name": "Bongo",
+      "animal_type": "Monkey",
+      "style_number": "4067",
+      "birthday": "1995-08-17",
+      "introduced": "1995",
+      "retired": "1999",
+      "description": "Brown monkey with tan face",
+      "visual_identifiers": ["brown body", "tan face and belly", "long tail", "curled tail on some versions"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 15, "max": 40 },
+        "2nd_gen": { "min": 50, "max": 125 },
+        "1st_gen": { "min": 100, "max": 275 }
+      },
+      "special_notes": "Originally named 'Nana' - Nana tags very rare ($3000+). Tan tail version worth more than brown tail."
+    },
+    {
+      "name": "Derby",
+      "animal_type": "Horse",
+      "style_number": "4008",
+      "birthday": "1995-09-16",
+      "introduced": "1995",
+      "retired": "1999",
+      "description": "Brown horse with yarn or fine mane",
+      "visual_identifiers": ["brown body", "darker brown mane and tail", "standing horse pose", "yarn or fine mane variations"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 60 },
+        "2nd_gen": { "min": 75, "max": 200 },
+        "1st_gen": { "min": 175, "max": 450 }
+      },
+      "special_notes": "Coarse yarn mane version more valuable than fine mane. Star on forehead variation exists on later versions."
+    },
+    {
+      "name": "Twigs",
+      "animal_type": "Giraffe",
+      "style_number": "4068",
+      "birthday": "1995-05-19",
+      "introduced": "1996",
+      "retired": "1998",
+      "description": "Orange giraffe with brown spots",
+      "visual_identifiers": ["orange/tan body", "brown spots", "long neck", "small horns/ossicones"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 65 },
+        "2nd_gen": { "min": 75, "max": 200 },
+        "1st_gen": { "min": 175, "max": 400 }
+      },
+      "special_notes": "Spot pattern varies. Earlier retirement makes this slightly less common than some."
+    },
+    {
+      "name": "Curly",
+      "animal_type": "Bear",
+      "style_number": "4052",
+      "birthday": "1996-04-12",
+      "introduced": "1996",
+      "retired": "1999",
+      "description": "Brown bear with curly napped fur",
+      "visual_identifiers": ["brown curly/napped fur", "textured plush", "ribbon around neck", "standard bear shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 15, "max": 40 },
+        "2nd_gen": { "min": 45, "max": 120 },
+        "1st_gen": { "min": 100, "max": 275 }
+      },
+      "special_notes": "Unique curly textured fur. Very common, long production run. Errors with extra or missing features exist."
+    },
+    {
+      "name": "Ty 2K",
+      "animal_type": "Bear",
+      "style_number": "4262",
+      "birthday": "1999-01-01",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "White bear with 2000 confetti pattern celebrating Y2K",
+      "visual_identifiers": ["white fur", "colorful 2000 confetti print", "millennium themed", "celebration design"],
+      "values": {
+        "no_tag": { "min": 1, "max": 2 },
+        "4th_gen_plus": { "min": 2, "max": 8 },
+        "3rd_gen": { "min": 8, "max": 20 },
+        "2nd_gen": { "min": 20, "max": 50 },
+        "1st_gen": { "min": 40, "max": 100 }
+      },
+      "special_notes": "Millennium commemorative bear. Mass produced for Y2K, extremely common. Almost all have 5th gen tags."
+    }
+  ]
+}

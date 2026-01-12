@@ -1,19 +1,21 @@
 {
   "expo": {
-    "name": "beanie-farewell",
+    "name": "Beanie Farewell",
     "slug": "beanie-farewell",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
+    "scheme": "beanie-farewell",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1a1025"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.beaniefarewell.app"
     },
     "android": {
       "adaptiveIcon": {
