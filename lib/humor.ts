@@ -62,7 +62,7 @@ const TIER_1_TITLES = [
 const TIER_1_MESSAGES = [
   "Time to let go. This one's ready to be loved by someone who doesn't care about eBay.",
   "The good news: closure. The bad news: that's about it.",
-  "Your 1999 self would be disappointed. Your 2025 self can finally clean that closet.",
+  "Your 1999 self would be disappointed. Your 2026 self can finally clean that closet.",
 ];
 
 // Tier 2: $10-50
@@ -209,7 +209,7 @@ export function getErrorPrefix(): string {
 export const WELCOME_TEXT = {
   title: "Beanie Farewell",
   tagline: "It's time to know the truth.",
-  description: "Find out what your Beanie Babies are actually worth in 2025.",
+  description: "Find out what your Beanie Babies are actually worth in 2026.",
   subdescription: "Spoiler: probably not millions. But you never know...",
 };
 

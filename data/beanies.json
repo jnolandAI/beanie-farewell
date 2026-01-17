@@ -541,6 +541,366 @@
         "1st_gen": { "min": 40, "max": 100 }
       },
       "special_notes": "Millennium commemorative bear. Mass produced for Y2K, extremely common. Almost all have 5th gen tags."
+    },
+    {
+      "name": "Bones",
+      "animal_type": "Dog",
+      "style_number": "4001",
+      "birthday": "1994-01-18",
+      "introduced": "1994",
+      "retired": "1998",
+      "description": "Brown hound dog with long floppy ears",
+      "visual_identifiers": ["brown body", "long floppy ears", "hound dog shape", "sitting pose"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 60 },
+        "2nd_gen": { "min": 75, "max": 200 },
+        "1st_gen": { "min": 175, "max": 450 }
+      },
+      "special_notes": "Popular dog Beanie. Early versions with darker brown fur slightly more valuable."
+    },
+    {
+      "name": "Rover",
+      "animal_type": "Dog",
+      "style_number": "4101",
+      "birthday": "1996-05-30",
+      "introduced": "1996",
+      "retired": "1998",
+      "description": "Red dog with black nose",
+      "visual_identifiers": ["red/rust colored fur", "black nose", "floppy ears", "sitting pose"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 20, "max": 50 },
+        "2nd_gen": { "min": 60, "max": 150 },
+        "1st_gen": { "min": 130, "max": 350 }
+      },
+      "special_notes": "Solid red colored dog. Less common than some other dog Beanies."
+    },
+    {
+      "name": "Wrinkles",
+      "animal_type": "Dog",
+      "style_number": "4103",
+      "birthday": "1996-05-01",
+      "introduced": "1996",
+      "retired": "1998",
+      "description": "Tan bulldog with wrinkled face",
+      "visual_identifiers": ["tan/beige fur", "wrinkled face", "bulldog shape", "short snout"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 18, "max": 45 },
+        "2nd_gen": { "min": 50, "max": 125 },
+        "1st_gen": { "min": 110, "max": 300 }
+      },
+      "special_notes": "Bulldog with distinctive wrinkled face. Popular dog design."
+    },
+    {
+      "name": "Scottie",
+      "animal_type": "Dog",
+      "style_number": "4102",
+      "birthday": "1996-06-15",
+      "introduced": "1996",
+      "retired": "1998",
+      "description": "Black Scottish terrier",
+      "visual_identifiers": ["all black fur", "scottish terrier shape", "pointed ears", "beard"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 18, "max": 45 },
+        "2nd_gen": { "min": 50, "max": 130 },
+        "1st_gen": { "min": 115, "max": 300 }
+      },
+      "special_notes": "Classic Scottish terrier design. All black coloring."
+    },
+    {
+      "name": "Bernie",
+      "animal_type": "Dog",
+      "style_number": "4109",
+      "birthday": "1996-10-03",
+      "introduced": "1997",
+      "retired": "1998",
+      "description": "Brown and white St. Bernard dog",
+      "visual_identifiers": ["brown and white fur", "st. bernard markings", "large dog", "barrel sometimes depicted"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 15, "max": 40 },
+        "2nd_gen": { "min": 45, "max": 110 },
+        "1st_gen": { "min": 100, "max": 275 }
+      },
+      "special_notes": "St. Bernard design. Brown and white coloring."
+    },
+    {
+      "name": "Doby",
+      "animal_type": "Dog",
+      "style_number": "4110",
+      "birthday": "1996-10-09",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Black and tan Doberman",
+      "visual_identifiers": ["black body", "tan markings", "doberman shape", "pointed ears"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Doberman design with classic black and tan markings."
+    },
+    {
+      "name": "Tracker",
+      "animal_type": "Dog",
+      "style_number": "4198",
+      "birthday": "1997-06-05",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Brown and white basset hound",
+      "visual_identifiers": ["brown and white fur", "long ears", "basset hound shape", "short legs"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 8 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 55, "max": 140 }
+      },
+      "special_notes": "Basset hound with long ears. Later production, mostly 4th/5th gen tags."
+    },
+    {
+      "name": "Spunky",
+      "animal_type": "Dog",
+      "style_number": "4184",
+      "birthday": "1997-01-14",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Tan cocker spaniel",
+      "visual_identifiers": ["tan/golden fur", "cocker spaniel shape", "long wavy ears", "fluffy"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 8 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 55, "max": 140 }
+      },
+      "special_notes": "Cocker spaniel with fluffy tan fur. Later production."
+    },
+    {
+      "name": "Tuffy",
+      "animal_type": "Dog",
+      "style_number": "4108",
+      "birthday": "1996-10-12",
+      "introduced": "1997",
+      "retired": "1998",
+      "description": "Brown and white terrier",
+      "visual_identifiers": ["brown and white fur", "terrier shape", "scruffy fur texture"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 15, "max": 40 },
+        "2nd_gen": { "min": 45, "max": 110 },
+        "1st_gen": { "min": 100, "max": 275 }
+      },
+      "special_notes": "Terrier with scruffy fur texture."
+    },
+    {
+      "name": "Weenie",
+      "animal_type": "Dog",
+      "style_number": "4013",
+      "birthday": "1995-07-20",
+      "introduced": "1996",
+      "retired": "1998",
+      "description": "Brown dachshund with long body",
+      "visual_identifiers": ["brown fur", "dachshund shape", "long body", "short legs"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 20, "max": 50 },
+        "2nd_gen": { "min": 60, "max": 150 },
+        "1st_gen": { "min": 130, "max": 350 }
+      },
+      "special_notes": "Dachshund (wiener dog) with characteristic long body."
+    },
+    {
+      "name": "Snip",
+      "animal_type": "Cat",
+      "style_number": "4120",
+      "birthday": "1996-10-22",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Siamese cat with blue eyes",
+      "visual_identifiers": ["cream body", "dark points", "siamese coloring", "blue eyes"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Siamese cat coloring. Popular cat design."
+    },
+    {
+      "name": "Nip",
+      "animal_type": "Cat",
+      "style_number": "4003",
+      "birthday": "1994-03-06",
+      "introduced": "1995",
+      "retired": "1998",
+      "description": "Gold cat with white face and belly",
+      "visual_identifiers": ["gold/orange body", "white face", "white belly", "pink ears"],
+      "values": {
+        "no_tag": { "min": 3, "max": 8 },
+        "4th_gen_plus": { "min": 10, "max": 25 },
+        "3rd_gen": { "min": 50, "max": 125 },
+        "2nd_gen": { "min": 150, "max": 400 },
+        "1st_gen": { "min": 350, "max": 900 }
+      },
+      "special_notes": "All gold version without white is rarer. White face version most common."
+    },
+    {
+      "name": "Pounce",
+      "animal_type": "Cat",
+      "style_number": "4122",
+      "birthday": "1997-08-28",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Brown tabby cat",
+      "visual_identifiers": ["brown tabby pattern", "striped fur", "cat shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 8 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 55, "max": 140 }
+      },
+      "special_notes": "Brown tabby cat. Later production, common."
+    },
+    {
+      "name": "Ringo",
+      "animal_type": "Raccoon",
+      "style_number": "4014",
+      "birthday": "1995-07-14",
+      "introduced": "1996",
+      "retired": "1998",
+      "description": "Gray raccoon with black mask",
+      "visual_identifiers": ["gray fur", "black mask", "ringed tail", "raccoon shape"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 20, "max": 50 },
+        "2nd_gen": { "min": 60, "max": 150 },
+        "1st_gen": { "min": 130, "max": 350 }
+      },
+      "special_notes": "Raccoon with distinctive mask and ringed tail."
+    },
+    {
+      "name": "Stinky",
+      "animal_type": "Skunk",
+      "style_number": "4017",
+      "birthday": "1995-02-13",
+      "introduced": "1995",
+      "retired": "1998",
+      "description": "Black and white skunk",
+      "visual_identifiers": ["black body", "white stripe", "skunk shape", "fluffy tail"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 20, "max": 50 },
+        "2nd_gen": { "min": 60, "max": 150 },
+        "1st_gen": { "min": 130, "max": 350 }
+      },
+      "special_notes": "Classic black and white skunk design."
+    },
+    {
+      "name": "Sly",
+      "animal_type": "Fox",
+      "style_number": "4115",
+      "birthday": "1996-09-12",
+      "introduced": "1996",
+      "retired": "1998",
+      "description": "Brown fox with white belly",
+      "visual_identifiers": ["brown/rust fur", "white belly", "fox shape", "bushy tail"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 20, "max": 50 },
+        "2nd_gen": { "min": 60, "max": 150 },
+        "1st_gen": { "min": 130, "max": 350 }
+      },
+      "special_notes": "Brown belly version rarer than white belly. White belly most common."
+    },
+    {
+      "name": "Nuts",
+      "animal_type": "Squirrel",
+      "style_number": "4114",
+      "birthday": "1996-01-21",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Brown squirrel with bushy tail",
+      "visual_identifiers": ["brown fur", "bushy tail", "squirrel shape", "small ears"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Squirrel with bushy tail. Common later production."
+    },
+    {
+      "name": "Hoot",
+      "animal_type": "Owl",
+      "style_number": "4073",
+      "birthday": "1995-08-09",
+      "introduced": "1996",
+      "retired": "1998",
+      "description": "Brown owl with big eyes",
+      "visual_identifiers": ["brown feathers", "large eyes", "owl shape", "small beak"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 20, "max": 50 },
+        "2nd_gen": { "min": 60, "max": 150 },
+        "1st_gen": { "min": 130, "max": 350 }
+      },
+      "special_notes": "Brown owl design. Earlier retirement makes it slightly less common."
+    },
+    {
+      "name": "Kiwi",
+      "animal_type": "Toucan",
+      "style_number": "4070",
+      "birthday": "1995-09-16",
+      "introduced": "1995",
+      "retired": "1999",
+      "description": "Colorful toucan with large beak",
+      "visual_identifiers": ["colorful feathers", "large orange beak", "toucan shape", "black body"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 60 },
+        "2nd_gen": { "min": 75, "max": 200 },
+        "1st_gen": { "min": 175, "max": 450 }
+      },
+      "special_notes": "Colorful toucan with distinctive large beak."
+    },
+    {
+      "name": "Scoop",
+      "animal_type": "Pelican",
+      "style_number": "4107",
+      "birthday": "1996-07-01",
+      "introduced": "1996",
+      "retired": "1998",
+      "description": "Blue pelican with large beak pouch",
+      "visual_identifiers": ["blue feathers", "large beak pouch", "pelican shape", "orange beak"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 18, "max": 45 },
+        "2nd_gen": { "min": 50, "max": 125 },
+        "1st_gen": { "min": 110, "max": 300 }
+      },
+      "special_notes": "Blue pelican with distinctive beak pouch."
     }
   ]
 }
