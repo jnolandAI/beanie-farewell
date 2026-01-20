@@ -179,6 +179,7 @@ export default function FollowUpScreen() {
     has_visible_hang_tag: string;
     follow_up_questions: string;
     potential_value_if_rare: string;
+    roast?: string;
   }>();
 
   // Parse incoming data
@@ -311,6 +312,7 @@ export default function FollowUpScreen() {
         has_visible_hang_tag: params.has_visible_hang_tag,
         followUpAnswers: JSON.stringify(answers),
         followUpPhotos: JSON.stringify(photos),
+        roast: params.roast || undefined,
       },
     });
   };

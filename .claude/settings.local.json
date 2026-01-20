@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx expo install:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx expo export --dump-sourcemap)",
+      "Bash(taskkill:*)",
+      "Bash(npx expo start:*)",
+      "Bash(timeout:*)",
+      "Bash(powershell:*)",
+      "Bash(ping:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(more:*)",
+      "Bash(cmd //c \"taskkill /F /IM node.exe\")",
+      "Bash(curl:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(cmd //c \"taskkill /F /PID 268340\")",
+      "Bash(cmd //c \"taskkill /F /PID 318660\")",
+      "WebSearch",
+      "Bash(claude mcp add context7 -- npx -y @upstash/context7-mcp@latest)",
+      "Bash(claude mcp list:*)",
+      "Bash(grep:*)",
+      "Bash(dir:*)"
+    ]
+  }
+}

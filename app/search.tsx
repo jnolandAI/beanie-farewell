@@ -15,10 +15,12 @@ import { router } from 'expo-router';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path, Circle, Polygon } from 'react-native-svg';
+import * as Haptics from 'expo-haptics';
 import { searchBeanies, ANIMAL_EMOJIS, SearchResult } from '../lib/search';
 import { identifyBeanieByName } from '../lib/claude';
 import { getLoadingText, getErrorPrefix } from '../lib/humor';
 import { useCollectionStore } from '../lib/store';
+import { isNetworkError, getOfflineErrorMessage } from '../lib/network';
 
 // Memphis Pattern SVG - Search screen variant
 function MemphisPattern() {
@@ -192,8 +194,18 @@ export default function SearchScreen() {
     setError(null);
     setLoadingText(getLoadingText());
 
+    // Haptic feedback on selection
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+
     try {
       const identification = await identifyBeanieByName(beanie.name, beanie.animal_type);
+
+      // Success haptic
+      if (Platform.OS !== 'web') {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      }
 
       // No thumbnail for text search
       setPendingThumbnail('');
@@ -213,6 +225,7 @@ export default function SearchScreen() {
             has_visible_hang_tag: String(identification.has_visible_hang_tag),
             follow_up_questions: JSON.stringify(identification.follow_up_questions),
             potential_value_if_rare: JSON.stringify(identification.potential_value_if_rare || null),
+            roast: identification.roast || '',
           },
         });
       } else {
@@ -229,12 +242,22 @@ export default function SearchScreen() {
             confidence: identification.confidence,
             has_visible_hang_tag: String(identification.has_visible_hang_tag),
             value_breakdown: identification.value_breakdown ? JSON.stringify(identification.value_breakdown) : undefined,
+            roast: identification.roast || '',
           },
         });
       }
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Unknown error occurred';
-      setError(`${getErrorPrefix()} ${errorMsg}`);
+      // Error haptic
+      if (Platform.OS !== 'web') {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      }
+      // Check if it's a network error
+      if (isNetworkError(err)) {
+        setError(getOfflineErrorMessage());
+      } else {
+        const errorMsg = err instanceof Error ? err.message : 'Unknown error occurred';
+        setError(`${getErrorPrefix()} ${errorMsg}`);
+      }
       setLoading(false);
       setSelectedBeanie(null);
     }

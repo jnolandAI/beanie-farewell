@@ -1,18 +1,26 @@
 import { useEffect } from 'react';
-import { Stack } from 'expo-router';
+import { Stack, useSegments, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useCollectionStore } from '../lib/store';
 
 export default function RootLayout() {
-  // Initialize collection store on app load
-  // This triggers hydration from AsyncStorage early
-  const isHydrated = useCollectionStore((state) => state.isHydrated);
+  const segments = useSegments();
+  const { isHydrated, hasCompletedOnboarding } = useCollectionStore();
 
+  // Handle onboarding redirect
   useEffect(() => {
-    if (isHydrated) {
-      console.log('[Store] Collection hydrated from storage');
+    if (!isHydrated) return; // Wait for store to hydrate
+
+    const inOnboarding = segments[0] === 'onboarding';
+
+    if (!hasCompletedOnboarding && !inOnboarding) {
+      // User hasn't completed onboarding, redirect there
+      router.replace('/onboarding');
+    } else if (hasCompletedOnboarding && inOnboarding) {
+      // User completed onboarding but is on onboarding screen, redirect home
+      router.replace('/');
     }
-  }, [isHydrated]);
+  }, [isHydrated, hasCompletedOnboarding, segments]);
 
   return (
     <>

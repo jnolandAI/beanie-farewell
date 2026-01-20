@@ -23,6 +23,15 @@ export interface FollowUpQuestion {
   valueImpact: string;        // e.g., "Could increase value by 10x"
 }
 
+// What the app detected/assumed from the photo
+export interface DetectedAssumptions {
+  tag_status: 'Visible' | 'Not visible' | 'Partially visible';
+  tag_generation: string;  // "Unknown", "Appears to be 4th/5th gen", etc.
+  condition_estimate: 'Mint' | 'Excellent' | 'Good' | 'Fair' | 'Cannot determine';
+  condition_notes: string;  // Brief explanation of condition observed
+  special_features: string[];  // Notable features observed
+}
+
 // Value breakdown explaining what drives high vs low values
 export interface ValueBreakdown {
   no_tag: string;              // e.g., "$3-8"
@@ -44,8 +53,14 @@ export interface BeanieIdentification {
   confidence: string;
   has_visible_hang_tag: boolean;
 
+  // Roast - funny, savage commentary on this specific Beanie
+  roast?: string;
+
   // Value breakdown - explains what drives high vs low values
   value_breakdown?: ValueBreakdown;
+
+  // What the app detected/assumed from the photo for valuation
+  detected_assumptions?: DetectedAssumptions;
 
   // New fields for Smart Variant Detection
   needs_follow_up: boolean;
@@ -131,4 +146,5 @@ export interface CollectionItem {
   pellet_type?: PelletType;
   value_notes: string;
   tier: number;                  // 1-5
+  roast?: string;                // Funny roast of this Beanie
 }

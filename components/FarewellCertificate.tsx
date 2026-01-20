@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { HeartTagIcon } from './icons/HeartTagIcon';
+import Svg, { Circle, Path, Text as SvgText, G } from 'react-native-svg';
+import { getCertificateTagline, getCertificateDisclaimer, getPermissionText, getFlexFlopLabel, FlexFlopLabel } from '../lib/humor';
 
 // ============================================
 // TYPES
@@ -13,133 +14,120 @@ export interface FarewellCertificateProps {
   valueLow: number;
   valueHigh: number;
   verdictTitle: string;
-  verdictIcon: string;
   tier: number;
-  condition?: string;
+  beanieImage?: string;  // Base64 image of the scanned Beanie
+  userName?: string;  // User's first name for personalization
+  roast?: string;  // Funny roast of this Beanie
+}
+
+// ============================================
+// OFFICIAL SEAL COMPONENT
+// ============================================
+
+function OfficialSeal({ color }: { color: string }) {
+  return (
+    <Svg width="60" height="60" viewBox="0 0 100 100">
+      {/* Outer starburst */}
+      <Path
+        d="M50 0 L55 20 L70 5 L65 25 L85 15 L75 35 L95 30 L80 45 L100 50 L80 55 L95 70 L75 65 L85 85 L65 75 L70 95 L55 80 L50 100 L45 80 L30 95 L35 75 L15 85 L25 65 L5 70 L20 55 L0 50 L20 45 L5 30 L25 35 L15 15 L35 25 L30 5 L45 20 Z"
+        fill={color}
+        opacity={0.15}
+      />
+      {/* Inner circle */}
+      <Circle cx="50" cy="50" r="32" fill="white" stroke={color} strokeWidth="2" />
+      <Circle cx="50" cy="50" r="28" fill="none" stroke={color} strokeWidth="1" opacity={0.5} />
+      {/* Center text */}
+      <SvgText x="50" y="44" textAnchor="middle" fontSize="8" fontWeight="bold" fill={color}>
+        CERTIFIED
+      </SvgText>
+      <SvgText x="50" y="54" textAnchor="middle" fontSize="6" fill={color}>
+        FAREWELL
+      </SvgText>
+      <SvgText x="50" y="64" textAnchor="middle" fontSize="5" fill={color} opacity={0.7}>
+        2026
+      </SvgText>
+    </Svg>
+  );
 }
 
 // ============================================
 // TIER CONFIGURATION
 // ============================================
 
-// Bold 90s color palette
 const COLORS = {
   primaryPurple: '#8B5CF6',
-  accentCoral: '#FF6B6B',
-  secondaryTeal: '#06B6D4',
 };
 
-// Tier-specific styles with bolder gradients
-const TIER_STYLES: Record<number, { gradient: string[]; accent: string; tagline: string }> = {
-  1: {
-    gradient: ['#F3F4F6', '#E5E7EB'],
-    accent: '#9CA3AF',
-    tagline: "Permission to let go. Officially granted."
-  },
-  2: {
-    gradient: ['#F3F4F6', '#E5E7EB'],
-    accent: '#6B7280',
-    tagline: "Not retirement money, but not nothing!"
-  },
-  3: {
-    gradient: ['#ECFEFF', '#CFFAFE'],  // Teal tint
-    accent: '#06B6D4',
-    tagline: "Look who held some value!"
-  },
-  4: {
-    gradient: ['#FEF3C7', '#FDE68A'],  // Warm yellow/orange
-    accent: '#F59E0B',
-    tagline: "Maybe don't donate this one..."
-  },
-  5: {
-    gradient: ['#D1FAE5', '#A7F3D0'],  // Green celebration
-    accent: '#10B981',
-    tagline: "HOLD EVERYTHING. Get this authenticated."
-  },
+// Tier 2 icon variants - randomly select for variety
+const TIER_2_ICONS = [
+  require('../assets/icons/icon-tier2A.png'),
+  require('../assets/icons/icon-tier2B.png'),
+  require('../assets/icons/icon-tier2C.png'),
+  require('../assets/icons/icon-tier2D.png'),
+  require('../assets/icons/icon-tier2E.png'),
+  require('../assets/icons/icon-tier2F.png'),
+  require('../assets/icons/icon-tier2G.png'),
+  require('../assets/icons/icon-tier2H.png'),
+  require('../assets/icons/icon-tier2I.png'),
+];
+
+// Get a consistent tier 2 icon based on beanie name (same beanie = same icon)
+const getTier2Icon = (beanieName: string) => {
+  const hash = beanieName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return TIER_2_ICONS[hash % TIER_2_ICONS.length];
 };
 
-// Tier-specific gradient backgrounds (solid-like gradients for static capture)
+// Tier icons matching the results page
+const TIER_ICONS: Record<number, any> = {
+  1: require('../assets/icons/icon-tier1.png'),
+  2: TIER_2_ICONS[0],  // default - will be overridden dynamically
+  3: require('../assets/icons/icon-tier3.png'),
+  4: require('../assets/icons/icon-tier4.png'),
+  5: require('../assets/icons/icon-tier5.png'),
+};
+
+// App main icon
+const APP_ICON = require('../assets/icons/icon-main.png');
+
+// Tier-specific styles
+const TIER_STYLES: Record<number, { gradient: string[]; accent: string }> = {
+  1: { gradient: ['#F3F4F6', '#E5E7EB'], accent: '#9CA3AF' },
+  2: { gradient: ['#F3F4F6', '#E5E7EB'], accent: '#6B7280' },
+  3: { gradient: ['#ECFEFF', '#CFFAFE'], accent: '#06B6D4' },
+  4: { gradient: ['#FEF3C7', '#FDE68A'], accent: '#F59E0B' },
+  5: { gradient: ['#D1FAE5', '#A7F3D0'], accent: '#10B981' },
+};
+
 const TIER_GRADIENTS: Record<number, { colors: string[]; locations: number[] }> = {
-  1: {
-    colors: [...TIER_STYLES[1].gradient, TIER_STYLES[1].gradient[0]],
-    locations: [0, 0.5, 1],
-  },
-  2: {
-    colors: [...TIER_STYLES[2].gradient, TIER_STYLES[2].gradient[0]],
-    locations: [0, 0.5, 1],
-  },
-  3: {
-    colors: [...TIER_STYLES[3].gradient, TIER_STYLES[3].gradient[0]],
-    locations: [0, 0.5, 1],
-  },
-  4: {
-    colors: [...TIER_STYLES[4].gradient, TIER_STYLES[4].gradient[0]],
-    locations: [0, 0.5, 1],
-  },
-  5: {
-    colors: [...TIER_STYLES[5].gradient, TIER_STYLES[5].gradient[0]],
-    locations: [0, 0.5, 1],
-  },
+  1: { colors: [...TIER_STYLES[1].gradient, TIER_STYLES[1].gradient[0]], locations: [0, 0.5, 1] },
+  2: { colors: [...TIER_STYLES[2].gradient, TIER_STYLES[2].gradient[0]], locations: [0, 0.5, 1] },
+  3: { colors: [...TIER_STYLES[3].gradient, TIER_STYLES[3].gradient[0]], locations: [0, 0.5, 1] },
+  4: { colors: [...TIER_STYLES[4].gradient, TIER_STYLES[4].gradient[0]], locations: [0, 0.5, 1] },
+  5: { colors: [...TIER_STYLES[5].gradient, TIER_STYLES[5].gradient[0]], locations: [0, 0.5, 1] },
 };
 
-// Tier-specific accent colors - using bolder palette
-const TIER_ACCENTS: Record<number, { primary: string; secondary: string; text: string }> = {
-  1: { primary: TIER_STYLES[1].accent, secondary: '#D1D5DB', text: '#6B7280' },
-  2: { primary: TIER_STYLES[2].accent, secondary: '#9CA3AF', text: '#4B5563' },
-  3: { primary: TIER_STYLES[3].accent, secondary: '#22D3EE', text: '#0891B2' },
-  4: { primary: TIER_STYLES[4].accent, secondary: '#FBBF24', text: '#D97706' },
-  5: { primary: TIER_STYLES[5].accent, secondary: '#34D399', text: '#059669' },
+const TIER_ACCENTS: Record<number, { primary: string; text: string }> = {
+  1: { primary: TIER_STYLES[1].accent, text: '#6B7280' },
+  2: { primary: TIER_STYLES[2].accent, text: '#4B5563' },
+  3: { primary: TIER_STYLES[3].accent, text: '#0891B2' },
+  4: { primary: TIER_STYLES[4].accent, text: '#D97706' },
+  5: { primary: TIER_STYLES[5].accent, text: '#059669' },
 };
-
-// Tier-specific taglines
-const TIER_TAGLINES: Record<number, string[]> = {
-  1: [
-    'Permission to let go. Officially granted.',
-    'Closure achieved. Box can now be recycled.',
-    'The truth shall set you free (from storage).',
-  ],
-  2: [
-    'Not retirement money, but not nothing!',
-    "Worth more than a participation trophy.",
-    'At least it paid for this app!',
-  ],
-  3: [
-    'Look who held some value!',
-    'Your 1997 self would be proud-ish.',
-    'Better than a savings account in 1999.',
-  ],
-  4: [
-    "Maybe don't donate this one...",
-    'Time to move this out of the garage.',
-    'Your parents were wrong to doubt you.',
-  ],
-  5: [
-    'HOLD EVERYTHING. Get this authenticated.',
-    'DO NOT CLEAN IT. DO NOT REMOVE THE TAG.',
-    'Against all odds, you won the Beanie lottery.',
-  ],
-};
-
-// Decorative elements for tier 5 - bolder 90s palette
-const CONFETTI_COLORS = ['#10B981', '#34D399', '#8B5CF6', '#F59E0B', '#06B6D4'];
-
-function getRandomTagline(tier: number): string {
-  const taglines = TIER_TAGLINES[tier] || TIER_TAGLINES[1];
-  return taglines[Math.floor(Math.random() * taglines.length)];
-}
 
 // ============================================
 // COMPONENT
 // ============================================
 
 export const FarewellCertificate = React.forwardRef<View, FarewellCertificateProps>(
-  ({ name, variant, valueLow, valueHigh, verdictTitle, verdictIcon, tier, condition }, ref) => {
+  ({ name, variant, valueLow, valueHigh, verdictTitle, tier, beanieImage, userName, roast }, ref) => {
     const normalizedTier = Math.max(1, Math.min(5, tier)) as 1 | 2 | 3 | 4 | 5;
     const gradient = TIER_GRADIENTS[normalizedTier];
     const accents = TIER_ACCENTS[normalizedTier];
-    const tagline = getRandomTagline(normalizedTier);
-    const isJackpotTier = normalizedTier === 5;
-    const isHighValueTier = normalizedTier >= 4;
+    const certificateLabel = getCertificateTagline();
+    const disclaimer = getCertificateDisclaimer();
+    const permission = getPermissionText(normalizedTier);
+    const tierIcon = normalizedTier === 2 ? getTier2Icon(name) : TIER_ICONS[normalizedTier];
+    const flexFlopLabel = getFlexFlopLabel(valueHigh);
 
     return (
       <View ref={ref} style={styles.container}>
@@ -152,136 +140,81 @@ export const FarewellCertificate = React.forwardRef<View, FarewellCertificatePro
           style={styles.backgroundGradient}
         />
 
-        {/* Decorative circles for higher tiers */}
-        {isHighValueTier && (
-          <>
-            <View
-              style={[
-                styles.decorativeCircle,
-                styles.decorativeCircleTopRight,
-                { backgroundColor: `${accents.primary}15` },
-              ]}
-            />
-            <View
-              style={[
-                styles.decorativeCircle,
-                styles.decorativeCircleBottomLeft,
-                { backgroundColor: `${accents.primary}12` },
-              ]}
-            />
-          </>
-        )}
-
-        {/* Confetti-like decorations for jackpot tier */}
-        {isJackpotTier && (
-          <>
-            {CONFETTI_COLORS.map((color, index) => (
-              <View
-                key={`confetti-${index}`}
-                style={[
-                  styles.confettiDot,
-                  {
-                    backgroundColor: color,
-                    top: 80 + (index * 240),
-                    left: index % 2 === 0 ? 40 + (index * 30) : undefined,
-                    right: index % 2 === 1 ? 40 + (index * 20) : undefined,
-                    transform: [{ rotate: `${index * 45}deg` }],
-                  },
-                ]}
-              />
-            ))}
-            {CONFETTI_COLORS.map((color, index) => (
-              <View
-                key={`confetti-right-${index}`}
-                style={[
-                  styles.confettiDot,
-                  styles.confettiDotSmall,
-                  {
-                    backgroundColor: color,
-                    top: 200 + (index * 200),
-                    right: index % 2 === 0 ? 60 + (index * 25) : undefined,
-                    left: index % 2 === 1 ? 60 + (index * 20) : undefined,
-                    transform: [{ rotate: `${-index * 30}deg` }],
-                  },
-                ]}
-              />
-            ))}
-          </>
-        )}
-
         {/* Certificate border */}
         <View style={[styles.certificateBorder, { borderColor: `${accents.primary}30` }]}>
-          {/* Header with branding */}
+
+          {/* Header: App icon + title */}
           <View style={styles.header}>
-            <View style={styles.brandingContainer}>
-              <HeartTagIcon size={60} color="#FF6B6B" textColor="#FFFFFF" />
-            </View>
+            <Image source={APP_ICON} style={styles.appIcon} resizeMode="contain" />
             <Text style={[styles.appName, { color: COLORS.primaryPurple }]}>Beanie Farewell</Text>
-            <Text style={[styles.certificateLabel, { color: accents.primary }]}>OFFICIAL VALUATION CERTIFICATE</Text>
+            <Text style={[styles.certificateLabel, { color: accents.primary }]}>{certificateLabel}</Text>
           </View>
 
-          {/* Divider line */}
-          <View style={[styles.divider, { backgroundColor: `${accents.primary}25` }]} />
-
-          {/* Verdict section */}
-          <View style={styles.verdictSection}>
-            <View
-              style={[
-                styles.iconCircle,
-                {
-                  backgroundColor: `${accents.primary}15`,
-                  borderColor: `${accents.primary}30`,
-                },
-              ]}
-            >
-              <Text style={styles.verdictIcon}>{verdictIcon}</Text>
+          {/* Issued To section - only if userName provided */}
+          {userName && (
+            <View style={styles.issuedToSection}>
+              <Text style={styles.issuedToLabel}>ISSUED TO</Text>
+              <Text style={[styles.issuedToName, { color: accents.primary }]}>{userName}</Text>
             </View>
-            <Text style={[styles.verdictTitle, { color: accents.primary }]}>{verdictTitle}</Text>
+          )}
+
+          {/* VERDICT SECTION - The judgment */}
+          <View style={[styles.verdictSection, { backgroundColor: `${accents.primary}10` }]}>
+            <Image source={tierIcon} style={styles.tierIcon} resizeMode="contain" />
+            <View style={styles.verdictContent}>
+              <Text style={[styles.verdictTitle, { color: accents.primary }]}>{verdictTitle}</Text>
+              {/* Flex/Flop Badge */}
+              <View style={[styles.flexFlopBadge, { backgroundColor: flexFlopLabel.color }]}>
+                <Text style={styles.flexFlopEmoji}>{flexFlopLabel.emoji}</Text>
+                <Text style={styles.flexFlopLabel}>{flexFlopLabel.label}</Text>
+              </View>
+            </View>
           </View>
 
-          {/* Beanie info */}
-          <View style={styles.beanieInfoSection}>
-            <Text style={styles.beanieName}>{name}</Text>
-            {variant && variant !== 'Standard' && (
+          {/* BEANIE SECTION - What was scanned */}
+          <View style={styles.beanieSection}>
+            {beanieImage && (
+              <View style={styles.beanieImageContainer}>
+                <Image
+                  source={{ uri: `data:image/jpeg;base64,${beanieImage}` }}
+                  style={styles.beanieImage}
+                  resizeMode="cover"
+                />
+              </View>
+            )}
+            <View style={styles.beanieInfo}>
+              <Text style={styles.beanieName}>{name}</Text>
               <Text style={[styles.beanieVariant, { color: accents.text }]}>{variant}</Text>
-            )}
-            {condition && (
-              <Text style={styles.conditionText}>Condition: {condition}</Text>
-            )}
-          </View>
-
-          {/* Value display - prominent */}
-          <View
-            style={[
-              styles.valueCard,
-              {
-                backgroundColor: `${accents.primary}08`,
-                borderColor: `${accents.primary}20`,
-              },
-            ]}
-          >
-            <Text style={styles.valueLabel}>ESTIMATED VALUE</Text>
-            <View style={styles.valueRow}>
-              <Text style={[styles.valueCurrency, { color: accents.primary }]}>$</Text>
-              <Text style={[styles.valueAmount, { color: accents.primary }]}>{valueLow}</Text>
-              <Text style={[styles.valueDash, { color: accents.secondary }]}> - </Text>
-              <Text style={[styles.valueCurrency, { color: accents.primary }]}>$</Text>
-              <Text style={[styles.valueAmount, { color: accents.primary }]}>{valueHigh}</Text>
+              <View style={[styles.valueChip, { backgroundColor: `${accents.primary}15` }]}>
+                <Text style={[styles.valueText, { color: accents.primary }]}>${valueLow} - ${valueHigh}</Text>
+              </View>
             </View>
           </View>
 
-          {/* Tagline */}
-          <View style={styles.taglineContainer}>
-            <Text style={[styles.tagline, { color: accents.text }]}>{tagline}</Text>
+          {/* THE ROAST - Savage but funny commentary */}
+          {roast && (
+            <View style={[styles.roastContainer, { borderColor: `${accents.primary}40` }]}>
+              <Text style={styles.roastIcon}>🔥</Text>
+              <Text style={[styles.roastText, { color: accents.text }]} numberOfLines={2}>
+                {roast}
+              </Text>
+            </View>
+          )}
+
+          {/* Permission text with seal */}
+          <View style={styles.permissionWithSeal}>
+            <View style={styles.permissionContainer}>
+              <Text style={[styles.permissionText, { color: accents.text }]}>{permission}</Text>
+            </View>
+            <View style={styles.sealContainer}>
+              <OfficialSeal color={accents.primary} />
+            </View>
           </View>
 
-          {/* Footer divider */}
-          <View style={[styles.divider, { backgroundColor: `${accents.primary}15` }]} />
-
-          {/* Footer with CTA */}
+          {/* Footer */}
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Scan yours at</Text>
-            <Text style={[styles.footerUrl, { color: accents.primary }]}>beaniefarewell.com</Text>
+            <Text style={styles.footerUrl}>beaniefarewell.com</Text>
+            <Text style={styles.disclaimer}>{disclaimer}</Text>
           </View>
         </View>
       </View>
@@ -295,10 +228,8 @@ FarewellCertificate.displayName = 'FarewellCertificate';
 // STYLES
 // ============================================
 
-// Certificate dimensions: 1080x1350 (Instagram portrait)
-// Using scaled down values for display (divide by 3)
 const CERTIFICATE_WIDTH = 360;
-const CERTIFICATE_HEIGHT = 450;
+const CERTIFICATE_HEIGHT = 480;  // Slightly taller to fit seal
 
 const styles = StyleSheet.create({
   container: {
@@ -314,165 +245,201 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  decorativeCircle: {
-    position: 'absolute',
-    borderRadius: 150,
-  },
-  decorativeCircleTopRight: {
-    width: 200,
-    height: 200,
-    top: -60,
-    right: -60,
-  },
-  decorativeCircleBottomLeft: {
-    width: 180,
-    height: 180,
-    bottom: -50,
-    left: -50,
-  },
-  confettiDot: {
-    position: 'absolute',
-    width: 12,
-    height: 12,
-    borderRadius: 2,
-    opacity: 0.6,
-  },
-  confettiDotSmall: {
-    width: 8,
-    height: 8,
-    opacity: 0.5,
-  },
   certificateBorder: {
     flex: 1,
-    margin: 16,
+    margin: 10,
     borderWidth: 2,
     borderRadius: 16,
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    padding: 20,
+    padding: 12,
+    justifyContent: 'space-between',
   },
+
+  // Header
   header: {
     alignItems: 'center',
-    marginBottom: 12,
   },
-  brandingContainer: {
-    marginBottom: 8,
+  appIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 6,
+    marginBottom: 2,
   },
   appName: {
-    fontSize: 26,
+    fontSize: 14,
     fontWeight: '900',
-    letterSpacing: 1.5,
+    letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
   certificateLabel: {
-    fontSize: 11,
+    fontSize: 7,
     fontWeight: '700',
-    letterSpacing: 2.5,
-    marginTop: 6,
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
-  divider: {
-    height: 1,
-    width: '80%',
-    alignSelf: 'center',
-    marginVertical: 12,
-  },
-  verdictSection: {
+
+  // Issued To Section
+  issuedToSection: {
     alignItems: 'center',
-    marginBottom: 12,
+    marginVertical: 4,
   },
-  iconCircle: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+  issuedToLabel: {
+    fontSize: 6,
+    fontWeight: '600',
+    color: '#9CA3AF',
+    letterSpacing: 1,
+  },
+  issuedToName: {
+    fontSize: 14,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+
+  // Verdict Section
+  verdictSection: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    marginBottom: 8,
+    gap: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 12,
   },
-  verdictIcon: {
-    fontSize: 36,
+  tierIcon: {
+    width: 50,
+    height: 50,
+  },
+  verdictContent: {
+    alignItems: 'flex-start',
+    gap: 4,
   },
   verdictTitle: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: '800',
     textTransform: 'uppercase',
-    letterSpacing: 2,
+    letterSpacing: 1,
   },
-  beanieInfoSection: {
+  flexFlopBadge: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    borderRadius: 10,
+    gap: 3,
+  },
+  flexFlopEmoji: {
+    fontSize: 10,
+  },
+  flexFlopLabel: {
+    color: '#FFFFFF',
+    fontSize: 8,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+  },
+
+  // Beanie Section
+  beanieSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 8,
+  },
+  beanieImageContainer: {
+    width: 90,
+    height: 90,
+    borderRadius: 12,
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  beanieImage: {
+    width: '100%',
+    height: '100%',
+  },
+  beanieInfo: {
+    flex: 1,
   },
   beanieName: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: '700',
     color: '#2D3436',
-    textAlign: 'center',
   },
   beanieVariant: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginTop: 4,
-  },
-  conditionText: {
     fontSize: 12,
-    color: '#636E72',
-    marginTop: 4,
+    fontWeight: '500',
+    marginTop: 2,
   },
-  valueCard: {
-    alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    borderWidth: 1,
-    marginBottom: 12,
+  valueChip: {
+    marginTop: 6,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    alignSelf: 'flex-start',
   },
-  valueLabel: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: '#B2BEC3',
-    letterSpacing: 1.5,
-    marginBottom: 6,
-  },
-  valueRow: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-  },
-  valueCurrency: {
-    fontSize: 22,
-    fontWeight: '700',
-  },
-  valueAmount: {
-    fontSize: 36,
+  valueText: {
+    fontSize: 16,
     fontWeight: '800',
   },
-  valueDash: {
-    fontSize: 28,
-    fontWeight: '300',
+
+  // Roast Section
+  roastContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    marginHorizontal: 4,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
-  taglineContainer: {
+  roastIcon: {
+    fontSize: 12,
+  },
+  roastText: {
+    flex: 1,
+    fontSize: 9,
+    fontStyle: 'italic',
+    lineHeight: 13,
+  },
+
+  // Permission with Seal
+  permissionWithSeal: {
+    flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    marginBottom: 12,
+    gap: 8,
+    paddingHorizontal: 4,
   },
-  tagline: {
-    fontSize: 13,
+  permissionContainer: {
+    flex: 1,
+  },
+  permissionText: {
+    fontSize: 9,
     fontWeight: '500',
     textAlign: 'center',
+    lineHeight: 13,
     fontStyle: 'italic',
-    lineHeight: 18,
   },
+  sealContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  // Footer
   footer: {
     alignItems: 'center',
-    marginTop: 4,
-  },
-  footerText: {
-    fontSize: 10,
-    color: '#B2BEC3',
-    fontWeight: '500',
   },
   footerUrl: {
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: 9,
+    fontWeight: '600',
+    color: '#8B5CF6',
+  },
+  disclaimer: {
+    fontSize: 6,
+    color: '#B2BEC3',
+    textAlign: 'center',
     marginTop: 2,
   },
 });

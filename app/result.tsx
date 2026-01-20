@@ -1,16 +1,27 @@
 import { useState, useEffect, useRef } from 'react';
-import { View, Text, Pressable, StyleSheet, ScrollView, Animated, Easing, Platform, Dimensions, Image } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ScrollView, Animated, Easing, Platform, Dimensions, Image, Modal } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
+import * as Haptics from 'expo-haptics';
 import Svg, { Path, Circle, Polygon } from 'react-native-svg';
-import { getVerdict, getScanAnotherText, getShareButtonText, VerdictInfo } from '../lib/humor';
-import { FollowUpAnswers, CollectionItem, ConditionLevel, PelletType, ValueBreakdown } from '../types/beanie';
+import { getVerdict, getScanAnotherText, getShareButtonText, VerdictInfo, generateFunFacts, getFlexFlopLabel, FlexFlopLabel, getShareCaption, getFlexFlopStatus } from '../lib/humor';
+import { Confetti } from '../components/Confetti';
+import { FollowUpAnswers, CollectionItem, ConditionLevel, PelletType, ValueBreakdown, DetectedAssumptions } from '../types/beanie';
 import { FarewellCertificate } from '../components/FarewellCertificate';
+import { AchievementToast } from '../components/AchievementToast';
+import { ChallengeToast } from '../components/ChallengeToast';
+import { LevelUpToast } from '../components/LevelUpToast';
+import { MilestoneToast, CollectionMilestone } from '../components/MilestoneToast';
+import { RareFindCelebration } from '../components/RareFindCelebration';
+import { LuckyScanToast } from '../components/LuckyScanToast';
+import { ValueMilestoneToast, ValueMilestone } from '../components/ValueMilestoneToast';
 import { useCollectionStore, generateId } from '../lib/store';
+import { Achievement } from '../lib/achievements';
+import { DailyChallenge } from '../lib/challenges';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -34,13 +45,41 @@ const TIER_COLORS: Record<number, { accent: string; bg: string; glow: string; gr
   5: { accent: '#FF00FF', bg: '#FFF0FF', glow: 'rgba(255, 0, 255, 0.4)', gradient: ['#FFFFFF', '#FFF8FF', '#FFFFFF'] },
 };
 
+// Tier 2 icon variants - randomly select for variety
+const TIER_2_ICONS = [
+  require('../assets/icons/icon-tier2A.png'),
+  require('../assets/icons/icon-tier2B.png'),
+  require('../assets/icons/icon-tier2C.png'),
+  require('../assets/icons/icon-tier2D.png'),
+  require('../assets/icons/icon-tier2E.png'),
+  require('../assets/icons/icon-tier2F.png'),
+  require('../assets/icons/icon-tier2G.png'),
+  require('../assets/icons/icon-tier2H.png'),
+  require('../assets/icons/icon-tier2I.png'),
+];
+
+// Get a consistent tier 2 icon based on beanie name (same beanie = same icon)
+const getTier2Icon = (beanieName: string) => {
+  const hash = beanieName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return TIER_2_ICONS[hash % TIER_2_ICONS.length];
+};
+
 // Tier icons - custom artwork for each value tier
 const TIER_ICONS: Record<number, any> = {
   1: require('../assets/icons/icon-tier1.png'),  // sad elephant - < $10
-  2: require('../assets/icons/icon-tier2.png'),  // meh frog - $10-50
+  2: TIER_2_ICONS[0],  // default - will be overridden for tier 2
   3: require('../assets/icons/icon-tier3.png'),  // surprised cat - $50-200
   4: require('../assets/icons/icon-tier4.png'),  // excited dog - $200-1000
   5: require('../assets/icons/icon-tier5.png'),  // jackpot bear - $1000+
+};
+
+// Rarity percentages - how rare each tier is in the wild
+const TIER_RARITY: Record<number, { percent: string; label: string }> = {
+  1: { percent: '60%', label: 'Most Common' },
+  2: { percent: '30%', label: 'Common' },
+  3: { percent: '8%', label: 'Uncommon' },
+  4: { percent: '1.8%', label: 'Rare' },
+  5: { percent: '0.2%', label: 'Ultra Rare' },
 };
 
 // Memphis Pattern SVG overlay - Different arrangement from index.tsx
@@ -269,24 +308,51 @@ function getPelletMultiplier(pelletType: string): { low: number; high: number } 
 
 export default function ResultScreen() {
   const [verdict, setVerdict] = useState<VerdictInfo | null>(null);
+  const [flexFlopLabel, setFlexFlopLabel] = useState<FlexFlopLabel | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
   const [scanButtonText] = useState(() => getScanAnotherText());
   const [shareButtonText] = useState(() => getShareButtonText());
   const [isSharing, setIsSharing] = useState(false);
   const [savedToCollection, setSavedToCollection] = useState(false);
+  const [showCertificateModal, setShowCertificateModal] = useState(false);
 
   // Collection store
-  const { addItem, pendingThumbnail, setPendingThumbnail } = useCollectionStore();
+  const { addItem, pendingThumbnail, setPendingThumbnail, userName, pendingAchievementNotifications, clearPendingAchievements, pendingChallengeReward, clearPendingChallengeReward, pendingLevelUp, clearPendingLevelUp, pendingMilestone, clearPendingMilestone, pendingLuckyBonus, clearPendingLuckyBonus, pendingValueMilestone, clearPendingValueMilestone } = useCollectionStore();
 
-  // Certificate capture ref
-  const certificateRef = useRef<View>(null);
+  // Achievement toast state
+  const [currentAchievement, setCurrentAchievement] = useState<Achievement | null>(null);
 
-  // Animations
-  const scaleAnim = useRef(new Animated.Value(0.8)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const cardSlideAnim = useRef(new Animated.Value(30)).current;
-  const cardFadeAnim = useRef(new Animated.Value(0)).current;
-  const glowAnim = useRef(new Animated.Value(0)).current;
+  // Challenge toast state
+  const [currentChallenge, setCurrentChallenge] = useState<DailyChallenge | null>(null);
 
+  // Level up toast state
+  const [showLevelUp, setShowLevelUp] = useState<{ level: number; title: string; emoji: string; color: string } | null>(null);
+
+  // Milestone toast state
+  const [showMilestone, setShowMilestone] = useState<CollectionMilestone | null>(null);
+
+  // Share caption state
+  const [shareCaption, setShareCaption] = useState<string | null>(null);
+
+  // Animated value counter
+  const [displayValueLow, setDisplayValueLow] = useState(0);
+  const [displayValueHigh, setDisplayValueHigh] = useState(0);
+  const valueCounterAnim = useRef(new Animated.Value(0)).current;
+
+  // Rare find celebration overlay
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [celebrationShown, setCelebrationShown] = useState(false);
+
+  // Lucky scan bonus toast
+  const [showLuckyBonus, setShowLuckyBonus] = useState<{ xp: number; multiplier: number } | null>(null);
+
+  // Value milestone toast
+  const [showValueMilestone, setShowValueMilestone] = useState<ValueMilestone | null>(null);
+
+  // Track total XP earned this session (for summary display)
+  const [xpEarnedThisScan, setXpEarnedThisScan] = useState(0);
+
+  // URL params - declared early so it can be used in subsequent hooks
   const params = useLocalSearchParams<{
     name: string;
     animal_type: string;
@@ -300,7 +366,48 @@ export default function ResultScreen() {
     followUpAnswers?: string;
     followUpPhotos?: string;
     value_breakdown?: string;
+    detected_assumptions?: string;
+    fromCollection?: string;  // Flag to prevent re-saving when viewing from collection
+    collectionThumbnail?: string;  // Thumbnail passed from collection view
+    roast?: string;  // Funny roast of this Beanie
   }>();
+
+  // Capture the image for the certificate - try multiple approaches for reliability
+  // 1. First try: capture synchronously on initial render (or from collection thumbnail)
+  const [certificateImage, setCertificateImage] = useState<string | null>(() => {
+    // If coming from collection, use the passed thumbnail
+    const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+    const collectionThumb = searchParams.get('collectionThumbnail');
+    if (collectionThumb) return collectionThumb;
+
+    // Otherwise try pendingThumbnail from store
+    const store = useCollectionStore.getState();
+    return store.pendingThumbnail || null;
+  });
+
+  // 2. Fallback: if initial capture missed it, watch for updates
+  useEffect(() => {
+    // Check for collection thumbnail first
+    if (!certificateImage && params.collectionThumbnail) {
+      setCertificateImage(params.collectionThumbnail);
+    }
+    // Then check pendingThumbnail
+    else if (!certificateImage && pendingThumbnail) {
+      setCertificateImage(pendingThumbnail);
+    }
+  }, [certificateImage, pendingThumbnail, params.collectionThumbnail]);
+
+  // Certificate capture ref
+  const certificateRef = useRef<View>(null);
+
+  // Animations
+  const scaleAnim = useRef(new Animated.Value(0.8)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const cardSlideAnim = useRef(new Animated.Value(30)).current;
+  const cardFadeAnim = useRef(new Animated.Value(0)).current;
+  const glowAnim = useRef(new Animated.Value(0)).current;
+  const tierIconBounce = useRef(new Animated.Value(0)).current;
+  const tierIconRotate = useRef(new Animated.Value(0)).current;
 
   // Parse follow-up answers if present
   const followUpAnswers: FollowUpAnswers | null = params.followUpAnswers
@@ -310,6 +417,11 @@ export default function ResultScreen() {
   // Parse value breakdown if present
   const valueBreakdown: ValueBreakdown | null = params.value_breakdown
     ? JSON.parse(params.value_breakdown)
+    : null;
+
+  // Parse detected assumptions if present
+  const detectedAssumptions: DetectedAssumptions | null = params.detected_assumptions
+    ? JSON.parse(params.detected_assumptions)
     : null;
 
   // Base values from initial identification
@@ -339,8 +451,51 @@ export default function ResultScreen() {
   const isNotBeanie = params.name?.toLowerCase() === 'not a beanie baby';
   const hasSpecialVariant = params.variant && params.variant.toLowerCase() !== 'standard';
 
+  // Generate fun facts based on value
+  const funFacts = generateFunFacts(
+    params.name || '',
+    valueLow,
+    valueHigh
+  );
+
   useEffect(() => {
     setVerdict(getVerdict(valueHigh));
+    setFlexFlopLabel(getFlexFlopLabel(valueHigh));
+
+    // Generate share caption
+    if (!isNotBeanie && params.name) {
+      const flexFlopStatus = getFlexFlopStatus(valueHigh);
+      setShareCaption(getShareCaption(params.name, valueHigh, flexFlopStatus));
+    }
+
+    // Show confetti for Tier 4+ (high value finds)
+    const tier = valueHigh >= 1000 ? 5 : valueHigh >= 200 ? 4 : valueHigh >= 50 ? 3 : valueHigh >= 15 ? 2 : 1;
+    if (tier >= 4) {
+      setTimeout(() => setShowConfetti(true), 500);
+    }
+
+    // Show celebration overlay for Tier 4+ (only once, not from collection view)
+    const fromCollection = params.fromCollection === 'true';
+    if (tier >= 4 && !celebrationShown && !fromCollection && !isNotBeanie) {
+      setShowCelebration(true);
+      setCelebrationShown(true);
+    }
+
+    // Haptic feedback on tier reveal
+    if (Platform.OS !== 'web') {
+      setTimeout(() => {
+        if (tier >= 5) {
+          // Heavy impact for jackpot
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        } else if (tier >= 4) {
+          // Medium impact for high value
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        } else {
+          // Light impact for regular reveals
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        }
+      }, 200);
+    }
 
     // Reveal animation sequence
     Animated.sequence([
@@ -356,6 +511,37 @@ export default function ResultScreen() {
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 300,
+          useNativeDriver: true,
+        }),
+      ]),
+      // Tier icon bounces for dramatic effect
+      Animated.sequence([
+        Animated.spring(tierIconBounce, {
+          toValue: 1,
+          friction: 3,
+          tension: 200,
+          useNativeDriver: true,
+        }),
+        // Quick wiggle for excitement on high tiers
+        tier >= 4 ? Animated.sequence([
+          Animated.timing(tierIconRotate, {
+            toValue: 1,
+            duration: 50,
+            useNativeDriver: true,
+          }),
+          Animated.timing(tierIconRotate, {
+            toValue: -1,
+            duration: 100,
+            useNativeDriver: true,
+          }),
+          Animated.timing(tierIconRotate, {
+            toValue: 0,
+            duration: 50,
+            useNativeDriver: true,
+          }),
+        ]) : Animated.timing(tierIconRotate, {
+          toValue: 0,
+          duration: 0,
           useNativeDriver: true,
         }),
       ]),
@@ -392,16 +578,44 @@ export default function ResultScreen() {
         }),
       ])
     ).start();
-  }, [valueHigh, scaleAnim, fadeAnim, cardSlideAnim, cardFadeAnim, glowAnim]);
 
-  // Auto-save to collection
+    // Animated value counter - count up effect
+    valueCounterAnim.setValue(0);
+    const listenerId = valueCounterAnim.addListener(({ value }) => {
+      setDisplayValueLow(Math.round(valueLow * value));
+      setDisplayValueHigh(Math.round(valueHigh * value));
+    });
+
+    // Delay value reveal until card slides in
+    setTimeout(() => {
+      Animated.timing(valueCounterAnim, {
+        toValue: 1,
+        duration: tier >= 4 ? 1500 : 800,  // Longer count for high values
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: false,  // Required for listeners
+      }).start();
+    }, 600);
+
+    return () => {
+      valueCounterAnim.removeListener(listenerId);
+    };
+  }, [valueHigh, valueLow, scaleAnim, fadeAnim, cardSlideAnim, cardFadeAnim, glowAnim, tierIconBounce, tierIconRotate, valueCounterAnim]);
+
+  // Check if viewing from collection
+  const isFromCollection = params.fromCollection === 'true';
+
+  // Auto-save to collection (skip if viewing from collection)
+  // Only clear pendingThumbnail after certificateImage is captured
   useEffect(() => {
-    if (!verdict || savedToCollection || isNotBeanie) return;
+    if (!verdict || savedToCollection || isNotBeanie || isFromCollection) return;
+
+    // Get the thumbnail - use certificateImage if captured, otherwise try pendingThumbnail
+    const thumbnailToSave = certificateImage || pendingThumbnail || '';
 
     const collectionItem: CollectionItem = {
       id: generateId(),
       timestamp: Date.now(),
-      thumbnail: pendingThumbnail || '',
+      thumbnail: thumbnailToSave,
       name: params.name || 'Unknown',
       animal_type: params.animal_type || '',
       variant: params.variant || '',
@@ -414,15 +628,152 @@ export default function ResultScreen() {
       pellet_type: followUpAnswers?.pellet_type as PelletType | undefined,
       value_notes: params.value_notes || '',
       tier: verdict.tier,
+      roast: params.roast || undefined,
     };
 
     addItem(collectionItem);
-    setPendingThumbnail(null);
+
+    // Haptic feedback on save
+    if (Platform.OS !== 'web') {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    }
+
+    // Only clear pendingThumbnail if certificateImage has already captured it
+    // This prevents race conditions where the certificate loses the image
+    if (certificateImage) {
+      setPendingThumbnail(null);
+    }
     setSavedToCollection(true);
-  }, [verdict, savedToCollection, isNotBeanie, params, baseValueLow, baseValueHigh, valueLow, valueHigh, followUpAnswers, pendingThumbnail, addItem, setPendingThumbnail]);
+  }, [verdict, savedToCollection, isNotBeanie, isFromCollection, params, baseValueLow, baseValueHigh, valueLow, valueHigh, followUpAnswers, pendingThumbnail, certificateImage, addItem, setPendingThumbnail]);
+
+  // Cleanup: clear pendingThumbnail once certificateImage is captured (fallback cleanup)
+  useEffect(() => {
+    if (certificateImage && pendingThumbnail) {
+      setPendingThumbnail(null);
+    }
+  }, [certificateImage, pendingThumbnail, setPendingThumbnail]);
+
+  // Track XP earned from this scan (challenge + lucky bonus)
+  useEffect(() => {
+    if (pendingChallengeReward && xpEarnedThisScan === 0) {
+      setXpEarnedThisScan(prev => prev + pendingChallengeReward.xpReward);
+    }
+  }, [pendingChallengeReward, xpEarnedThisScan]);
+
+  useEffect(() => {
+    if (pendingLuckyBonus && !showLuckyBonus) {
+      setXpEarnedThisScan(prev => prev + pendingLuckyBonus.xp);
+    }
+  }, [pendingLuckyBonus, showLuckyBonus]);
+
+  // Show achievement toast when new achievements are unlocked
+  useEffect(() => {
+    if (pendingAchievementNotifications && pendingAchievementNotifications.length > 0 && !currentAchievement) {
+      // Show the first pending achievement
+      setCurrentAchievement(pendingAchievementNotifications[0]);
+    }
+  }, [pendingAchievementNotifications, currentAchievement]);
+
+  // Handle achievement toast dismiss
+  const handleAchievementDismiss = () => {
+    setCurrentAchievement(null);
+    // Clear all pending achievements after showing first one
+    // (could queue them, but for simplicity just clear)
+    clearPendingAchievements();
+  };
+
+  // Show challenge toast when daily challenge is completed
+  useEffect(() => {
+    if (pendingChallengeReward && !currentChallenge && !currentAchievement) {
+      // Delay slightly so it doesn't overlap with achievement toast
+      const timer = setTimeout(() => {
+        setCurrentChallenge(pendingChallengeReward);
+      }, currentAchievement ? 2000 : 500);
+      return () => clearTimeout(timer);
+    }
+  }, [pendingChallengeReward, currentChallenge, currentAchievement]);
+
+  // Handle challenge toast dismiss
+  const handleChallengeDismiss = () => {
+    setCurrentChallenge(null);
+    clearPendingChallengeReward();
+  };
+
+  // Show level up toast when user levels up
+  useEffect(() => {
+    if (pendingLevelUp && !showLevelUp && !currentAchievement && !currentChallenge) {
+      // Delay slightly so it doesn't overlap with other toasts
+      const timer = setTimeout(() => {
+        setShowLevelUp(pendingLevelUp);
+      }, currentAchievement || currentChallenge ? 2500 : 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [pendingLevelUp, showLevelUp, currentAchievement, currentChallenge]);
+
+  // Handle level up toast dismiss
+  const handleLevelUpDismiss = () => {
+    setShowLevelUp(null);
+    clearPendingLevelUp();
+  };
+
+  // Show milestone toast when collection milestone is reached
+  useEffect(() => {
+    if (pendingMilestone && !showMilestone && !currentAchievement && !currentChallenge && !showLevelUp) {
+      // Delay slightly so it doesn't overlap with other toasts
+      const timer = setTimeout(() => {
+        setShowMilestone(pendingMilestone);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [pendingMilestone, showMilestone, currentAchievement, currentChallenge, showLevelUp]);
+
+  // Handle milestone toast dismiss
+  const handleMilestoneDismiss = () => {
+    setShowMilestone(null);
+    clearPendingMilestone();
+  };
+
+  // Show lucky bonus toast when bonus is pending
+  useEffect(() => {
+    if (pendingLuckyBonus && !showLuckyBonus && !currentAchievement && !currentChallenge && !showLevelUp && !showMilestone) {
+      // Delay slightly so it doesn't overlap with other toasts
+      const timer = setTimeout(() => {
+        setShowLuckyBonus(pendingLuckyBonus);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [pendingLuckyBonus, showLuckyBonus, currentAchievement, currentChallenge, showLevelUp, showMilestone]);
+
+  // Handle lucky bonus toast dismiss
+  const handleLuckyBonusDismiss = () => {
+    setShowLuckyBonus(null);
+    clearPendingLuckyBonus();
+  };
+
+  // Show value milestone toast when milestone is pending
+  useEffect(() => {
+    if (pendingValueMilestone && !showValueMilestone && !currentAchievement && !currentChallenge && !showLevelUp && !showMilestone && !showLuckyBonus) {
+      // Delay so it doesn't overlap with other toasts
+      const timer = setTimeout(() => {
+        setShowValueMilestone(pendingValueMilestone);
+      }, 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [pendingValueMilestone, showValueMilestone, currentAchievement, currentChallenge, showLevelUp, showMilestone, showLuckyBonus]);
+
+  // Handle value milestone toast dismiss
+  const handleValueMilestoneDismiss = () => {
+    setShowValueMilestone(null);
+    clearPendingValueMilestone();
+  };
 
   const handleShare = async () => {
     if (!certificateRef.current || !verdict) return;
+
+    // Haptic feedback on share
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
 
     setIsSharing(true);
 
@@ -475,20 +826,74 @@ export default function ResultScreen() {
       {/* Memphis pattern overlay */}
       <MemphisPattern tier={currentTier} />
 
-      {/* Hidden certificate for capture */}
-      <View style={styles.certificateContainer}>
-        <FarewellCertificate
-          ref={certificateRef}
-          name={params.name || ''}
-          variant={hasSpecialVariant ? params.variant || '' : params.animal_type || ''}
-          valueLow={valueLow}
-          valueHigh={valueHigh}
-          verdictTitle={verdict?.title || ''}
-          verdictIcon={verdict?.icon || ''}
-          tier={verdict?.tier || 1}
-          condition={followUpAnswers?.condition ? formatCondition(followUpAnswers.condition) : undefined}
+
+      {/* Home Button */}
+      <Pressable style={styles.homeButton} onPress={() => router.replace('/')}>
+        <Text style={styles.homeButtonText}>← Home</Text>
+      </Pressable>
+
+      {/* Achievement Toast */}
+      {currentAchievement && (
+        <AchievementToast
+          achievement={currentAchievement}
+          onDismiss={handleAchievementDismiss}
         />
-      </View>
+      )}
+
+      {/* Challenge Toast */}
+      {currentChallenge && !currentAchievement && (
+        <ChallengeToast
+          challenge={currentChallenge}
+          onDismiss={handleChallengeDismiss}
+        />
+      )}
+
+      {/* Level Up Toast */}
+      {showLevelUp && !currentAchievement && !currentChallenge && (
+        <LevelUpToast
+          level={showLevelUp.level}
+          title={showLevelUp.title}
+          emoji={showLevelUp.emoji}
+          color={showLevelUp.color}
+          onDismiss={handleLevelUpDismiss}
+        />
+      )}
+
+      {/* Milestone Toast */}
+      {showMilestone && !currentAchievement && !currentChallenge && !showLevelUp && (
+        <MilestoneToast
+          milestone={showMilestone}
+          onDismiss={handleMilestoneDismiss}
+        />
+      )}
+
+      {/* Rare Find Celebration Overlay */}
+      {showCelebration && verdict && (verdict.tier === 4 || verdict.tier === 5) && (
+        <RareFindCelebration
+          tier={verdict.tier as 4 | 5}
+          onComplete={() => setShowCelebration(false)}
+        />
+      )}
+
+      {/* Lucky Scan Bonus Toast */}
+      {showLuckyBonus && !currentAchievement && !currentChallenge && !showLevelUp && !showMilestone && (
+        <LuckyScanToast
+          xp={showLuckyBonus.xp}
+          multiplier={showLuckyBonus.multiplier}
+          onDismiss={handleLuckyBonusDismiss}
+        />
+      )}
+
+      {/* Value Milestone Toast */}
+      {showValueMilestone && !currentAchievement && !currentChallenge && !showLevelUp && !showMilestone && !showLuckyBonus && (
+        <ValueMilestoneToast
+          milestone={showValueMilestone}
+          onDismiss={handleValueMilestoneDismiss}
+        />
+      )}
+
+      {/* Confetti for high-value discoveries */}
+      {showConfetti && <Confetti count={60} />}
 
       <ScrollView
         style={styles.scrollView}
@@ -505,17 +910,51 @@ export default function ResultScreen() {
             },
           ]}
         >
-          {/* Tier Icon */}
-          <View style={styles.tierIconWrapper}>
+          {/* Tier Icon - Animated bounce reveal */}
+          <Animated.View style={[
+            styles.tierIconWrapper,
+            {
+              transform: [
+                {
+                  scale: tierIconBounce.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.3, 1],
+                  }),
+                },
+                {
+                  rotate: tierIconRotate.interpolate({
+                    inputRange: [-1, 0, 1],
+                    outputRange: ['-10deg', '0deg', '10deg'],
+                  }),
+                },
+              ],
+            },
+          ]}>
             <Image
-              source={TIER_ICONS[currentTier] || TIER_ICONS[1]}
+              source={currentTier === 2 ? getTier2Icon(params.name || '') : (TIER_ICONS[currentTier] || TIER_ICONS[1])}
               style={styles.tierIcon}
               resizeMode="contain"
             />
-          </View>
+          </Animated.View>
           <Text style={[styles.verdictTitle, { color: tierColors.accent }]}>
             {verdict?.title || 'Analyzing...'}
           </Text>
+
+          {/* Flex/Flop Badge */}
+          {flexFlopLabel && !isNotBeanie && (
+            <View style={[styles.flexFlopBadge, { backgroundColor: flexFlopLabel.color }]}>
+              <Text style={styles.flexFlopEmoji}>{flexFlopLabel.emoji}</Text>
+              <Text style={styles.flexFlopLabel}>{flexFlopLabel.label}</Text>
+            </View>
+          )}
+
+          {/* Rarity Indicator */}
+          {!isNotBeanie && (
+            <View style={[styles.rarityBadge, { borderColor: `${tierColors.accent}40` }]}>
+              <Text style={styles.rarityPercent}>{TIER_RARITY[currentTier].percent}</Text>
+              <Text style={styles.rarityLabel}>{TIER_RARITY[currentTier].label}</Text>
+            </View>
+          )}
         </Animated.View>
 
         {/* Main Card - Frosted Glass */}
@@ -572,50 +1011,104 @@ export default function ResultScreen() {
                     <Text style={styles.valueLabel}>ESTIMATED VALUE</Text>
                     <View style={styles.valueRow}>
                       <Text style={[styles.valueAmount, { color: tierColors.accent }]}>
-                        ${valueLow}
+                        ${displayValueLow}
                       </Text>
                       <Text style={styles.valueDash}>-</Text>
                       <Text style={[styles.valueAmount, { color: tierColors.accent }]}>
-                        ${valueHigh}
+                        ${displayValueHigh}
                       </Text>
                     </View>
                   </View>
+
+                  {/* THE ROAST - Savage but funny commentary */}
+                  {params.roast && (
+                    <View style={[styles.roastContainer, { borderColor: `${tierColors.accent}40` }]}>
+                      <Text style={styles.roastIcon}>🔥</Text>
+                      <Text style={[styles.roastText, { color: tierColors.accent }]}>
+                        {params.roast}
+                      </Text>
+                    </View>
+                  )}
+
+                  {/* What We Detected - Compact inline format */}
+                  {detectedAssumptions && (
+                    <View style={styles.assumptionsContainer}>
+                      <Text style={styles.assumptionsTitle}>👁️ WHAT WE SAW</Text>
+                      <View style={styles.assumptionsInline}>
+                        <View style={styles.assumptionChip}>
+                          <Text style={styles.chipIcon}>🏷️</Text>
+                          <Text style={styles.chipText}>{detectedAssumptions.tag_status}</Text>
+                        </View>
+                        <View style={styles.assumptionChip}>
+                          <Text style={styles.chipIcon}>📅</Text>
+                          <Text style={styles.chipText}>{detectedAssumptions.tag_generation}</Text>
+                        </View>
+                        <View style={styles.assumptionChip}>
+                          <Text style={styles.chipIcon}>✨</Text>
+                          <Text style={styles.chipText}>{detectedAssumptions.condition_estimate}</Text>
+                        </View>
+                      </View>
+                      {detectedAssumptions.condition_notes && (
+                        <Text style={styles.conditionNotes}>{detectedAssumptions.condition_notes}</Text>
+                      )}
+                      {detectedAssumptions.special_features && detectedAssumptions.special_features.length > 0 && (
+                        <View style={styles.specialFeaturesInline}>
+                          {detectedAssumptions.special_features.map((feature, index) => (
+                            <Text key={index} style={styles.specialFeatureChip}>🔍 {feature}</Text>
+                          ))}
+                        </View>
+                      )}
+                    </View>
+                  )}
 
                   {/* Verdict Message */}
                   <View style={styles.messageContainer}>
                     <Text style={styles.messageText}>{verdict?.message || ''}</Text>
                   </View>
 
-                  {/* Value Breakdown - Shows what drives high vs low values */}
+                  {/* Fun Facts Section */}
+                  {funFacts.length > 0 && (
+                    <View style={styles.funFactsContainer}>
+                      <Text style={styles.funFactsTitle}>📜 THE FINE PRINT</Text>
+                      {funFacts.slice(0, 2).map((fact, index) => (
+                        <Text key={index} style={styles.funFactText}>
+                          {fact.text}
+                        </Text>
+                      ))}
+                    </View>
+                  )}
+
+                  {/* Value Breakdown - Compact visual format */}
                   {valueBreakdown && (
                     <View style={styles.breakdownContainer}>
-                      <Text style={styles.breakdownTitle}>VALUE BY CONDITION</Text>
-
-                      <View style={styles.breakdownRow}>
-                        <Text style={styles.breakdownLabel}>No tag:</Text>
-                        <Text style={styles.breakdownValue}>{valueBreakdown.no_tag}</Text>
-                      </View>
-
-                      <View style={styles.breakdownRow}>
-                        <Text style={styles.breakdownLabel}>4th/5th gen tag:</Text>
-                        <Text style={styles.breakdownValue}>{valueBreakdown.common_tag}</Text>
-                      </View>
-
-                      <View style={styles.breakdownRow}>
-                        <Text style={styles.breakdownLabel}>1st-3rd gen tag:</Text>
-                        <Text style={styles.breakdownValue}>{valueBreakdown.early_tag}</Text>
-                      </View>
-
-                      {valueBreakdown.mint_premium && (
-                        <View style={styles.breakdownRow}>
-                          <Text style={styles.breakdownLabel}>Mint premium:</Text>
-                          <Text style={[styles.breakdownValue, styles.premiumText]}>{valueBreakdown.mint_premium}</Text>
+                      <Text style={styles.breakdownTitle}>📊 VALUE BY CONDITION</Text>
+                      <View style={styles.breakdownGrid}>
+                        <View style={styles.breakdownItem}>
+                          <Text style={styles.breakdownEmoji}>❌</Text>
+                          <Text style={styles.breakdownItemLabel}>No tag</Text>
+                          <Text style={styles.breakdownItemValue}>{valueBreakdown.no_tag}</Text>
                         </View>
-                      )}
-
+                        <View style={styles.breakdownItem}>
+                          <Text style={styles.breakdownEmoji}>🏷️</Text>
+                          <Text style={styles.breakdownItemLabel}>Common tag</Text>
+                          <Text style={styles.breakdownItemValue}>{valueBreakdown.common_tag}</Text>
+                        </View>
+                        <View style={styles.breakdownItem}>
+                          <Text style={styles.breakdownEmoji}>⭐</Text>
+                          <Text style={styles.breakdownItemLabel}>Early tag</Text>
+                          <Text style={styles.breakdownItemValue}>{valueBreakdown.early_tag}</Text>
+                        </View>
+                        {valueBreakdown.mint_premium && (
+                          <View style={styles.breakdownItem}>
+                            <Text style={styles.breakdownEmoji}>💎</Text>
+                            <Text style={styles.breakdownItemLabel}>Mint bonus</Text>
+                            <Text style={[styles.breakdownItemValue, styles.premiumText]}>{valueBreakdown.mint_premium}</Text>
+                          </View>
+                        )}
+                      </View>
                       {valueBreakdown.key_factors && valueBreakdown.key_factors.length > 0 && (
                         <View style={styles.keyFactorsSection}>
-                          <Text style={styles.keyFactorsTitle}>Key factors:</Text>
+                          <Text style={styles.keyFactorsTitle}>💡 Key factors:</Text>
                           {valueBreakdown.key_factors.map((factor, index) => (
                             <Text key={index} style={styles.keyFactorItem}>• {factor}</Text>
                           ))}
@@ -627,7 +1120,7 @@ export default function ResultScreen() {
                   {/* Value Notes */}
                   {params.value_notes && (
                     <View style={styles.notesContainer}>
-                      <Text style={styles.notesLabel}>About this Beanie</Text>
+                      <Text style={styles.notesLabel}>ℹ️ About this Beanie</Text>
                       <Text style={styles.notesText}>{params.value_notes}</Text>
                     </View>
                   )}
@@ -635,34 +1128,26 @@ export default function ResultScreen() {
                   {/* Value Factors Applied */}
                   {followUpAnswers && (
                     <View style={styles.factorsContainer}>
-                      <Text style={styles.factorsTitle}>VALUE FACTORS APPLIED</Text>
-                      {followUpAnswers.condition && (
-                        <Text style={styles.factorItem}>
-                          {'\u2022'} Condition: {formatCondition(followUpAnswers.condition)}
-                        </Text>
-                      )}
-                      {followUpAnswers.pellet_type && (
-                        <Text style={styles.factorItem}>
-                          {'\u2022'} Pellets: {formatPelletType(followUpAnswers.pellet_type)}
-                        </Text>
-                      )}
+                      <Text style={styles.factorsTitle}>✅ FACTORS APPLIED</Text>
+                      <View style={styles.factorsGrid}>
+                        {followUpAnswers.condition && (
+                          <View style={styles.factorChip}>
+                            <Text style={styles.factorChipIcon}>✨</Text>
+                            <Text style={styles.factorChipText}>{formatCondition(followUpAnswers.condition)}</Text>
+                          </View>
+                        )}
+                        {followUpAnswers.pellet_type && (
+                          <View style={styles.factorChip}>
+                            <Text style={styles.factorChipIcon}>🫘</Text>
+                            <Text style={styles.factorChipText}>{formatPelletType(followUpAnswers.pellet_type)}</Text>
+                          </View>
+                        )}
+                      </View>
                       {followUpAnswers.pellet_type === 'unknown' && (
                         <View style={styles.rangeExplanation}>
                           <Text style={styles.rangeText}>
-                            High end assumes rare PVC pellets{'\n'}
-                            Low end assumes common PE pellets
-                          </Text>
-                        </View>
-                      )}
-                      {followUpAnswers.pellet_type === 'unknown' && (
-                        <View style={styles.pelletRangeContainer}>
-                          <Text style={styles.pelletRangeTitle}>If pellet type is known:</Text>
-                          <Text style={styles.pelletRangeText}>
-                            PVC pellets: ${Math.round(baseValueLow * 3)}-$
-                            {Math.round(baseValueHigh * 5)}
-                          </Text>
-                          <Text style={styles.pelletRangeText}>
-                            PE pellets: ${baseValueLow}-${baseValueHigh}
+                            📈 High: assumes rare PVC pellets{'\n'}
+                            📉 Low: assumes common PE pellets
                           </Text>
                         </View>
                       )}
@@ -716,21 +1201,17 @@ export default function ResultScreen() {
 
           {/* Secondary buttons row */}
           <View style={styles.secondaryButtonsRow}>
-            {/* Share button (mobile only) */}
-            {Platform.OS !== 'web' && (
+            {/* View Certificate button (mobile only) */}
+            {Platform.OS !== 'web' && !isNotBeanie && (
               <BlurView intensity={40} tint="light" style={[styles.secondaryButtonBlur, styles.flexButton]}>
                 <Pressable
                   style={({ pressed }) => [
                     styles.secondaryButton,
                     pressed && styles.secondaryButtonPressed,
-                    isSharing && styles.buttonDisabled,
                   ]}
-                  onPress={handleShare}
-                  disabled={isSharing}
+                  onPress={() => setShowCertificateModal(true)}
                 >
-                  <Text style={styles.secondaryButtonText}>
-                    {isSharing ? 'Creating...' : shareButtonText}
-                  </Text>
+                  <Text style={styles.secondaryButtonText}>View Certificate</Text>
                 </Pressable>
               </BlurView>
             )}
@@ -749,12 +1230,90 @@ export default function ResultScreen() {
             </BlurView>
           </View>
 
-          {/* Added to collection indicator */}
-          {savedToCollection && !isNotBeanie && (
-            <Text style={styles.savedIndicator}>Added to collection</Text>
+          {/* Added to collection indicator with XP earned */}
+          {savedToCollection && !isNotBeanie && !isFromCollection && (
+            <View style={styles.savedRow}>
+              <Text style={styles.savedIndicator}>Added to collection</Text>
+              {xpEarnedThisScan > 0 && (
+                <View style={styles.xpEarnedBadge}>
+                  <Text style={styles.xpEarnedText}>+{xpEarnedThisScan} XP</Text>
+                </View>
+              )}
+            </View>
+          )}
+          {/* Viewing from collection indicator */}
+          {isFromCollection && (
+            <Text style={styles.savedIndicator}>Viewing from collection</Text>
           )}
         </Animated.View>
       </ScrollView>
+
+      {/* Certificate Preview Modal */}
+      <Modal
+        visible={showCertificateModal}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setShowCertificateModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            {/* Certificate Preview */}
+            <View style={styles.certificatePreview}>
+              <FarewellCertificate
+                ref={certificateRef}
+                name={params.name || ''}
+                variant={hasSpecialVariant ? params.variant || '' : params.animal_type || ''}
+                valueLow={valueLow}
+                valueHigh={valueHigh}
+                verdictTitle={verdict?.title || ''}
+                tier={verdict?.tier || 1}
+                beanieImage={certificateImage || undefined}
+                userName={userName || undefined}
+                roast={params.roast || undefined}
+              />
+            </View>
+
+            {/* Share Caption */}
+            {shareCaption && (
+              <View style={styles.shareCaptionContainer}>
+                <Text style={styles.shareCaptionLabel}>📋 Copy for socials:</Text>
+                <Text style={styles.shareCaptionText}>{shareCaption}</Text>
+              </View>
+            )}
+
+            {/* Modal Buttons */}
+            <View style={styles.modalButtons}>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.modalShareButton,
+                  pressed && styles.buttonPressed,
+                  isSharing && styles.buttonDisabled,
+                ]}
+                onPress={handleShare}
+                disabled={isSharing}
+              >
+                <LinearGradient
+                  colors={[MEMPHIS_COLORS.magenta, MEMPHIS_COLORS.deepPink]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.modalShareButtonGradient}
+                >
+                  <Text style={styles.modalShareButtonText}>
+                    {isSharing ? 'Sharing...' : 'Share Certificate'}
+                  </Text>
+                </LinearGradient>
+              </Pressable>
+
+              <Pressable
+                style={styles.modalCloseButton}
+                onPress={() => setShowCertificateModal(false)}
+              >
+                <Text style={styles.modalCloseButtonText}>Close</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -777,6 +1336,26 @@ const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     height: '100%',
+  },
+  homeButton: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    zIndex: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  homeButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#666666',
   },
   certificateContainer: {
     position: 'absolute',
@@ -808,6 +1387,51 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: '700',
     textAlign: 'center',
+  },
+  flexFlopBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    marginTop: 12,
+    gap: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  flexFlopEmoji: {
+    fontSize: 18,
+  },
+  flexFlopLabel: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '800',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  rarityBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 16,
+    marginTop: 10,
+    gap: 6,
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    borderWidth: 1,
+  },
+  rarityPercent: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#1a1a2e',
+  },
+  rarityLabel: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#666',
   },
   cardWrapper: {
     marginBottom: 20,
@@ -848,10 +1472,33 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 16,
     borderWidth: 1,
     overflow: 'hidden',
     position: 'relative',
+  },
+  // Roast styles
+  roastContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 20,
+    borderWidth: 2,
+    borderStyle: 'dashed',
+    gap: 12,
+  },
+  roastIcon: {
+    fontSize: 24,
+    marginTop: 2,
+  },
+  roastText: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '600',
+    fontStyle: 'italic',
+    lineHeight: 24,
   },
   valueGlow: {
     position: 'absolute',
@@ -897,6 +1544,95 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontStyle: 'italic',
   },
+  funFactsContainer: {
+    backgroundColor: 'rgba(255, 107, 53, 0.08)',
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 107, 53, 0.15)',
+  },
+  funFactsTitle: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#FF6B35',
+    letterSpacing: 1.2,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  funFactText: {
+    fontSize: 13,
+    color: '#666666',
+    lineHeight: 20,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  assumptionsContainer: {
+    backgroundColor: 'rgba(139, 92, 246, 0.08)',
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(139, 92, 246, 0.2)',
+  },
+  assumptionsTitle: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#8B5CF6',
+    letterSpacing: 1.2,
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  assumptionsInline: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 8,
+    marginBottom: 8,
+  },
+  assumptionChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(139, 92, 246, 0.12)',
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+    gap: 4,
+  },
+  chipIcon: {
+    fontSize: 12,
+  },
+  chipText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#1a1a2e',
+  },
+  conditionNotes: {
+    fontSize: 12,
+    color: '#666666',
+    fontStyle: 'italic',
+    marginTop: 8,
+    lineHeight: 18,
+    textAlign: 'center',
+  },
+  specialFeaturesInline: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 6,
+    marginTop: 8,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  specialFeatureChip: {
+    fontSize: 11,
+    color: '#666666',
+    backgroundColor: 'rgba(0, 0, 0, 0.04)',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 12,
+  },
   breakdownContainer: {
     backgroundColor: 'rgba(0, 206, 209, 0.08)',
     borderRadius: 14,
@@ -910,26 +1646,36 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#00CED1',
     letterSpacing: 1.2,
-    marginBottom: 14,
+    marginBottom: 12,
+    textAlign: 'center',
   },
-  breakdownRow: {
+  breakdownGrid: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  breakdownItem: {
     alignItems: 'center',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.05)',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    minWidth: 70,
   },
-  breakdownLabel: {
-    fontSize: 14,
+  breakdownEmoji: {
+    fontSize: 16,
+    marginBottom: 4,
+  },
+  breakdownItemLabel: {
+    fontSize: 10,
     color: '#666666',
-    flex: 1,
+    marginBottom: 2,
   },
-  breakdownValue: {
-    fontSize: 14,
-    fontWeight: '600',
+  breakdownItemValue: {
+    fontSize: 13,
+    fontWeight: '700',
     color: '#1a1a2e',
-    textAlign: 'right',
   },
   premiumText: {
     color: '#00CED1',
@@ -968,19 +1714,44 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   factorsContainer: {
-    backgroundColor: 'rgba(248, 249, 250, 0.8)',
+    backgroundColor: 'rgba(16, 185, 129, 0.08)',
     borderRadius: 14,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.05)',
+    borderColor: 'rgba(16, 185, 129, 0.2)',
   },
   factorsTitle: {
     fontSize: 11,
-    fontWeight: '600',
-    color: '#999999',
-    letterSpacing: 1,
+    fontWeight: '700',
+    color: '#10B981',
+    letterSpacing: 1.2,
     marginBottom: 12,
+    textAlign: 'center',
+  },
+  factorsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 8,
+    marginBottom: 4,
+  },
+  factorChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    gap: 6,
+  },
+  factorChipIcon: {
+    fontSize: 14,
+  },
+  factorChipText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#1a1a2e',
   },
   factorItem: {
     fontSize: 14,
@@ -1107,11 +1878,113 @@ const styles = StyleSheet.create({
   flexButton: {
     flex: 1,
   },
+  savedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 8,
+    gap: 8,
+  },
   savedIndicator: {
     fontSize: 13,
     color: '#00CED1',
-    textAlign: 'center',
-    marginTop: 8,
     fontWeight: '500',
+  },
+  xpEarnedBadge: {
+    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 215, 0, 0.4)',
+  },
+  xpEarnedText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#DAA520',
+  },
+
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: '#F8F9FA',
+    borderRadius: 24,
+    padding: 16,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 20 },
+    shadowOpacity: 0.3,
+    shadowRadius: 30,
+    elevation: 20,
+  },
+  certificatePreview: {
+    borderRadius: 16,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  modalButtons: {
+    width: '100%',
+    gap: 12,
+    marginTop: 16,
+  },
+  modalShareButton: {
+    borderRadius: 50,
+    overflow: 'hidden',
+    shadowColor: '#FF00FF',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 10,
+    elevation: 6,
+  },
+  modalShareButtonGradient: {
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    alignItems: 'center',
+  },
+  modalShareButtonText: {
+    color: '#FFFFFF',
+    fontSize: 17,
+    fontWeight: '600',
+    letterSpacing: 0.3,
+  },
+  modalCloseButton: {
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  modalCloseButtonText: {
+    color: '#666666',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+
+  // Share Caption
+  shareCaptionContainer: {
+    width: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    borderRadius: 12,
+    padding: 12,
+    marginTop: 12,
+  },
+  shareCaptionLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#999',
+    marginBottom: 6,
+  },
+  shareCaptionText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#1a1a2e',
+    lineHeight: 20,
   },
 });

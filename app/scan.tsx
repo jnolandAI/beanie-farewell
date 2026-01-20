@@ -5,9 +5,12 @@ import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path, Circle, Polygon } from 'react-native-svg';
 import * as ImagePicker from 'expo-image-picker';
+import * as Haptics from 'expo-haptics';
 import { identifyBeanieFromImage } from '../lib/claude';
 import { getLoadingText, SCAN_TEXT, getErrorPrefix } from '../lib/humor';
 import { useCollectionStore } from '../lib/store';
+import { compressImageForThumbnail } from '../lib/imageUtils';
+import { isNetworkError, getOfflineErrorMessage } from '../lib/network';
 
 // Web mock mode test scenarios
 const WEB_TEST_SCENARIOS = [
@@ -335,13 +338,8 @@ export default function ScanScreen() {
         })
       ).start();
 
-      // Rotate loading messages
-      const interval = setInterval(() => {
-        setLoadingText(getLoadingText());
-      }, 3000);
-
+      // Keep loading text stable - no rotation so facts can be read
       return () => {
-        clearInterval(interval);
         pulseAnim.setValue(1);
         dotAnim.setValue(0);
       };
@@ -355,11 +353,22 @@ export default function ScanScreen() {
     setError(null);
     setLoadingText(getLoadingText());
 
+    // Haptic feedback on scan start
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+
     try {
       const identification = await identifyBeanieFromImage(base64);
 
-      // Store thumbnail for collection auto-save
-      setPendingThumbnail(base64);
+      // Compress thumbnail for storage efficiency
+      const compressedThumbnail = await compressImageForThumbnail(base64);
+      setPendingThumbnail(compressedThumbnail);
+
+      // Success haptic
+      if (Platform.OS !== 'web') {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      }
 
       if (identification.needs_follow_up && identification.follow_up_questions?.length) {
         // Route to follow-up screen
@@ -377,6 +386,7 @@ export default function ScanScreen() {
             has_visible_hang_tag: String(identification.has_visible_hang_tag),
             follow_up_questions: JSON.stringify(identification.follow_up_questions),
             potential_value_if_rare: JSON.stringify(identification.potential_value_if_rare || null),
+            roast: identification.roast || undefined,
           },
         });
       } else {
@@ -394,17 +404,33 @@ export default function ScanScreen() {
             confidence: identification.confidence,
             has_visible_hang_tag: String(identification.has_visible_hang_tag),
             value_breakdown: identification.value_breakdown ? JSON.stringify(identification.value_breakdown) : undefined,
+            detected_assumptions: identification.detected_assumptions ? JSON.stringify(identification.detected_assumptions) : undefined,
+            roast: identification.roast || undefined,
           },
         });
       }
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Unknown error occurred';
-      setError(`${getErrorPrefix()} ${errorMsg}`);
+      // Error haptic
+      if (Platform.OS !== 'web') {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      }
+      // Check if it's a network error
+      if (isNetworkError(err)) {
+        setError(getOfflineErrorMessage());
+      } else {
+        const errorMsg = err instanceof Error ? err.message : 'Unknown error occurred';
+        setError(`${getErrorPrefix()} ${errorMsg}`);
+      }
       setLoading(false);
     }
   };
 
   const takePhoto = async () => {
+    // Light haptic on button press
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
     if (!permissionResult.granted) {
@@ -425,6 +451,11 @@ export default function ScanScreen() {
   };
 
   const chooseFromLibrary = async () => {
+    // Light haptic on button press
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (!permissionResult.granted) {
@@ -531,7 +562,14 @@ export default function ScanScreen() {
               </Animated.View>
 
               <Text style={styles.loadingTitle}>{loadingText.title}</Text>
-              <Text style={styles.loadingSubtitle}>{loadingText.subtitle}</Text>
+              {loadingText.fact ? (
+                <View style={styles.factContainer}>
+                  <Text style={styles.factLabel}>DID YOU KNOW?</Text>
+                  <Text style={styles.factText}>{loadingText.fact}</Text>
+                </View>
+              ) : (
+                <Text style={styles.loadingSubtitle}>{loadingText.subtitle}</Text>
+              )}
 
               <View style={styles.dotsContainer}>
                 {[0, 1, 2].map((i) => (
@@ -583,8 +621,8 @@ export default function ScanScreen() {
           },
         ]}
       >
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
-          <Text style={styles.backButtonText}>← Back</Text>
+        <Pressable style={styles.backButton} onPress={() => router.replace('/')}>
+          <Text style={styles.backButtonText}>← Home</Text>
         </Pressable>
 
         <View style={styles.content}>
@@ -1021,6 +1059,28 @@ const styles = StyleSheet.create({
     color: '#666666',
     textAlign: 'center',
     fontStyle: 'italic',
+  },
+  factContainer: {
+    backgroundColor: 'rgba(0, 206, 209, 0.1)',
+    borderRadius: 12,
+    padding: 14,
+    marginTop: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 206, 209, 0.2)',
+  },
+  factLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#00CED1',
+    letterSpacing: 1.2,
+    marginBottom: 6,
+    textAlign: 'center',
+  },
+  factText: {
+    fontSize: 14,
+    color: '#666666',
+    textAlign: 'center',
+    lineHeight: 20,
   },
   dotsContainer: {
     flexDirection: 'row',

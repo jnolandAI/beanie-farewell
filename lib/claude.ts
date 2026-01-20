@@ -34,7 +34,30 @@ REQUIRED FIELDS:
 - confidence: "High", "Medium", or "Low"
 - has_visible_hang_tag: boolean
 
-CRITICAL NEW FIELD - value_breakdown (REQUIRED):
+CRITICAL - roast (REQUIRED):
+Generate a funny, savage but affectionate roast of this specific Beanie Baby (1-2 sentences).
+- Be witty and specific to THIS Beanie (its name, animal type, colors, or history)
+- Mock the 90s Beanie craze and the idea these were "investments"
+- Keep it lighthearted - we're laughing WITH millennials, not at them
+- Reference the specific value if relevant (e.g., if it's worth $3, roast that)
+- No mean-spirited or offensive content
+Examples:
+- "Ah, Teddy. The participation trophy of Beanie Babies. Everyone had one, no one got rich."
+- "Legs the Frog: proving that even in the 90s, putting all your money in amphibians was a bad call."
+- "Princess Bear - the one that launched a thousand eBay disputes and zero retirements."
+
+CRITICAL - detected_assumptions (REQUIRED):
+This tells the user what YOU observed in the photo and what you're assuming for the valuation.
+- detected_assumptions: object with what you can see/assume:
+  {
+    "tag_status": "Visible" | "Not visible" | "Partially visible",
+    "tag_generation": "Unknown" | "Appears to be 4th/5th gen" | "Appears to be 1st-3rd gen" | specific if identifiable,
+    "condition_estimate": "Mint" | "Excellent" | "Good" | "Fair" | "Cannot determine",
+    "condition_notes": "Brief explanation of condition based on what you see (e.g., 'Tag appears creased', 'Fur looks clean and fluffy')",
+    "special_features": ["any notable features observed, e.g., 'Tag protector visible', 'Tush tag visible'"]
+  }
+
+CRITICAL - value_breakdown (REQUIRED):
 - value_breakdown: object explaining EXACTLY what drives value differences:
   {
     "no_tag": "$X-Y",
@@ -44,7 +67,7 @@ CRITICAL NEW FIELD - value_breakdown (REQUIRED):
     "key_factors": ["factor 1 that affects value", "factor 2", ...]
   }
 
-- value_notes: 1-2 sentences explaining the SPECIFIC condition of THIS item based on what you see in the photo (tag visible? condition? any notable features?)
+- value_notes: 1-2 sentences explaining WHY you chose this specific value range based on what you observed
 
 SMART VARIANT DETECTION:
 - needs_follow_up: boolean - TRUE if estimated_value_high >= 75 OR known valuable variants exist
@@ -166,6 +189,18 @@ Return JSON with these fields:
 - estimated_value_high: integer USD (best realistic scenario with early tag, mint condition)
 - confidence: "High"
 - has_visible_hang_tag: true
+
+CRITICAL - roast (REQUIRED):
+Generate a funny, savage but affectionate roast of this specific Beanie Baby (1-2 sentences).
+- Be witty and specific to THIS Beanie (its name, animal type, colors, or history)
+- Mock the 90s Beanie craze and the idea these were "investments"
+- Keep it lighthearted - we're laughing WITH millennials, not at them
+- Reference the specific value if relevant (e.g., if it's worth $3, roast that)
+- No mean-spirited or offensive content
+Examples:
+- "Ah, Teddy. The participation trophy of Beanie Babies. Everyone had one, no one got rich."
+- "Legs the Frog: proving that even in the 90s, putting all your money in amphibians was a bad call."
+- "Princess Bear - the one that launched a thousand eBay disputes and zero retirements."
 
 CRITICAL - value_breakdown (REQUIRED):
 - value_breakdown: object with EXACT price ranges:
