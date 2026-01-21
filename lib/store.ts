@@ -93,131 +93,174 @@ export const useCollectionStore = create<CollectionStore>()(
       pendingValueMilestone: null,
 
       addItem: (item: CollectionItem) => {
-        const today = new Date().toISOString().split('T')[0];
-        const { lastScanDate, currentStreak, completedChallengeIds } = get();
+        // Read ALL state once at start to prevent race conditions
+        const state = get();
+        const {
+          collection,
+          lastScanDate,
+          currentStreak,
+          longestStreak,
+          completedChallengeIds,
+          achievedMilestones,
+          achievedStreakMilestones,
+          achievedValueMilestones,
+          unlockedAchievements,
+          lastKnownLevel,
+          totalXP,
+          pendingMilestone,
+          pendingStreakMilestone,
+          pendingLevelUp,
+          pendingAchievementNotifications,
+        } = state;
 
-        // Update streak
+        const today = new Date().toISOString().split('T')[0];
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+        // Calculate new streak
         let newStreak = currentStreak;
         if (lastScanDate !== today) {
-          // Check if yesterday was scanned (streak continues)
-          const yesterday = new Date();
-          yesterday.setDate(yesterday.getDate() - 1);
-          const yesterdayStr = yesterday.toISOString().split('T')[0];
-
           if (lastScanDate === yesterdayStr) {
             newStreak = currentStreak + 1;
-          } else if (lastScanDate !== today) {
-            // Streak broken or first scan
+          } else {
             newStreak = 1;
           }
         }
 
-        // Calculate new collection size after adding
-        const newCollectionSize = get().collection.length + 1;
-        const { achievedMilestones } = get();
+        // Calculate new collection with item added
+        const newCollection = [item, ...collection];
+        const newCollectionSize = newCollection.length;
 
-        // Check for milestone
+        // Check for collection milestone
         const newMilestone = COLLECTION_MILESTONES.find(
           m => m.count === newCollectionSize && !achievedMilestones.includes(m.count)
         );
 
         // Check for streak milestone
-        const { achievedStreakMilestones } = get();
         const newStreakMilestone = STREAK_MILESTONES.find(
           m => newStreak >= m.days && !achievedStreakMilestones.includes(m.days)
         );
 
-        set((state) => ({
-          collection: [item, ...state.collection],
-          currentStreak: newStreak,
-          longestStreak: Math.max(state.longestStreak, newStreak),
-          lastScanDate: today,
-          achievedMilestones: newMilestone
-            ? [...state.achievedMilestones, newMilestone.count]
-            : state.achievedMilestones,
-          pendingMilestone: newMilestone || state.pendingMilestone,
-          achievedStreakMilestones: newStreakMilestone
-            ? [...state.achievedStreakMilestones, newStreakMilestone.days]
-            : state.achievedStreakMilestones,
-          pendingStreakMilestone: newStreakMilestone || state.pendingStreakMilestone,
-        }));
+        // Calculate today's scans (including new item)
+        const todaysScans = newCollection.filter(i => {
+          const itemDate = new Date(i.timestamp).toISOString().split('T')[0];
+          return itemDate === today;
+        });
 
-        // Check daily challenge completion
-        const todaysScans = get().getTodaysScans();
-        const challenge = get().getDailyChallenge();
+        // Get daily challenge
+        const challenge = getDailyChallenge();
+        const challengeAlreadyCompleted = completedChallengeIds.includes(challenge.id);
 
-        if (!completedChallengeIds.includes(challenge.id)) {
-          const completed = checkChallengeCompletion(challenge, item, todaysScans);
-          if (completed) {
-            const { lastKnownLevel, totalXP } = get();
-            const newTotalXP = totalXP + challenge.xpReward;
-            const newLevel = calculateLevel(newTotalXP);
-
-            // Check for level up
-            const leveledUp = newLevel.level > lastKnownLevel;
-
-            set((state) => ({
-              completedChallengeIds: [...state.completedChallengeIds, challenge.id],
-              totalXP: newTotalXP,
-              lastKnownLevel: newLevel.level,
-              pendingChallengeReward: { ...challenge, completed: true },
-              pendingLevelUp: leveledUp ? {
-                level: newLevel.level,
-                title: newLevel.title,
-                emoji: newLevel.emoji,
-                color: newLevel.color,
-              } : state.pendingLevelUp,
-            }));
-          }
+        // Check if challenge just completed
+        let challengeJustCompleted = false;
+        if (!challengeAlreadyCompleted) {
+          challengeJustCompleted = checkChallengeCompletion(challenge, item, todaysScans);
         }
 
-        // Check for new achievements after adding
-        get().checkAndUnlockAchievements();
+        // Calculate XP changes
+        let runningXP = totalXP;
+        let runningLevel = lastKnownLevel;
+        let newPendingChallengeReward: DailyChallenge | null = null;
+        let newPendingLevelUp = pendingLevelUp;
+
+        if (challengeJustCompleted) {
+          runningXP += challenge.xpReward;
+          const levelInfo = calculateLevel(runningXP);
+          if (levelInfo.level > runningLevel) {
+            newPendingLevelUp = {
+              level: levelInfo.level,
+              title: levelInfo.title,
+              emoji: levelInfo.emoji,
+              color: levelInfo.color,
+            };
+          }
+          runningLevel = levelInfo.level;
+          newPendingChallengeReward = { ...challenge, completed: true };
+        }
 
         // Lucky scan bonus - 10% chance for 2x-5x XP multiplier
+        let newPendingLuckyBonus: { xp: number; multiplier: number } | null = null;
         const luckyRoll = Math.random();
-        if (luckyRoll < 0.10) {  // 10% chance
-          // Determine multiplier: 70% 2x, 20% 3x, 8% 4x, 2% 5x
+        if (luckyRoll < 0.10) {
           const multiplierRoll = Math.random();
           let multiplier = 2;
           if (multiplierRoll > 0.98) multiplier = 5;
           else if (multiplierRoll > 0.90) multiplier = 4;
           else if (multiplierRoll > 0.70) multiplier = 3;
 
-          const baseXP = 10;  // Base scan XP
-          const bonusXP = baseXP * multiplier;
-
-          const { lastKnownLevel, totalXP } = get();
-          const newTotalXP = totalXP + bonusXP;
-          const newLevel = calculateLevel(newTotalXP);
-          const leveledUp = newLevel.level > lastKnownLevel;
-
-          set({
-            totalXP: newTotalXP,
-            lastKnownLevel: newLevel.level,
-            pendingLuckyBonus: { xp: bonusXP, multiplier },
-            pendingLevelUp: leveledUp ? {
-              level: newLevel.level,
-              title: newLevel.title,
-              emoji: newLevel.emoji,
-              color: newLevel.color,
-            } : get().pendingLevelUp,
-          });
+          const bonusXP = 10 * multiplier;
+          runningXP += bonusXP;
+          const levelInfo = calculateLevel(runningXP);
+          if (levelInfo.level > runningLevel) {
+            newPendingLevelUp = {
+              level: levelInfo.level,
+              title: levelInfo.title,
+              emoji: levelInfo.emoji,
+              color: levelInfo.color,
+            };
+          }
+          runningLevel = levelInfo.level;
+          newPendingLuckyBonus = { xp: bonusXP, multiplier };
         }
 
+        // Calculate new total value for value milestone check
+        const newTotalValue = newCollection.reduce(
+          (acc, i) => ({
+            low: acc.low + (i.adjusted_value_low ?? i.estimated_value_low),
+            high: acc.high + (i.adjusted_value_high ?? i.estimated_value_high),
+          }),
+          { low: 0, high: 0 }
+        );
+
         // Check for value milestone
-        const newTotalValue = get().getTotalValue();
-        const { achievedValueMilestones } = get();
         const newValueMilestone = VALUE_MILESTONES.find(
           m => newTotalValue.high >= m.value && !achievedValueMilestones.includes(m.value)
         );
 
-        if (newValueMilestone) {
-          set((state) => ({
-            achievedValueMilestones: [...state.achievedValueMilestones, newValueMilestone.value],
-            pendingValueMilestone: newValueMilestone,
-          }));
-        }
+        // Check for new achievements
+        const newlyUnlockedAchievements = checkAchievements(newCollection, unlockedAchievements);
+
+        // Single atomic state update
+        set({
+          collection: newCollection,
+          currentStreak: newStreak,
+          longestStreak: Math.max(longestStreak, newStreak),
+          lastScanDate: today,
+          totalXP: runningXP,
+          lastKnownLevel: runningLevel,
+          // Milestones
+          achievedMilestones: newMilestone
+            ? [...achievedMilestones, newMilestone.count]
+            : achievedMilestones,
+          pendingMilestone: newMilestone || pendingMilestone,
+          // Streak milestones
+          achievedStreakMilestones: newStreakMilestone
+            ? [...achievedStreakMilestones, newStreakMilestone.days]
+            : achievedStreakMilestones,
+          pendingStreakMilestone: newStreakMilestone || pendingStreakMilestone,
+          // Challenge completion
+          completedChallengeIds: challengeJustCompleted
+            ? [...completedChallengeIds, challenge.id]
+            : completedChallengeIds,
+          pendingChallengeReward: newPendingChallengeReward,
+          // Level up
+          pendingLevelUp: newPendingLevelUp,
+          // Lucky bonus
+          pendingLuckyBonus: newPendingLuckyBonus,
+          // Value milestones
+          achievedValueMilestones: newValueMilestone
+            ? [...achievedValueMilestones, newValueMilestone.value]
+            : achievedValueMilestones,
+          pendingValueMilestone: newValueMilestone || null,
+          // Achievements
+          unlockedAchievements: newlyUnlockedAchievements.length > 0
+            ? [...unlockedAchievements, ...newlyUnlockedAchievements.map(a => a.id)]
+            : unlockedAchievements,
+          pendingAchievementNotifications: newlyUnlockedAchievements.length > 0
+            ? [...pendingAchievementNotifications, ...newlyUnlockedAchievements]
+            : pendingAchievementNotifications,
+        });
       },
 
       setPendingThumbnail: (thumbnail: string | null) => {
@@ -269,8 +312,9 @@ export const useCollectionStore = create<CollectionStore>()(
       },
 
       checkDailyLoginBonus: () => {
+        // Read all state once at start
+        const { lastLoginDate, currentStreak, lastKnownLevel, totalXP, pendingLevelUp } = get();
         const today = new Date().toISOString().split('T')[0];
-        const { lastLoginDate, currentStreak, lastKnownLevel, totalXP } = get();
 
         // Already logged in today
         if (lastLoginDate === today) return;
@@ -303,7 +347,7 @@ export const useCollectionStore = create<CollectionStore>()(
             title: newLevel.title,
             emoji: newLevel.emoji,
             color: newLevel.color,
-          } : get().pendingLevelUp,
+          } : pendingLevelUp,
         });
       },
 
@@ -324,7 +368,8 @@ export const useCollectionStore = create<CollectionStore>()(
       },
 
       addXP: (amount: number) => {
-        const { lastKnownLevel, totalXP } = get();
+        // Read all state once at start
+        const { lastKnownLevel, totalXP, pendingLevelUp } = get();
         const newTotalXP = totalXP + amount;
         const newLevel = calculateLevel(newTotalXP);
 
@@ -339,7 +384,7 @@ export const useCollectionStore = create<CollectionStore>()(
             title: newLevel.title,
             emoji: newLevel.emoji,
             color: newLevel.color,
-          } : get().pendingLevelUp,
+          } : pendingLevelUp,
         });
       },
 

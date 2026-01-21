@@ -39,6 +39,7 @@ import {
   generateCollectionInsights,
   CollectionInsight,
 } from '../lib/humor';
+import { showExportFailedAlert, showShareFailedAlert } from '../lib/errors';
 
 // Sort options
 type SortOption = 'date_desc' | 'date_asc' | 'value_desc' | 'value_asc' | 'name_asc' | 'name_desc';
@@ -449,6 +450,7 @@ export default function CollectionScreen() {
         });
       } catch (error) {
         console.error('Export error:', error);
+        showExportFailedAlert();
       }
     }
 
@@ -620,6 +622,7 @@ export default function CollectionScreen() {
       }
     } catch (error) {
       console.error('Error sharing:', error);
+      showShareFailedAlert();
     } finally {
       setIsSharing(false);
     }
@@ -655,6 +658,7 @@ export default function CollectionScreen() {
       }
     } catch (error) {
       console.error('Error sharing stats:', error);
+      showShareFailedAlert();
     } finally {
       setIsSharing(false);
     }

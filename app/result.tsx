@@ -22,6 +22,7 @@ import { ValueMilestoneToast, ValueMilestone } from '../components/ValueMileston
 import { useCollectionStore, generateId } from '../lib/store';
 import { Achievement } from '../lib/achievements';
 import { DailyChallenge } from '../lib/challenges';
+import { safeParseURLParam, showShareFailedAlert } from '../lib/errors';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -409,20 +410,17 @@ export default function ResultScreen() {
   const tierIconBounce = useRef(new Animated.Value(0)).current;
   const tierIconRotate = useRef(new Animated.Value(0)).current;
 
-  // Parse follow-up answers if present
-  const followUpAnswers: FollowUpAnswers | null = params.followUpAnswers
-    ? JSON.parse(params.followUpAnswers)
-    : null;
+  // Ref to track glow animation loop for cleanup
+  const glowAnimRef = useRef<Animated.CompositeAnimation | null>(null);
+
+  // Parse follow-up answers if present (with safe parsing to prevent crashes)
+  const followUpAnswers = safeParseURLParam<FollowUpAnswers | null>(params.followUpAnswers, null);
 
   // Parse value breakdown if present
-  const valueBreakdown: ValueBreakdown | null = params.value_breakdown
-    ? JSON.parse(params.value_breakdown)
-    : null;
+  const valueBreakdown = safeParseURLParam<ValueBreakdown | null>(params.value_breakdown, null);
 
   // Parse detected assumptions if present
-  const detectedAssumptions: DetectedAssumptions | null = params.detected_assumptions
-    ? JSON.parse(params.detected_assumptions)
-    : null;
+  const detectedAssumptions = safeParseURLParam<DetectedAssumptions | null>(params.detected_assumptions, null);
 
   // Base values from initial identification
   const baseValueLow = parseInt(params.estimated_value_low || '0', 10);
@@ -562,7 +560,7 @@ export default function ResultScreen() {
     ]).start();
 
     // Glow pulse animation for high-value tiers
-    Animated.loop(
+    glowAnimRef.current = Animated.loop(
       Animated.sequence([
         Animated.timing(glowAnim, {
           toValue: 1,
@@ -577,7 +575,8 @@ export default function ResultScreen() {
           useNativeDriver: true,
         }),
       ])
-    ).start();
+    );
+    glowAnimRef.current.start();
 
     // Animated value counter - count up effect
     valueCounterAnim.setValue(0);
@@ -597,6 +596,7 @@ export default function ResultScreen() {
     }, 600);
 
     return () => {
+      glowAnimRef.current?.stop();
       valueCounterAnim.removeListener(listenerId);
     };
   }, [valueHigh, valueLow, scaleAnim, fadeAnim, cardSlideAnim, cardFadeAnim, glowAnim, tierIconBounce, tierIconRotate, valueCounterAnim]);
@@ -802,6 +802,7 @@ export default function ResultScreen() {
       }
     } catch (error) {
       console.error('Error sharing:', error);
+      showShareFailedAlert();
     } finally {
       setIsSharing(false);
     }

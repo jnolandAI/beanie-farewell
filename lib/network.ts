@@ -1,8 +1,52 @@
 /**
- * Network utilities for checking connectivity
+ * Network utilities for checking connectivity and API configuration
  */
 
 import { Platform } from 'react-native';
+
+/**
+ * API endpoint configuration.
+ * In production, uses Supabase Edge Function to keep API key server-side.
+ * In development, can use direct Anthropic calls for faster iteration.
+ */
+const SUPABASE_PROJECT_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
+const USE_EDGE_FUNCTION = process.env.EXPO_PUBLIC_USE_EDGE_FUNCTION === 'true';
+
+export function getApiEndpoint(): { url: string; headers: Record<string, string> } {
+  if (USE_EDGE_FUNCTION && SUPABASE_PROJECT_URL) {
+    // Production: Use Supabase Edge Function
+    return {
+      url: `${SUPABASE_PROJECT_URL}/functions/v1/identify-beanie`,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Device-ID': getDeviceId(),
+      },
+    };
+  }
+
+  // Development: Use direct Anthropic API
+  const apiKey = process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY;
+  return {
+    url: 'https://api.anthropic.com/v1/messages',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey || '',
+      'anthropic-version': '2023-06-01',
+    },
+  };
+}
+
+/**
+ * Get a unique device ID for rate limiting.
+ * Uses a simple random ID stored in memory (resets on app restart).
+ */
+let cachedDeviceId: string | null = null;
+function getDeviceId(): string {
+  if (!cachedDeviceId) {
+    cachedDeviceId = `device-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  }
+  return cachedDeviceId;
+}
 
 /**
  * Check if the device has network connectivity.

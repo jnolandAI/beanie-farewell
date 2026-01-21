@@ -285,6 +285,10 @@ export default function ScanScreen() {
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const dotAnim = useRef(new Animated.Value(0)).current;
 
+  // Refs to track running animations for cleanup
+  const pulseAnimRef = useRef<Animated.CompositeAnimation | null>(null);
+  const dotAnimRef = useRef<Animated.CompositeAnimation | null>(null);
+
   useEffect(() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
@@ -311,7 +315,7 @@ export default function ScanScreen() {
   useEffect(() => {
     if (loading) {
       // Gentle pulse animation
-      Animated.loop(
+      pulseAnimRef.current = Animated.loop(
         Animated.sequence([
           Animated.timing(pulseAnim, {
             toValue: 1.05,
@@ -326,20 +330,24 @@ export default function ScanScreen() {
             useNativeDriver: true,
           }),
         ])
-      ).start();
+      );
+      pulseAnimRef.current.start();
 
       // Dot animation
-      Animated.loop(
+      dotAnimRef.current = Animated.loop(
         Animated.timing(dotAnim, {
           toValue: 3,
           duration: 1500,
           easing: Easing.linear,
           useNativeDriver: false,
         })
-      ).start();
+      );
+      dotAnimRef.current.start();
 
-      // Keep loading text stable - no rotation so facts can be read
+      // Proper cleanup - stop animations and reset values
       return () => {
+        pulseAnimRef.current?.stop();
+        dotAnimRef.current?.stop();
         pulseAnim.setValue(1);
         dotAnim.setValue(0);
       };

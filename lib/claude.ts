@@ -1,8 +1,6 @@
 import { BeanieIdentification, FollowUpQuestion, FollowUpType } from '../types/beanie';
-
-const ANTHROPIC_API_KEY = process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY;
-const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
-const ANTHROPIC_VERSION = '2023-06-01';
+import { safeParseJSON } from './errors';
+import { getApiEndpoint } from './network';
 
 /**
  * Detect image media type from base64 data's magic bytes.
@@ -105,25 +103,20 @@ FIXED VALUE REFERENCES:
 export async function identifyBeanieFromImage(
   base64Image: string
 ): Promise<BeanieIdentification> {
-  if (!ANTHROPIC_API_KEY) {
-    throw new Error('ANTHROPIC_API_KEY not found in environment variables');
-  }
+  // Get API endpoint configuration (Supabase Edge Function in production, direct in dev)
+  const { url, headers } = getApiEndpoint();
 
   // Detect the actual image format from base64 magic bytes
   const mediaType = detectMediaType(base64Image);
 
   // Debug logging
   console.log('[Claude API] Detected media type:', mediaType);
-  console.log('[Claude API] Base64 first 100 chars:', base64Image.substring(0, 100));
+  console.log('[Claude API] Using endpoint:', url);
   console.log('[Claude API] Base64 length:', base64Image.length);
 
-  const response = await fetch(ANTHROPIC_API_URL, {
+  const response = await fetch(url, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': ANTHROPIC_API_KEY,
-      'anthropic-version': ANTHROPIC_VERSION,
-    },
+    headers,
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 2048,
@@ -158,6 +151,12 @@ export async function identifyBeanieFromImage(
 
   const data = await response.json();
 
+  // Validate response structure
+  if (!data.content || !Array.isArray(data.content)) {
+    console.error('[Claude API] Unexpected response structure:', data);
+    throw new Error('Unexpected API response format. Please try again.');
+  }
+
   // Extract text from Claude's response
   const responseText = data.content
     .filter((block: any) => block.type === 'text')
@@ -170,7 +169,10 @@ export async function identifyBeanieFromImage(
     throw new Error('No JSON found in Claude response');
   }
 
-  const result: BeanieIdentification = JSON.parse(jsonMatch[0]);
+  const result = safeParseJSON<BeanieIdentification | null>(jsonMatch[0], null, 'beanie identification');
+  if (!result) {
+    throw new Error('Failed to parse identification result. Please try again.');
+  }
   return result;
 }
 
@@ -247,9 +249,8 @@ export async function identifyBeanieByName(
   beanieName: string,
   animalType: string
 ): Promise<BeanieIdentification> {
-  if (!ANTHROPIC_API_KEY) {
-    throw new Error('ANTHROPIC_API_KEY not found in environment variables');
-  }
+  // Get API endpoint configuration (Supabase Edge Function in production, direct in dev)
+  const { url, headers } = getApiEndpoint();
 
   const prompt = TEXT_IDENTIFICATION_PROMPT
     .replace(/\{name\}/g, beanieName)
@@ -257,13 +258,9 @@ export async function identifyBeanieByName(
 
   console.log('[Claude API] Text query for:', beanieName, animalType);
 
-  const response = await fetch(ANTHROPIC_API_URL, {
+  const response = await fetch(url, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': ANTHROPIC_API_KEY,
-      'anthropic-version': ANTHROPIC_VERSION,
-    },
+    headers,
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 2048,
@@ -285,6 +282,12 @@ export async function identifyBeanieByName(
 
   const data = await response.json();
 
+  // Validate response structure
+  if (!data.content || !Array.isArray(data.content)) {
+    console.error('[Claude API] Unexpected response structure:', data);
+    throw new Error('Unexpected API response format. Please try again.');
+  }
+
   // Extract text from Claude's response
   const responseText = data.content
     .filter((block: any) => block.type === 'text')
@@ -297,6 +300,9 @@ export async function identifyBeanieByName(
     throw new Error('No JSON found in Claude response');
   }
 
-  const result: BeanieIdentification = JSON.parse(jsonMatch[0]);
+  const result = safeParseJSON<BeanieIdentification | null>(jsonMatch[0], null, 'beanie identification');
+  if (!result) {
+    throw new Error('Failed to parse identification result. Please try again.');
+  }
   return result;
 }

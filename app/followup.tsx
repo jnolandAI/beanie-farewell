@@ -21,6 +21,7 @@ import {
   PelletType,
   FollowUpAnswers,
 } from '../types/beanie';
+import { safeParseURLParam, showPermissionDeniedAlert } from '../lib/errors';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -182,13 +183,9 @@ export default function FollowUpScreen() {
     roast?: string;
   }>();
 
-  // Parse incoming data
-  const followUpQuestions: FollowUpQuestion[] = params.follow_up_questions
-    ? JSON.parse(params.follow_up_questions)
-    : [];
-  const potentialValue = params.potential_value_if_rare
-    ? JSON.parse(params.potential_value_if_rare)
-    : null;
+  // Parse incoming data (with safe parsing to prevent crashes)
+  const followUpQuestions = safeParseURLParam<FollowUpQuestion[]>(params.follow_up_questions, []);
+  const potentialValue = safeParseURLParam<{ low: number; high: number; conditions: string } | null>(params.potential_value_if_rare, null);
 
   // State for answers
   const [condition, setCondition] = useState<ConditionLevel | null>(null);
@@ -249,7 +246,7 @@ export default function FollowUpScreen() {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
     if (!permissionResult.granted) {
-      // Could show error, but keep it simple
+      showPermissionDeniedAlert('Camera', 'to photograph your Beanie Baby tag');
       return;
     }
 
@@ -273,6 +270,7 @@ export default function FollowUpScreen() {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (!permissionResult.granted) {
+      showPermissionDeniedAlert('Photo Library', 'to select a photo of your Beanie Baby');
       return;
     }
 

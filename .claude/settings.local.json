@@ -23,7 +23,11 @@
       "Bash(claude mcp add context7 -- npx -y @upstash/context7-mcp@latest)",
       "Bash(claude mcp list:*)",
       "Bash(grep:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(git push)",
+      "Bash(gh repo create:*)",
+      "Bash(ls -la \"C:\\\\Projects\\\\beanie-farewell\\\\assets\"\" 2>/dev/null || echo \"Assets directory check \")",
+      "Bash(identify:*)"
     ]
   }
 }
