@@ -37,7 +37,8 @@
           "photosPermission": "Save Farewell Certificates to your photo library.",
           "savePhotosPermission": "Save Farewell Certificates to your photo library."
         }
-      ]
+      ],
+      "sentry-expo"
     ],
     "android": {
       "adaptiveIcon": {

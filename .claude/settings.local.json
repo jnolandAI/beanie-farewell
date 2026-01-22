@@ -27,7 +27,24 @@
       "Bash(git push)",
       "Bash(gh repo create:*)",
       "Bash(ls -la \"C:\\\\Projects\\\\beanie-farewell\\\\assets\"\" 2>/dev/null || echo \"Assets directory check \")",
-      "Bash(identify:*)"
+      "Bash(identify:*)",
+      "mcp__plugin_supabase_supabase__list_projects",
+      "mcp__plugin_supabase_supabase__list_organizations",
+      "mcp__plugin_supabase_supabase__get_cost",
+      "mcp__plugin_supabase_supabase__confirm_cost",
+      "mcp__plugin_supabase_supabase__create_project",
+      "mcp__plugin_supabase_supabase__get_project_url",
+      "mcp__plugin_supabase_supabase__deploy_edge_function",
+      "Bash(npx supabase secrets set:*)",
+      "Bash(node -e \"\nfetch\\(''https://sndngvwkkqoznzqnppdn.supabase.co/functions/v1/identify-beanie'', {\n  method: ''POST'',\n  headers: {\n    ''Content-Type'': ''application/json'',\n    ''X-Device-ID'': ''test-device''\n  },\n  body: JSON.stringify\\({\n    messages: [{ role: ''user'', content: ''Say hello in 3 words'' }],\n    max_tokens: 50\n  }\\)\n}\\)\n.then\\(r => r.json\\(\\)\\)\n.then\\(d => console.log\\(JSON.stringify\\(d, null, 2\\)\\)\\)\n.catch\\(e => console.error\\(''Error:'', e.message\\)\\);\n\")",
+      "Bash(npx eas-cli:*)",
+      "Bash(npx eas:*)",
+      "Bash(eas whoami:*)",
+      "Bash(eas build:*)",
+      "Bash(eas init:*)",
+      "Bash(gh api:*)",
+      "Bash(gh repo view:*)",
+      "Bash(gh repo edit:*)"
     ]
   }
 }
