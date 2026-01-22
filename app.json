@@ -19,7 +19,8 @@
       "infoPlist": {
         "NSCameraUsageDescription": "Beanie Farewell uses your camera to photograph and identify your Beanie Babies.",
         "NSPhotoLibraryUsageDescription": "Select pictures of your Beanie Babies for identification.",
-        "NSPhotoLibraryAddUsageDescription": "Save Farewell Certificates to your photo library."
+        "NSPhotoLibraryAddUsageDescription": "Save Farewell Certificates to your photo library.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "plugins": [
@@ -44,10 +45,25 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO",
+        "android.permission.READ_MEDIA_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a900df5c-4cfd-410f-b083-b3eeb2198b58"
+      }
+    },
+    "owner": "jnoland"
   }
 }
