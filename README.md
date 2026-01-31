@@ -1,10 +1,10 @@
-# Beanie Farewell
+# Bean Bye
 
 A mobile app for valuing Beanie Babies using AI-powered image recognition.
 
 ## Overview
 
-Beanie Farewell is an iOS application that helps users identify and value their Beanie Baby collection. Using camera integration and Claude AI, the app provides accurate valuations based on photos.
+Bean Bye is an iOS application that helps users identify and value their Beanie Baby collection. Using camera integration and Claude AI, the app provides accurate valuations based on photos.
 
 ## Tech Stack
 

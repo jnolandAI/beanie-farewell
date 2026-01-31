@@ -7,6 +7,7 @@ import {
   Easing,
   Pressable,
   Platform,
+  Share,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
@@ -18,6 +19,15 @@ interface ChallengeToastProps {
 }
 
 export function ChallengeToast({ challenge, onDismiss }: ChallengeToastProps) {
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `✅ Daily Challenge Complete!\n\n${challenge.emoji} ${challenge.title}\n+${challenge.xpReward} XP earned!\n\nTracking my Beanie Baby collection with Bean Bye! 📦`,
+      });
+    } catch (error) {
+      // Silently fail
+    }
+  };
   const slideAnim = useRef(new Animated.Value(-100)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
@@ -100,10 +110,15 @@ export function ChallengeToast({ challenge, onDismiss }: ChallengeToastProps) {
               <Text style={styles.name}>{challenge.title}</Text>
             </View>
 
-            {/* XP Reward */}
-            <View style={styles.xpBadge}>
-              <Text style={styles.xpText}>+{challenge.xpReward}</Text>
-              <Text style={styles.xpLabel}>XP</Text>
+            {/* Actions */}
+            <View style={styles.actions}>
+              <Pressable onPress={handleShare} style={styles.shareBtn}>
+                <Text style={styles.shareBtnText}>📤</Text>
+              </Pressable>
+              <View style={styles.xpBadge}>
+                <Text style={styles.xpText}>+{challenge.xpReward}</Text>
+                <Text style={styles.xpLabel}>XP</Text>
+              </View>
             </View>
           </View>
         </BlurView>
@@ -164,6 +179,24 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: '#1a1a2e',
+  },
+  actions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  shareBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(0, 206, 209, 0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 206, 209, 0.3)',
+  },
+  shareBtnText: {
+    fontSize: 16,
   },
   xpBadge: {
     backgroundColor: '#FFD700',

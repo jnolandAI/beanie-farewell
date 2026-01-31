@@ -120,7 +120,7 @@ export const CollectionStatsCard = React.forwardRef<View, CollectionStatsCardPro
           <View style={styles.header}>
             <Image source={APP_ICON} style={styles.appIcon} resizeMode="contain" />
             <View style={styles.headerText}>
-              <Text style={styles.appName}>Beanie Farewell</Text>
+              <Text style={styles.appName}>Bean Bye</Text>
               <Text style={styles.cardLabel}>Collection Stats</Text>
             </View>
             <OfficialSeal color={levelInfo.color} />
@@ -213,7 +213,7 @@ export const CollectionStatsCard = React.forwardRef<View, CollectionStatsCardPro
 
           {/* Footer */}
           <View style={styles.footer}>
-            <Text style={styles.footerUrl}>beaniefarewell.com</Text>
+            <Text style={styles.footerUrl}>beanbye.com</Text>
             <Text style={styles.footerDate}>{new Date().toLocaleDateString()}</Text>
           </View>
         </View>

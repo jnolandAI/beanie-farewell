@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,8 @@ import {
   Easing,
   ScrollView,
   Platform,
+  Share,
+  Modal,
 } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -21,6 +23,7 @@ import {
   ACHIEVEMENT_CATEGORIES,
   Achievement,
 } from '../lib/achievements';
+import { AchievementCertificate } from '../components/AchievementCertificate';
 
 // Memphis Pattern
 function MemphisPattern() {
@@ -178,9 +181,10 @@ function AchievementCard({
 }
 
 export default function AchievementsScreen() {
-  const { collection, unlockedAchievements, checkAndUnlockAchievements } = useCollectionStore();
+  const { collection, unlockedAchievements, checkAndUnlockAchievements, userName } = useCollectionStore();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(20)).current;
+  const [showSharePreview, setShowSharePreview] = useState(false);
 
   // Check for any new achievements on mount
   useEffect(() => {
@@ -226,6 +230,14 @@ export default function AchievementsScreen() {
     return grouped;
   }, [allAchievements]);
 
+  // Get recent unlocked achievements for the certificate
+  const recentAchievements = useMemo(() => {
+    return allAchievements
+      .filter(a => unlockedAchievements.includes(a.id))
+      .slice(0, 4)
+      .map(a => ({ name: a.name, emoji: a.emoji }));
+  }, [allAchievements, unlockedAchievements]);
+
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -236,6 +248,69 @@ export default function AchievementsScreen() {
         style={styles.backgroundGradient}
       />
       <MemphisPattern />
+
+      {/* Share Preview Modal */}
+      <Modal
+        visible={showSharePreview}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowSharePreview(false)}
+      >
+        <Pressable
+          style={styles.shareModalOverlay}
+          onPress={() => setShowSharePreview(false)}
+        >
+          <Pressable style={styles.shareModalContent} onPress={e => e.stopPropagation()}>
+            <BlurView intensity={80} tint="light" style={styles.shareModalBlur}>
+              <View style={styles.shareModalInner}>
+                {/* Header */}
+                <View style={styles.shareModalHeader}>
+                  <Text style={styles.shareModalTitle}>Share Achievements</Text>
+                  <Pressable onPress={() => setShowSharePreview(false)} style={styles.shareModalClose}>
+                    <Text style={styles.shareModalCloseText}>✕</Text>
+                  </Pressable>
+                </View>
+
+                {/* Certificate Preview */}
+                <View style={styles.certificatePreviewContainer}>
+                  <View style={styles.certificatePreviewScaler}>
+                    <AchievementCertificate
+                      unlockedCount={progress.unlocked}
+                      totalCount={progress.total}
+                      percentage={progress.percentage}
+                      recentAchievements={recentAchievements}
+                      userName={userName || undefined}
+                    />
+                  </View>
+                </View>
+
+                {/* Share button */}
+                <Pressable
+                  onPress={async () => {
+                    try {
+                      await Share.share({
+                        message: `🏆 My Bean Bye Achievements\n\n${progress.unlocked} / ${progress.total} unlocked (${progress.percentage}%)!\n\nTracking my Beanie Baby collection with Bean Bye! 📦`,
+                      });
+                      setShowSharePreview(false);
+                    } catch (error) {
+                      // Silently fail
+                    }
+                  }}
+                >
+                  <LinearGradient
+                    colors={['#FFD700', '#FFA500']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.shareModalButton}
+                  >
+                    <Text style={styles.shareModalButtonText}>📤 Share Now</Text>
+                  </LinearGradient>
+                </Pressable>
+              </View>
+            </BlurView>
+          </Pressable>
+        </Pressable>
+      </Modal>
 
       {/* Header */}
       <Animated.View
@@ -268,9 +343,17 @@ export default function AchievementsScreen() {
                   ]}
                 />
               </View>
-              <Text style={styles.progressText}>
-                {progress.unlocked} / {progress.total} ({progress.percentage}%)
-              </Text>
+              <View style={styles.progressRow}>
+                <Text style={styles.progressText}>
+                  {progress.unlocked} / {progress.total} ({progress.percentage}%)
+                </Text>
+                <Pressable
+                  onPress={() => setShowSharePreview(true)}
+                  style={styles.shareBtn}
+                >
+                  <Text style={styles.shareBtnText}>📤 Share</Text>
+                </Pressable>
+              </View>
             </View>
           </View>
         </BlurView>
@@ -373,11 +456,18 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   headerInner: {
-    backgroundColor: 'rgba(255, 255, 255, 0.72)',
+    backgroundColor: 'rgba(255, 255, 255, 0.42)',
     padding: 16,
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.6)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.7)',
+    borderTopColor: 'rgba(255, 255, 255, 0.9)',
+    borderLeftColor: 'rgba(255, 255, 255, 0.8)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 8,
   },
   backButton: {
     alignSelf: 'flex-start',
@@ -411,10 +501,29 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFD700',
     borderRadius: 6,
   },
+  progressRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+  },
   progressText: {
     fontSize: 14,
     color: '#666',
     fontWeight: '600',
+  },
+  shareBtn: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 14,
+    backgroundColor: 'rgba(0, 206, 209, 0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 206, 209, 0.3)',
+  },
+  shareBtnText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#00A5A5',
   },
   scrollView: {
     flex: 1,
@@ -449,12 +558,19 @@ const styles = StyleSheet.create({
   achievementInner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.72)',
+    backgroundColor: 'rgba(255, 255, 255, 0.38)',
     padding: 14,
     borderRadius: 14,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.6)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.7)',
+    borderTopColor: 'rgba(255, 255, 255, 0.9)',
+    borderLeftColor: 'rgba(255, 255, 255, 0.85)',
     gap: 12,
+    shadowColor: 'rgba(0, 0, 0, 0.08)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 12,
+    elevation: 4,
   },
   achievementLocked: {
     opacity: 0.6,
@@ -539,6 +655,82 @@ const styles = StyleSheet.create({
   },
   scanButtonText: {
     color: 'white',
+    fontSize: 17,
+    fontWeight: '600',
+  },
+  // Share Modal styles
+  shareModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    justifyContent: 'flex-end',
+  },
+  shareModalContent: {
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    overflow: 'hidden',
+  },
+  shareModalBlur: {
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+  shareModalInner: {
+    backgroundColor: 'rgba(255, 255, 255, 0.92)',
+    padding: 20,
+    paddingBottom: 40,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+  shareModalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  shareModalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1a1a2e',
+  },
+  shareModalClose: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(0, 0, 0, 0.08)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  shareModalCloseText: {
+    fontSize: 16,
+    color: '#666',
+  },
+  certificatePreviewContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: '#f5f5f5',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  certificatePreviewScaler: {
+    transform: [{ scale: 0.85 }],
+    marginVertical: -20,
+  },
+  shareModalButton: {
+    paddingVertical: 16,
+    borderRadius: 50,
+    alignItems: 'center',
+    shadowColor: '#FFD700',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 6,
+  },
+  shareModalButtonText: {
+    color: '#1a1a2e',
     fontSize: 17,
     fontWeight: '600',
   },

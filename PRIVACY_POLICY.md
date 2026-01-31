@@ -1,10 +1,10 @@
-# Beanie Farewell Privacy Policy
+# Bean Bye Privacy Policy
 
 **Last Updated: January 2026**
 
 ## Overview
 
-Beanie Farewell ("the App") is a mobile application that helps users identify and value their Beanie Baby collectibles using AI-powered image recognition. This Privacy Policy describes how we collect, use, and protect your information.
+Bean Bye ("the App") is a mobile application that helps users identify and value their Beanie Baby collectibles using AI-powered image recognition. This Privacy Policy describes how we collect, use, and protect your information.
 
 ## Information We Collect
 
@@ -48,7 +48,7 @@ When you scan a Beanie Baby:
 
 ## Children's Privacy
 
-Beanie Farewell does not knowingly collect information from children under 13. The App is intended for nostalgic millennials looking to value their childhood collectibles.
+Bean Bye does not knowingly collect information from children under 13. The App is intended for nostalgic millennials looking to value their childhood collectibles.
 
 ## Third-Party Services
 

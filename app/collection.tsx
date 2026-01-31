@@ -16,7 +16,7 @@ import {
   RefreshControl,
   Share,
 } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { captureRef } from 'react-native-view-shot';
@@ -314,6 +314,7 @@ function EmptyState({ searchQuery }: { searchQuery?: string }) {
 }
 
 export default function CollectionScreen() {
+  const { showShare } = useLocalSearchParams<{ showShare?: string }>();
   const { collection, removeItem, clearCollection, getTotalValue, isHydrated, userName, totalXP, getStreak } =
     useCollectionStore();
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -324,6 +325,9 @@ export default function CollectionScreen() {
   const [isSharing, setIsSharing] = useState(false);
   const [showCertificateModal, setShowCertificateModal] = useState(false);
   const [showStatsModal, setShowStatsModal] = useState(false);
+
+  // Auto-show share modal when navigated with showShare param
+  const [hasTriggeredShare, setHasTriggeredShare] = useState(false);
 
   // Search and filter state
   const [searchQuery, setSearchQuery] = useState('');
@@ -349,6 +353,18 @@ export default function CollectionScreen() {
       }),
     ]).start();
   }, [fadeAnim, slideAnim]);
+
+  // Auto-trigger share modal when showShare param is present
+  useEffect(() => {
+    if (showShare === 'true' && !hasTriggeredShare && collection.length > 0) {
+      setHasTriggeredShare(true);
+      // Small delay to let the screen render first
+      const timer = setTimeout(() => {
+        setShowStatsModal(true);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [showShare, hasTriggeredShare, collection.length]);
 
   // Filtered and sorted collection
   const filteredCollection = useMemo(() => {
@@ -839,14 +855,6 @@ export default function CollectionScreen() {
               <View style={styles.headerActions}>
                 {collection.length > 0 && (
                   <>
-                    {/* Export button */}
-                    <Pressable
-                      onPress={exportCollection}
-                      style={styles.actionButton}
-                    >
-                      <Text style={styles.actionButtonText}>Export</Text>
-                    </Pressable>
-
                     {/* Stats button */}
                     {Platform.OS !== 'web' && (
                       <Pressable
@@ -1240,12 +1248,19 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   headerInner: {
-    backgroundColor: 'rgba(255, 255, 255, 0.72)',
+    backgroundColor: 'rgba(255, 255, 255, 0.42)',
     padding: 16,
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.6)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.7)',
+    borderTopColor: 'rgba(255, 255, 255, 0.9)',
+    borderLeftColor: 'rgba(255, 255, 255, 0.8)',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 8,
   },
   headerTopRow: {
     flexDirection: 'row',
@@ -1415,7 +1430,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   itemCardInner: {
-    backgroundColor: 'rgba(255, 255, 255, 0.75)',
+    backgroundColor: 'rgba(255, 255, 255, 0.60)',
     padding: 12,
     borderRadius: 16,
     borderWidth: 1,
@@ -1540,7 +1555,7 @@ const styles = StyleSheet.create({
   portfolioSummaryHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.72)',
+    backgroundColor: 'rgba(255, 255, 255, 0.58)',
     padding: 14,
     borderRadius: 16,
     borderWidth: 1,
@@ -1573,7 +1588,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   portfolioSummaryContent: {
-    backgroundColor: 'rgba(255, 255, 255, 0.72)',
+    backgroundColor: 'rgba(255, 255, 255, 0.58)',
     padding: 16,
     borderRadius: 16,
     borderWidth: 1,
@@ -1706,7 +1721,7 @@ const styles = StyleSheet.create({
 
   // Skeleton loading styles
   skeletonCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.75)',
+    backgroundColor: 'rgba(255, 255, 255, 0.60)',
     padding: 12,
     borderRadius: 16,
     borderWidth: 1,

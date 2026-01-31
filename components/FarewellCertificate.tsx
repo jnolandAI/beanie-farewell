@@ -146,7 +146,7 @@ export const FarewellCertificate = React.forwardRef<View, FarewellCertificatePro
           {/* Header: App icon + title */}
           <View style={styles.header}>
             <Image source={APP_ICON} style={styles.appIcon} resizeMode="contain" />
-            <Text style={[styles.appName, { color: COLORS.primaryPurple }]}>Beanie Farewell</Text>
+            <Text style={[styles.appName, { color: COLORS.primaryPurple }]}>Bean Bye</Text>
             <Text style={[styles.certificateLabel, { color: accents.primary }]}>{certificateLabel}</Text>
           </View>
 
@@ -195,7 +195,7 @@ export const FarewellCertificate = React.forwardRef<View, FarewellCertificatePro
           {roast && (
             <View style={[styles.roastContainer, { borderColor: `${accents.primary}40` }]}>
               <Text style={styles.roastIcon}>🔥</Text>
-              <Text style={[styles.roastText, { color: accents.text }]} numberOfLines={2}>
+              <Text style={[styles.roastText, { color: accents.text }]} numberOfLines={3} adjustsFontSizeToFit minimumFontScale={0.8}>
                 {roast}
               </Text>
             </View>
@@ -213,7 +213,7 @@ export const FarewellCertificate = React.forwardRef<View, FarewellCertificatePro
 
           {/* Footer */}
           <View style={styles.footer}>
-            <Text style={styles.footerUrl}>beaniefarewell.com</Text>
+            <Text style={styles.footerUrl}>beanbye.com</Text>
             <Text style={styles.disclaimer}>{disclaimer}</Text>
           </View>
         </View>
@@ -229,7 +229,7 @@ FarewellCertificate.displayName = 'FarewellCertificate';
 // ============================================
 
 const CERTIFICATE_WIDTH = 360;
-const CERTIFICATE_HEIGHT = 480;  // Slightly taller to fit seal
+const CERTIFICATE_HEIGHT = 500;  // Taller to fit roast text
 
 const styles = StyleSheet.create({
   container: {

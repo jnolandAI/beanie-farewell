@@ -1,4 +1,4 @@
-# Beanie Farewell
+# Bean Bye
 
 ## Overview
 iOS app using AI photo identification to value Beanie Babies. Core positioning: "permission to let go" - humorous acceptance that most are worthless, with occasional surprise finds.

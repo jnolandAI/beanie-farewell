@@ -6,6 +6,7 @@ import {
   Animated,
   Pressable,
   Platform,
+  Share,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
@@ -19,6 +20,15 @@ interface LevelUpToastProps {
 }
 
 export function LevelUpToast({ level, title, emoji, color, onDismiss }: LevelUpToastProps) {
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `${emoji} LEVEL UP!\n\nI just reached Level ${level}: ${title}!\n\nTracking my Beanie Baby collection with Bean Bye! 📦`,
+      });
+    } catch (error) {
+      // Silently fail
+    }
+  };
   const slideAnim = useRef(new Animated.Value(-120)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.5)).current;
@@ -120,6 +130,11 @@ export function LevelUpToast({ level, title, emoji, color, onDismiss }: LevelUpT
               <Text style={styles.title}>{title}</Text>
             </View>
 
+            {/* Share button */}
+            <Pressable onPress={handleShare} style={styles.shareBtn}>
+              <Text style={styles.shareBtnText}>📤</Text>
+            </Pressable>
+
             {/* Celebration sparks */}
             <View style={styles.sparkContainer}>
               <Text style={styles.spark}>✨</Text>
@@ -188,6 +203,19 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#666',
     marginTop: 1,
+  },
+  shareBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(0, 206, 209, 0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 206, 209, 0.3)',
+  },
+  shareBtnText: {
+    fontSize: 17,
   },
   sparkContainer: {
     position: 'absolute',

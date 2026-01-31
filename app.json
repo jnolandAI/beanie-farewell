@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Beanie Farewell",
+    "name": "Bean Bye",
     "slug": "beanie-farewell",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,9 +15,9 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.beaniefarewell.app",
+      "bundleIdentifier": "com.beanbye.app",
       "infoPlist": {
-        "NSCameraUsageDescription": "Beanie Farewell uses your camera to photograph and identify your Beanie Babies.",
+        "NSCameraUsageDescription": "Bean Bye uses your camera to photograph and identify your Beanie Babies.",
         "NSPhotoLibraryUsageDescription": "Select pictures of your Beanie Babies for identification.",
         "NSPhotoLibraryAddUsageDescription": "Save Farewell Certificates to your photo library.",
         "ITSAppUsesNonExemptEncryption": false
@@ -27,7 +27,7 @@
       [
         "expo-image-picker",
         {
-          "cameraPermission": "Beanie Farewell uses your camera to photograph and identify your Beanie Babies.",
+          "cameraPermission": "Bean Bye uses your camera to photograph and identify your Beanie Babies.",
           "photosPermission": "Select pictures of your Beanie Babies for identification."
         }
       ],
@@ -37,8 +37,7 @@
           "photosPermission": "Save Farewell Certificates to your photo library.",
           "savePhotosPermission": "Save Farewell Certificates to your photo library."
         }
-      ],
-      "sentry-expo"
+      ]
     ],
     "android": {
       "adaptiveIcon": {

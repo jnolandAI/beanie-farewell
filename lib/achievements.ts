@@ -1,5 +1,5 @@
 /**
- * Achievements system for Beanie Farewell
+ * Achievements system for Bean Bye
  * Gamification to encourage scanning and collection building
  */
 

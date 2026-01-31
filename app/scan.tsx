@@ -344,12 +344,18 @@ export default function ScanScreen() {
       );
       dotAnimRef.current.start();
 
+      // Rotate loading text every 3 seconds for humor
+      const textInterval = setInterval(() => {
+        setLoadingText(getLoadingText());
+      }, 3000);
+
       // Proper cleanup - stop animations and reset values
       return () => {
         pulseAnimRef.current?.stop();
         dotAnimRef.current?.stop();
         pulseAnim.setValue(1);
         dotAnim.setValue(0);
+        clearInterval(textInterval);
       };
     }
   }, [loading, pulseAnim, dotAnim]);
@@ -897,15 +903,18 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   glassCardInner: {
-    backgroundColor: 'rgba(255, 255, 255, 0.72)',
+    backgroundColor: 'rgba(255, 255, 255, 0.42)',
     padding: 24,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.6)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.7)',
+    borderTopColor: 'rgba(255, 255, 255, 0.9)',
+    borderLeftColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.08,
-    shadowRadius: 32,
+    shadowOffset: { width: 0, height: 16 },
+    shadowOpacity: 0.12,
+    shadowRadius: 40,
+    elevation: 16,
     gap: 12,
   },
   // Primary Button (Magenta Gradient)
@@ -995,13 +1004,20 @@ const styles = StyleSheet.create({
   },
   tipCardContent: {
     padding: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.72)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.6)',
+    backgroundColor: 'rgba(255, 255, 255, 0.42)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.7)',
+    borderTopColor: 'rgba(255, 255, 255, 0.9)',
+    borderLeftColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 20,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    elevation: 6,
   },
   tipIcon: {
     fontSize: 20,
@@ -1026,15 +1042,18 @@ const styles = StyleSheet.create({
     maxWidth: 320,
   },
   loadingGlassContent: {
-    backgroundColor: 'rgba(255, 255, 255, 0.72)',
+    backgroundColor: 'rgba(255, 255, 255, 0.42)',
     padding: 32,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.6)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.7)',
+    borderTopColor: 'rgba(255, 255, 255, 0.9)',
+    borderLeftColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.08,
-    shadowRadius: 32,
+    shadowOffset: { width: 0, height: 16 },
+    shadowOpacity: 0.12,
+    shadowRadius: 40,
+    elevation: 16,
     alignItems: 'center',
   },
   loadingIconContainer: {

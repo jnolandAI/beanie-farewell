@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated, Platform } from 'react-native';
+import { View, Text, StyleSheet, Animated, Platform, Pressable, Share } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 
@@ -29,6 +29,16 @@ export function MilestoneToast({ milestone, onDismiss }: MilestoneToastProps) {
   const slideAnim = useRef(new Animated.Value(-150)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
   const emojiPulse = useRef(new Animated.Value(1)).current;
+
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `${milestone.emoji} ${milestone.title}\n\n${milestone.message}\n\nI just hit ${milestone.count} Beanie Babies in my collection! 🎉\n\nTracking my collection with Bean Bye! 📦`,
+      });
+    } catch (error) {
+      // Silently fail
+    }
+  };
 
   useEffect(() => {
     // Haptic feedback
@@ -122,6 +132,11 @@ export function MilestoneToast({ milestone, onDismiss }: MilestoneToastProps) {
             <Text style={styles.message}>{milestone.message}</Text>
           </View>
 
+          {/* Share button */}
+          <Pressable onPress={handleShare} style={styles.shareBtn}>
+            <Text style={styles.shareBtnText}>📤</Text>
+          </Pressable>
+
           {/* Decorative stars */}
           <View style={styles.stars}>
             <Text style={styles.star}>⭐</Text>
@@ -202,6 +217,19 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: 'rgba(255, 255, 255, 0.9)',
     lineHeight: 20,
+  },
+  shareBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+  },
+  shareBtnText: {
+    fontSize: 18,
   },
   stars: {
     position: 'absolute',

@@ -1,5 +1,5 @@
 /**
- * Humor and copy utilities for Beanie Farewell
+ * Humor and copy utilities for Bean Bye
  * Expanded humor with variety, fun facts, and absurd comparisons
  */
 
@@ -21,14 +21,25 @@ function pickRandomN<T>(arr: T[], n: number): T[] {
 // ============================================
 
 const LOADING_TITLES = [
-  // Simple/direct
-  "Analyzing...",
-  "Scanning...",
-  "Processing...",
-  "Working on it...",
-  "One moment...",
-  "Hang tight...",
-  "Almost there...",
+  // Absurdly specific processes
+  "Consulting ancient texts...",
+  "Reading the whole internet real quick...",
+  "Asking the Beanie elders...",
+  "Cross-referencing with NASA...",
+  "Downloading more RAM...",
+  "Summoning the spirits of 1997...",
+  "Checking the Beanie matrix...",
+  "Consulting the oracle...",
+  "Hacking the mainframe...",
+  "Warming up the flux capacitor...",
+
+  // Dramatic investigation
+  "Enhancing... enhancing...",
+  "Running forensic analysis...",
+  "Dusting for fingerprints...",
+  "Interviewing witnesses...",
+  "Reviewing the evidence...",
+  "Building the case file...",
 
   // Beanie-themed
   "Counting beans...",
@@ -37,21 +48,23 @@ const LOADING_TITLES = [
   "Checking for errors...",
   "Consulting price guides...",
   "Searching auction records...",
+  "Analyzing the fluff...",
+  "Measuring the stuffing...",
 
-  // Playful
-  "Doing the math...",
-  "Crunching numbers...",
-  "Running the numbers...",
-  "Calculating your ROI...",
-  "Assessing the damage...",
-  "Preparing your reality check...",
-  "Generating closure...",
+  // Tech parody
+  "Initializing bean protocol...",
+  "Syncing with the cloud...",
+  "Calibrating the algorithm...",
+  "Compiling the verdict...",
+  "Running AI diagnostics...",
 
   // Self-aware
   "This is taking a moment...",
   "Still here, still working...",
   "Any second now...",
   "Worth the wait (probably)...",
+  "Bear with us...",
+  "Almost done (maybe)...",
 ];
 
 // ============================================
@@ -111,10 +124,19 @@ const LOADING_SUBTITLES = [
   "Cross-referencing with disappointed collectors worldwide.",
   "Searching for someone who still cares.",
 
+  // Inflation/economy humor (sprinkled in)
+  "Adjusting for 27 years of inflation...",
+  "Comparing to the price of eggs these days...",
+  "At least Beanies don't have shrinkflation.",
+  "Still a better store of value than some currencies.",
+  "Calculating what this could buy at 2026 prices...",
+
   // Pop culture (mainstream only)
   "This is faster than waiting for your eBay auction to end.",
   "Unlike your Beanie investment, this won't take 25 years.",
   "Loading faster than dial-up. You're welcome.",
+  "Faster than streaming on hotel WiFi.",
+  "Quicker than finding parking at Costco.",
 
   // Meta/absurd
   "Generating an emotional buffer...",
@@ -122,6 +144,8 @@ const LOADING_SUBTITLES = [
   "Calibrating expectations downward...",
   "Finding the silver lining...",
   "Locating closure...",
+  "Warming up the copium dispenser...",
+  "Preparing the participation trophy...",
 ];
 
 export function getLoadingText(): { title: string; subtitle: string; fact?: string } {
@@ -261,6 +285,8 @@ function getWhatElseComparison(value: number): string {
       "You could buy a candy bar with this. Maybe two if you find a sale.",
       "Worth approximately one gumball. But the gumball would be gone by now.",
       "This is worth less than the shipping to send it anywhere.",
+      "Worth about half a dozen eggs. At 2026 prices, that's something.",
+      "This buys you approximately one banana at a fancy grocery store.",
     ]);
   } else if (value < 15) {
     return pickRandom([
@@ -268,13 +294,17 @@ function getWhatElseComparison(value: number): string {
       "You could trade this for lunch at a fast food restaurant. The fries would be more satisfying.",
       "Current value: approximately one greeting card with a nice envelope.",
       "Worth roughly what you'd tip a mediocre haircut.",
+      "Could buy you a salad. The kind with no protein. At airport prices.",
+      "Worth about what a bagel costs at that overpriced place you love.",
     ]);
   } else if (value < 50) {
     return pickRandom([
-      "Worth about a tank of gas. In a small car. In a cheap state.",
+      "Worth about a tank of gas. In a small car. In a cheap state. In 2019.",
       "You could trade this for a month of streaming. But which one?",
       "Current value: one hardcover book you'll start but never finish.",
       "Worth approximately two tickets to a matinee movie (no popcorn).",
+      "About a week of groceries. If you eat like a college student.",
+      "Worth one brunch. The kind where you say 'we should do this more often.'",
     ]);
   } else if (value < 200) {
     return pickRandom([
@@ -282,6 +312,8 @@ function getWhatElseComparison(value: number): string {
       "You could buy a decent pair of running shoes with this. You won't use them either.",
       "Worth about a year of that gym membership you've been meaning to cancel.",
       "Current value: one splurge at a fancy restaurant where you can't pronounce the menu.",
+      "About a month of groceries. Real groceries, with fruits and vegetables.",
+      "Worth one 'treat yourself' moment that you'll feel guilty about later.",
     ]);
   } else if (value < 1000) {
     return pickRandom([
@@ -289,12 +321,16 @@ function getWhatElseComparison(value: number): string {
       "You could buy a very nice jacket. Or a mediocre appliance.",
       "Current value: approximately one 'why did I buy this' electronics purchase.",
       "Worth about what you'd lose in Vegas before saying 'just one more.'",
+      "Could cover your utilities for a month. Maybe two, if you don't run the AC.",
+      "Worth a really nice pair of jeans. The kind that makes you feel things.",
     ]);
   }
   return pickRandom([
     "Worth an actual vacation. With checked bags.",
     "You could put this toward a used car. The Beanie gets better gas mileage.",
     "Current value: enough to make your accountant briefly interested.",
+    "This could cover rent. Somewhere. Probably not where you live.",
+    "Worth more than most people's monthly student loan payments. Ouch.",
   ]);
 }
 
@@ -469,26 +505,36 @@ const TIER_1_MESSAGES = [
   "At least you didn't put it in a safety deposit box. You didn't... right?",
   "This one's worth about as much as the memory of buying it. Which is free.",
   "Perfect for donating, gifting, or finally admitting defeat.",
+  "Couldn't even buy a gallon of gas with this. Thanks, inflation.",
+  "Worth less than what a Happy Meal costs now. Let that sink in.",
+  "The Beanie market crashed harder than... well, everything else lately.",
+  "At least it didn't charge you a subscription fee to exist.",
 ];
 
 // Tier 2: $10-50
 const TIER_2_TITLES = [
-  "Coffee Money",
+  "Lunch Money",
   "Meh",
   "Could Be Worse",
   "Not Nothing",
   "Shrug",
   "Fine, I Guess",
+  "Modest Returns",
+  "Par for the Course",
 ];
 
 const TIER_2_MESSAGES = [
   "Worth selling if you enjoy negotiating with Facebook Marketplace strangers.",
-  "Enough for a fancy latte. Or four regular ones. Your call.",
+  "Enough for a nice lunch. Or a week of sad desk lunches. Your portfolio, your choice.",
   "It's not nothing! Also not a college fund, but not nothing.",
   "You could sell this, or you could keep the nostalgia. Both valid.",
   "Worth about what you paid for it. Inflation says you lost, though.",
   "The S&P 500 did better. But did the S&P 500 have a cute face? Exactly.",
   "Not worthless! That's the kind of optimism we need.",
+  "Worth roughly one streaming subscription. Choose your nostalgia wisely.",
+  "Could buy you a nice houseplant. That might also die. Circle of life.",
+  "About two gallons of gas. Remember when that was cheap?",
+  "Worth a month of that app subscription you forgot to cancel.",
 ];
 
 // Tier 3: $50-200
@@ -614,6 +660,10 @@ export const CERTIFICATE_DISCLAIMERS = [
   "* Not redeemable for cash, credit, or emotional closure.",
   "* Value estimates are for entertainment only. Like the Beanies themselves.",
   "* This document is worth approximately as much as most Beanie Babies.",
+  "* Past performance is not indicative of future results. But it's not looking great.",
+  "* Generated by AI. Verified by vibes. Approved by absolutely no one.",
+  "* May cause mild disappointment. Side effects include closure and acceptance.",
+  "* Valid in all 50 states. Also completely meaningless in all 50 states.",
 ];
 
 export function getCertificateDisclaimer(): string {
@@ -628,6 +678,12 @@ export const CERTIFICATE_TAGLINES = [
   "EXTREMELY SCIENTIFIC ESTIMATE",
   "100% AUTHENTIC-LOOKING CERTIFICATE",
   "PROFESSIONAL-ISH EVALUATION",
+  "CERTIFIED BEAN COUNTING",
+  "AI-POWERED TRUTH BOMB",
+  "OFFICIAL REALITY CHECK",
+  "PEER-REVIEWED* (*BY BOTS)",
+  "JUDGMENT DAY RESULTS",
+  "YOUR FINANCIAL RECKONING",
 ];
 
 export function getCertificateTagline(): string {
@@ -649,13 +705,16 @@ const TIER_1_PERMISSIONS = [
 ];
 
 const TIER_2_PERMISSIONS = [
-  "You may trade this in for an overpriced smoothie.",
+  "You may trade this in for a very mediocre brunch.",
   "Permission granted to sell this and treat yourself to a mediocre lunch.",
-  "This certificate authorizes one (1) fancy coffee in exchange for this Beanie.",
-  "You are cleared to convert this into approximately 2-3 gallons of gas.",
+  "This certificate authorizes one (1) modest dinner in exchange for this Beanie.",
+  "You are cleared to convert this into approximately 2-3 gallons of gas. Maybe.",
   "Official permission to list this on Facebook Marketplace and lowball yourself.",
   "You may now exchange this for a month of streaming you'll forget to cancel.",
   "This Beanie is worth exactly one impulse purchase at Target.",
+  "Permission granted to convert this into groceries. Not many groceries.",
+  "You may trade this for approximately one bouquet of flowers. A small one.",
+  "This certificate authorizes you to feel neutral about this transaction.",
 ];
 
 const TIER_3_PERMISSIONS = [
@@ -736,7 +795,7 @@ export function getErrorPrefix(): string {
 // ============================================
 
 export const WELCOME_TEXT = {
-  title: "Beanie Farewell",
+  title: "Bean Bye",
   tagline: "It's time to know the truth.",
   description: "Find out what your Beanie Babies are actually worth in 2026.",
   subdescription: "Spoiler: probably not millions. But you never know...",
@@ -1349,26 +1408,37 @@ export function getShareCaption(beanieName: string, value: number, flexFlop: Fle
       `My ${beanieName} is worth $${value}?! 💀 I'M RICH`,
       `$${value} BEANIE BABY FLEX 🏆 #BeanieMillionaire`,
       `Mom was right. ${beanieName}: $${value} 👑`,
+      `27 years of patience finally paid off! ${beanieName}: $${value}`,
+      `Plot twist: ${beanieName} = $${value} 🎰`,
     ],
     flex: [
       `${beanieName}: $${value} 💪 Not bad for a 90s toy!`,
       `Turns out ${beanieName} was the real investment`,
       `My ${beanieName} just paid for dinner`,
+      `${beanieName} outperformed my expectations ($${value})`,
+      `Against all odds: ${beanieName} = $${value} ✨`,
     ],
     mid: [
       `${beanieName}: $${value} 🤷 Could be worse!`,
       `Solid meh from my ${beanieName} collection`,
       `${beanieName} said: "I'm worth something" ($${value})`,
+      `${beanieName}: peak mediocrity at $${value}`,
+      `Neither flex nor flop: ${beanieName} = $${value}`,
     ],
     flop: [
       `${beanieName}: $${value} 📉 The dream is dead`,
       `RIP to my ${beanieName} investment strategy`,
       `${beanieName} really said $${value} and nothing else`,
+      `Thanks for nothing, ${beanieName} ($${value})`,
+      `${beanieName}: a $${value} lesson in humility`,
     ],
     mega_flop: [
       `${beanieName}: $${value} ☠️ EMOTIONAL DAMAGE`,
       `My retirement plan (${beanieName}) is worth $${value}`,
       `$${value}. That's it. That's the tweet. 💀`,
+      `${beanieName} chose violence ($${value})`,
+      `POV: You discover ${beanieName} is worth $${value}`,
+      `Generational wealth this is not. ${beanieName}: $${value}`,
     ],
   };
 

@@ -2,18 +2,18 @@ import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle, Path, Text as SvgText } from 'react-native-svg';
-import { getCertificateTagline, getCertificateDisclaimer, getCollectionPermissionText } from '../lib/humor';
+import { getCertificateTagline, getCertificateDisclaimer } from '../lib/humor';
 
 // ============================================
 // TYPES
 // ============================================
 
-export interface CollectionCertificateProps {
-  itemCount: number;
-  totalValueLow: number;
-  totalValueHigh: number;
-  topItems: Array<{ name: string; valueLow: number; valueHigh: number }>;
-  userName?: string;  // User's first name for personalization
+export interface AchievementCertificateProps {
+  unlockedCount: number;
+  totalCount: number;
+  percentage: number;
+  recentAchievements: Array<{ name: string; emoji: string }>;
+  userName?: string;
 }
 
 // ============================================
@@ -34,7 +34,7 @@ function OfficialSeal({ color }: { color: string }) {
         CERTIFIED
       </SvgText>
       <SvgText x="50" y="54" textAnchor="middle" fontSize="6" fill={color}>
-        COLLECTION
+        ACHIEVER
       </SvgText>
       <SvgText x="50" y="64" textAnchor="middle" fontSize="5" fill={color} opacity={0.7}>
         2026
@@ -49,47 +49,44 @@ function OfficialSeal({ color }: { color: string }) {
 
 const COLORS = {
   primaryPurple: '#8B5CF6',
-  magenta: '#FF00FF',
+  gold: '#FFD700',
 };
 
 // App main icon
 const APP_ICON = require('../assets/icons/icon-main.png');
 
-// Verdict icons based on collection value
-const VERDICT_ICONS: Record<string, any> = {
-  low: require('../assets/icons/icon-tier1.png'),    // Low value collection
-  mid: require('../assets/icons/icon-tier3.png'),    // Mid value collection
-  high: require('../assets/icons/icon-tier5.png'),   // High value collection
-};
+// Trophy icon
+const TROPHY_ICON = require('../assets/icons/icon-tier5.png');
 
-// Verdicts for collections based on total value
-function getCollectionVerdict(totalHigh: number): { title: string; icon: any; accent: string } {
-  if (totalHigh >= 500) {
-    return { title: "IMPRESSIVE", icon: VERDICT_ICONS.high, accent: '#10B981' };
-  } else if (totalHigh >= 100) {
-    return { title: "NOT BAD", icon: VERDICT_ICONS.mid, accent: '#06B6D4' };
-  } else if (totalHigh >= 50) {
-    return { title: "MEH", icon: VERDICT_ICONS.low, accent: '#6B7280' };
+// Get achievement verdict based on percentage
+function getAchievementVerdict(percentage: number): { title: string; accent: string } {
+  if (percentage >= 80) {
+    return { title: "LEGEND", accent: '#FFD700' };
+  } else if (percentage >= 50) {
+    return { title: "DEDICATED", accent: '#FF6B35' };
+  } else if (percentage >= 25) {
+    return { title: "RISING STAR", accent: '#06B6D4' };
+  } else if (percentage >= 10) {
+    return { title: "GETTING STARTED", accent: '#8B5CF6' };
   }
-  return { title: "WELP", icon: VERDICT_ICONS.low, accent: '#9CA3AF' };
+  return { title: "NEWCOMER", accent: '#9CA3AF' };
 }
 
 // ============================================
 // COMPONENT
 // ============================================
 
-export const CollectionCertificate = React.forwardRef<View, CollectionCertificateProps>(
-  ({ itemCount, totalValueLow, totalValueHigh, topItems, userName }, ref) => {
+export const AchievementCertificate = React.forwardRef<View, AchievementCertificateProps>(
+  ({ unlockedCount, totalCount, percentage, recentAchievements, userName }, ref) => {
     const certificateLabel = getCertificateTagline();
     const disclaimer = getCertificateDisclaimer();
-    const permission = getCollectionPermissionText(totalValueHigh);
-    const verdict = getCollectionVerdict(totalValueHigh);
+    const verdict = getAchievementVerdict(percentage);
 
     return (
       <View ref={ref} style={styles.container}>
-        {/* Background gradient */}
+        {/* Background gradient - gold tint */}
         <LinearGradient
-          colors={['#FAFAFA', '#F0F0F0', '#FAFAFA']}
+          colors={['#FFFBEB', '#FEF3C7', '#FFFBEB']}
           locations={[0, 0.5, 1]}
           start={{ x: 0.2, y: 0 }}
           end={{ x: 0.8, y: 1 }}
@@ -106,7 +103,7 @@ export const CollectionCertificate = React.forwardRef<View, CollectionCertificat
             <Text style={[styles.certificateLabel, { color: verdict.accent }]}>{certificateLabel}</Text>
           </View>
 
-          {/* Issued To section - only if userName provided */}
+          {/* Issued To section */}
           {userName && (
             <View style={styles.issuedToSection}>
               <Text style={styles.issuedToLabel}>ISSUED TO</Text>
@@ -115,56 +112,59 @@ export const CollectionCertificate = React.forwardRef<View, CollectionCertificat
           )}
 
           {/* VERDICT SECTION */}
-          <View style={[styles.verdictSection, { backgroundColor: `${verdict.accent}10` }]}>
-            <Image source={verdict.icon} style={styles.verdictIcon} resizeMode="contain" />
+          <View style={[styles.verdictSection, { backgroundColor: `${verdict.accent}15` }]}>
+            <Image source={TROPHY_ICON} style={styles.trophyIcon} resizeMode="contain" />
             <View style={styles.verdictText}>
               <Text style={[styles.verdictTitle, { color: verdict.accent }]}>{verdict.title}</Text>
-              <Text style={styles.collectionLabel}>COLLECTION</Text>
+              <Text style={styles.verdictSubtitle}>ACHIEVEMENT STATUS</Text>
             </View>
           </View>
 
           {/* STATS SECTION */}
           <View style={styles.statsSection}>
             <View style={styles.statBox}>
-              <Text style={[styles.statNumber, { color: verdict.accent }]}>{itemCount}</Text>
-              <Text style={styles.statLabel}>{itemCount === 1 ? 'BEANIE' : 'BEANIES'}</Text>
+              <Text style={[styles.statNumber, { color: verdict.accent }]}>{unlockedCount}</Text>
+              <Text style={styles.statLabel}>UNLOCKED</Text>
             </View>
             <View style={[styles.statDivider, { backgroundColor: `${verdict.accent}30` }]} />
             <View style={styles.statBox}>
-              <Text style={[styles.statNumber, { color: verdict.accent }]}>${totalValueLow}-${totalValueHigh}</Text>
-              <Text style={styles.statLabel}>TOTAL VALUE</Text>
+              <Text style={[styles.statNumber, { color: verdict.accent }]}>{percentage}%</Text>
+              <Text style={styles.statLabel}>COMPLETE</Text>
             </View>
           </View>
 
-          {/* TOP ITEMS */}
-          {topItems.length > 0 && (
-            <View style={styles.topItemsSection}>
-              <Text style={[styles.topItemsTitle, { color: verdict.accent }]}>TOP PERFORMERS</Text>
-              {topItems.slice(0, 3).map((item, index) => (
-                <View key={index} style={styles.topItemRow}>
-                  <Text style={styles.topItemRank}>#{index + 1}</Text>
-                  <Text style={styles.topItemName} numberOfLines={1}>{item.name}</Text>
-                  <Text style={[styles.topItemValue, { color: verdict.accent }]}>
-                    ${item.valueLow}-${item.valueHigh}
-                  </Text>
-                </View>
-              ))}
+          {/* Progress bar */}
+          <View style={styles.progressContainer}>
+            <View style={styles.progressBar}>
+              <View style={[styles.progressFill, { width: `${percentage}%`, backgroundColor: verdict.accent }]} />
+            </View>
+            <Text style={styles.progressLabel}>{unlockedCount} of {totalCount} achievements</Text>
+          </View>
+
+          {/* Recent achievements */}
+          {recentAchievements.length > 0 && (
+            <View style={styles.recentSection}>
+              <Text style={[styles.recentTitle, { color: verdict.accent }]}>RECENT UNLOCKS</Text>
+              <View style={styles.recentList}>
+                {recentAchievements.slice(0, 4).map((achievement, index) => (
+                  <View key={index} style={styles.recentItem}>
+                    <Text style={styles.recentEmoji}>{achievement.emoji}</Text>
+                    <Text style={styles.recentName} numberOfLines={1}>{achievement.name}</Text>
+                  </View>
+                ))}
+              </View>
             </View>
           )}
 
-          {/* Permission text with seal */}
-          <View style={styles.permissionWithSeal}>
-            <View style={styles.permissionContainer}>
-              <Text style={styles.permissionText}>{permission}</Text>
-            </View>
-            <View style={styles.sealContainer}>
-              <OfficialSeal color={verdict.accent} />
-            </View>
+          {/* Seal */}
+          <View style={styles.sealContainer}>
+            <OfficialSeal color={verdict.accent} />
           </View>
 
-          {/* Footer */}
+          {/* Footer with CTA placeholder */}
           <View style={styles.footer}>
             <Text style={styles.footerUrl}>beanbye.com</Text>
+            {/* TODO: Add App Store link when available */}
             <Text style={styles.disclaimer}>{disclaimer}</Text>
           </View>
         </View>
@@ -173,20 +173,20 @@ export const CollectionCertificate = React.forwardRef<View, CollectionCertificat
   }
 );
 
-CollectionCertificate.displayName = 'CollectionCertificate';
+AchievementCertificate.displayName = 'AchievementCertificate';
 
 // ============================================
 // STYLES
 // ============================================
 
 const CERTIFICATE_WIDTH = 320;
-const CERTIFICATE_HEIGHT = 440;
+const CERTIFICATE_HEIGHT = 480;
 
 const styles = StyleSheet.create({
   container: {
     width: CERTIFICATE_WIDTH,
     height: CERTIFICATE_HEIGHT,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#FFFBEB',
     overflow: 'hidden',
   },
   backgroundGradient: {
@@ -256,21 +256,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 12,
   },
-  verdictIcon: {
-    width: 45,
-    height: 45,
+  trophyIcon: {
+    width: 40,
+    height: 40,
   },
   verdictText: {
     alignItems: 'flex-start',
   },
   verdictTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '800',
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
-  collectionLabel: {
-    fontSize: 10,
+  verdictSubtitle: {
+    fontSize: 8,
     fontWeight: '600',
     color: '#9CA3AF',
     letterSpacing: 1,
@@ -281,13 +281,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
+    gap: 20,
   },
   statBox: {
     alignItems: 'center',
   },
   statNumber: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '800',
   },
   statLabel: {
@@ -298,66 +298,67 @@ const styles = StyleSheet.create({
   },
   statDivider: {
     width: 1,
-    height: 30,
+    height: 35,
   },
 
-  // Top Items
-  topItemsSection: {
+  // Progress bar
+  progressContainer: {
+    alignItems: 'center',
+    gap: 4,
+  },
+  progressBar: {
+    width: '90%',
+    height: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.08)',
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 5,
+  },
+  progressLabel: {
+    fontSize: 9,
+    color: '#6B7280',
+    fontWeight: '500',
+  },
+
+  // Recent achievements
+  recentSection: {
     paddingHorizontal: 4,
   },
-  topItemsTitle: {
-    fontSize: 9,
+  recentTitle: {
+    fontSize: 8,
     fontWeight: '700',
     letterSpacing: 1,
     marginBottom: 6,
     textAlign: 'center',
   },
-  topItemRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 4,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.05)',
+  recentList: {
+    gap: 4,
   },
-  topItemRank: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: '#9CA3AF',
-    width: 24,
-  },
-  topItemName: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#2D3436',
-    flex: 1,
-    marginRight: 8,
-  },
-  topItemValue: {
-    fontSize: 11,
-    fontWeight: '700',
-  },
-
-  // Permission with Seal
-  permissionWithSeal: {
+  recentItem: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    paddingHorizontal: 4,
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+    borderRadius: 8,
   },
-  permissionContainer: {
+  recentEmoji: {
+    fontSize: 14,
+  },
+  recentName: {
     flex: 1,
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#374151',
   },
-  permissionText: {
-    fontSize: 9,
-    fontWeight: '500',
-    textAlign: 'center',
-    lineHeight: 13,
-    fontStyle: 'italic',
-    color: '#6B7280',
-  },
+
+  // Seal
   sealContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
   },
 
   // Footer
@@ -377,4 +378,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CollectionCertificate;
+export default AchievementCertificate;

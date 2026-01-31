@@ -387,16 +387,42 @@ export default function ResultScreen() {
   });
 
   // 2. Fallback: if initial capture missed it, watch for updates
+  // Also check the store directly as a backup (handles race conditions)
   useEffect(() => {
+    if (certificateImage) return; // Already have an image
+
     // Check for collection thumbnail first
-    if (!certificateImage && params.collectionThumbnail) {
+    if (params.collectionThumbnail) {
       setCertificateImage(params.collectionThumbnail);
+      return;
     }
-    // Then check pendingThumbnail
-    else if (!certificateImage && pendingThumbnail) {
+
+    // Then check pendingThumbnail from hook
+    if (pendingThumbnail) {
       setCertificateImage(pendingThumbnail);
+      return;
+    }
+
+    // Last resort: check store directly (handles timing issues)
+    const storeThumb = useCollectionStore.getState().pendingThumbnail;
+    if (storeThumb) {
+      setCertificateImage(storeThumb);
     }
   }, [certificateImage, pendingThumbnail, params.collectionThumbnail]);
+
+  // 3. Additional fallback: retry after a short delay if still missing
+  useEffect(() => {
+    if (certificateImage) return;
+
+    const timeoutId = setTimeout(() => {
+      const storeThumb = useCollectionStore.getState().pendingThumbnail;
+      if (storeThumb && !certificateImage) {
+        setCertificateImage(storeThumb);
+      }
+    }, 100);
+
+    return () => clearTimeout(timeoutId);
+  }, [certificateImage]);
 
   // Certificate capture ref
   const certificateRef = useRef<View>(null);
@@ -1442,16 +1468,18 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   resultCardInner: {
-    backgroundColor: 'rgba(255, 255, 255, 0.75)',
+    backgroundColor: 'rgba(255, 255, 255, 0.42)',
     padding: 28,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.6)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.7)',
+    borderTopColor: 'rgba(255, 255, 255, 0.9)',
+    borderLeftColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.08,
-    shadowRadius: 32,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 16 },
+    shadowOpacity: 0.12,
+    shadowRadius: 40,
+    elevation: 16,
   },
   cardTitle: {
     fontSize: 28,
@@ -1482,7 +1510,7 @@ const styles = StyleSheet.create({
   roastContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    backgroundColor: 'rgba(255, 255, 255, 0.35)',
     borderRadius: 16,
     padding: 16,
     marginBottom: 20,

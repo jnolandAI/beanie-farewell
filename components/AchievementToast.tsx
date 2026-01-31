@@ -7,6 +7,7 @@ import {
   Easing,
   Pressable,
   Platform,
+  Share,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
@@ -15,14 +16,26 @@ import { Achievement, ACHIEVEMENT_CATEGORIES } from '../lib/achievements';
 interface AchievementToastProps {
   achievement: Achievement;
   onDismiss: () => void;
+  onShare?: () => void;
 }
 
-export function AchievementToast({ achievement, onDismiss }: AchievementToastProps) {
+export function AchievementToast({ achievement, onDismiss, onShare }: AchievementToastProps) {
   const slideAnim = useRef(new Animated.Value(-100)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
 
   const categoryInfo = ACHIEVEMENT_CATEGORIES[achievement.category];
+
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `🏆 Achievement Unlocked: ${achievement.name}!\n\n${achievement.emoji} ${achievement.description}\n\nTracking my Beanie Baby collection with Bean Bye! 📦`,
+      });
+      if (onShare) onShare();
+    } catch (error) {
+      // Silently fail
+    }
+  };
 
   useEffect(() => {
     // Haptic feedback on show
@@ -103,9 +116,14 @@ export function AchievementToast({ achievement, onDismiss }: AchievementToastPro
               <Text style={styles.description}>{achievement.description}</Text>
             </View>
 
-            {/* Checkmark */}
-            <View style={[styles.checkmark, { backgroundColor: categoryInfo.color }]}>
-              <Text style={styles.checkmarkText}>✓</Text>
+            {/* Actions */}
+            <View style={styles.actions}>
+              <Pressable onPress={handleShare} style={styles.shareBtn}>
+                <Text style={styles.shareBtnText}>📤</Text>
+              </Pressable>
+              <View style={[styles.checkmark, { backgroundColor: categoryInfo.color }]}>
+                <Text style={styles.checkmarkText}>✓</Text>
+              </View>
             </View>
           </View>
         </BlurView>
@@ -169,6 +187,24 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 12,
     color: '#666',
+  },
+  actions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  shareBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(0, 206, 209, 0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 206, 209, 0.3)',
+  },
+  shareBtnText: {
+    fontSize: 16,
   },
   checkmark: {
     width: 28,

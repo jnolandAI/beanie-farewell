@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { View, Text, Pressable, StyleSheet, Animated, Easing, Dimensions, Image } from 'react-native';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { View, Text, Pressable, StyleSheet, Animated, Easing, Dimensions, Image, ScrollView, Share, Modal } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
@@ -10,11 +10,18 @@ import { getBeanieOfTheDay } from '../lib/humor';
 import { LoginBonusToast } from '../components/LoginBonusToast';
 import { TierDistributionChart } from '../components/TierDistributionChart';
 import { StreakMilestoneToast, StreakMilestone } from '../components/StreakMilestoneToast';
+import { CollectionCertificate } from '../components/CollectionCertificate';
+import { FarewellCertificate } from '../components/FarewellCertificate';
 
 // Main app icon (elephant from tier 1)
 const mainIcon = require('../assets/icons/icon-tier1.png');
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+// Carousel card dimensions
+const CARD_WIDTH = 130;
+const CARD_MARGIN = 10;
+const CARD_TOTAL_WIDTH = CARD_WIDTH + CARD_MARGIN * 2;
 
 // Memphis Pattern SVG overlay - Bold 90s Trapper Keeper/Jazz Cup style
 function MemphisPattern() {
@@ -165,13 +172,22 @@ export default function WelcomeScreen() {
   const buttonGlow = useRef(new Animated.Value(0)).current;
   const buttonPulse = useRef(new Animated.Value(1)).current;
 
+  // Carousel scroll position for 3D effect
+  const carouselScrollX = useRef(new Animated.Value(0)).current;
+
+  // Shimmer animation for cards
+  const shimmerAnim = useRef(new Animated.Value(0)).current;
+
   // Collection store
-  const { getItemCount, isHydrated, hasCompletedOnboarding, unlockedAchievements, getStreak, getDailyChallenge, totalXP, collection, checkDailyLoginBonus, pendingLoginBonus, clearPendingLoginBonus, pendingStreakMilestone, clearPendingStreakMilestone, longestStreak } = useCollectionStore();
+  const { getItemCount, isHydrated, hasCompletedOnboarding, unlockedAchievements, getStreak, getDailyChallenge, totalXP, collection, checkDailyLoginBonus, pendingLoginBonus, clearPendingLoginBonus, pendingStreakMilestone, clearPendingStreakMilestone, longestStreak, userName } = useCollectionStore();
 
   // Login bonus toast state
   const [showLoginBonus, setShowLoginBonus] = useState<{ xp: number; streak: number } | null>(null);
   // Streak milestone toast state
   const [showStreakMilestone, setShowStreakMilestone] = useState<StreakMilestone | null>(null);
+  // Share preview modal state
+  const [showSharePreview, setShowSharePreview] = useState(false);
+  const [selectedShareTemplate, setSelectedShareTemplate] = useState(0);
   const collectionCount = isHydrated ? getItemCount() : 0;
   const achievementCount = unlockedAchievements?.length || 0;
   const currentStreak = isHydrated ? getStreak() : 0;
@@ -186,6 +202,57 @@ export default function WelcomeScreen() {
         return itemValue > bestValue ? item : best;
       }, collection[0])
     : null;
+
+  // Total collection value (high and low)
+  const totalValueHigh = isHydrated && collection.length > 0
+    ? collection.reduce((sum, item) => sum + (item.adjusted_value_high ?? item.estimated_value_high), 0)
+    : 0;
+  const totalValueLow = isHydrated && collection.length > 0
+    ? collection.reduce((sum, item) => sum + (item.adjusted_value_low ?? item.estimated_value_low), 0)
+    : 0;
+
+  // Top items for collection certificate (sorted by value, top 3)
+  const topItems = isHydrated && collection.length > 0
+    ? [...collection]
+        .sort((a, b) => {
+          const aVal = a.adjusted_value_high ?? a.estimated_value_high;
+          const bVal = b.adjusted_value_high ?? b.estimated_value_high;
+          return bVal - aVal;
+        })
+        .slice(0, 3)
+        .map(item => ({
+          name: item.name,
+          valueLow: item.adjusted_value_low ?? item.estimated_value_low,
+          valueHigh: item.adjusted_value_high ?? item.estimated_value_high,
+        }))
+    : [];
+
+  // Get tier for best find
+  const getBestFindTier = () => {
+    if (!bestFind) return 1;
+    const value = bestFind.adjusted_value_high ?? bestFind.estimated_value_high;
+    if (value >= 1000) return 5;
+    if (value >= 200) return 4;
+    if (value >= 50) return 3;
+    if (value >= 10) return 2;
+    return 1;
+  };
+
+  // Share templates
+  const shareTemplates = [
+    {
+      id: 'collection',
+      label: 'Collection',
+      emoji: '📦',
+      message: `📦 My Beanie Baby Collection\n\n${collectionCount} Beanies scanned\n💰 Total value: $${totalValueHigh.toLocaleString()}\n\nFind out what yours are worth with Bean Bye! 🧸`,
+    },
+    ...(bestFind ? [{
+      id: 'bestfind',
+      label: 'Best Find',
+      emoji: '💎',
+      message: `💎 Look what I found!\n\n${bestFind.name} - worth $${(bestFind.adjusted_value_high ?? bestFind.estimated_value_high).toLocaleString()}!\n\nScanning my Beanie Baby collection with Bean Bye! 🧸`,
+    }] : []),
+  ];
 
   // Today's stats
   const todaysStats = isHydrated && collection.length > 0 ? (() => {
@@ -334,7 +401,25 @@ export default function WelcomeScreen() {
         }),
       ])
     ).start();
-  }, [fadeAnim, slideAnim, buttonPulse, buttonGlow]);
+
+    // Start subtle border shimmer animation for carousel cards
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(shimmerAnim, {
+          toValue: 1,
+          duration: 3000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(shimmerAnim, {
+          toValue: 0,
+          duration: 3000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, [fadeAnim, slideAnim, buttonPulse, buttonGlow, shimmerAnim]);
 
   const handlePressIn = () => {
     Animated.spring(buttonScale, {
@@ -382,16 +467,118 @@ export default function WelcomeScreen() {
         />
       )}
 
-      {/* Main content */}
-      <Animated.View
-        style={[
-          styles.content,
-          {
-            opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }],
-          },
-        ]}
+      {/* Share Preview Modal */}
+      <Modal
+        visible={showSharePreview}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowSharePreview(false)}
       >
+        <Pressable
+          style={styles.shareModalOverlay}
+          onPress={() => setShowSharePreview(false)}
+        >
+          <Pressable style={styles.shareModalContent} onPress={e => e.stopPropagation()}>
+            <BlurView intensity={80} tint="light" style={styles.shareModalBlur}>
+              <View style={styles.shareModalInner}>
+                {/* Header */}
+                <View style={styles.shareModalHeader}>
+                  <Text style={styles.shareModalTitle}>Share Your Progress</Text>
+                  <Pressable onPress={() => setShowSharePreview(false)} style={styles.shareModalClose}>
+                    <Text style={styles.shareModalCloseText}>✕</Text>
+                  </Pressable>
+                </View>
+
+                {/* Template selector */}
+                <View style={styles.shareTemplateSelector}>
+                  {shareTemplates.map((template, index) => (
+                    <Pressable
+                      key={template.id}
+                      onPress={() => setSelectedShareTemplate(index)}
+                      style={[
+                        styles.shareTemplateTab,
+                        selectedShareTemplate === index && styles.shareTemplateTabActive,
+                      ]}
+                    >
+                      <Text style={styles.shareTemplateEmoji}>{template.emoji}</Text>
+                      <Text style={[
+                        styles.shareTemplateLabel,
+                        selectedShareTemplate === index && styles.shareTemplateLabelActive,
+                      ]}>{template.label}</Text>
+                    </Pressable>
+                  ))}
+                </View>
+
+                {/* Certificate Preview */}
+                <View style={styles.certificatePreviewContainer}>
+                  <View style={styles.certificatePreviewScaler}>
+                    {selectedShareTemplate === 0 && (
+                      <CollectionCertificate
+                        itemCount={collectionCount}
+                        totalValueLow={totalValueLow}
+                        totalValueHigh={totalValueHigh}
+                        topItems={topItems}
+                        userName={userName || undefined}
+                      />
+                    )}
+                    {selectedShareTemplate === 1 && bestFind && (
+                      <FarewellCertificate
+                        name={bestFind.name}
+                        variant={bestFind.variant || 'Standard'}
+                        valueLow={bestFind.adjusted_value_low ?? bestFind.estimated_value_low}
+                        valueHigh={bestFind.adjusted_value_high ?? bestFind.estimated_value_high}
+                        verdictTitle={(bestFind.adjusted_value_high ?? bestFind.estimated_value_high) >= 200 ? "NICE!" : (bestFind.adjusted_value_high ?? bestFind.estimated_value_high) >= 50 ? "NOT BAD" : "MEH"}
+                        tier={getBestFindTier()}
+                        beanieImage={bestFind.thumbnail}
+                        userName={userName || undefined}
+                      />
+                    )}
+                  </View>
+                </View>
+
+                {/* Share button */}
+                <Pressable
+                  onPress={async () => {
+                    try {
+                      await Share.share({
+                        message: shareTemplates[selectedShareTemplate]?.message || '',
+                      });
+                      setShowSharePreview(false);
+                    } catch (error) {
+                      // Silently fail
+                    }
+                  }}
+                >
+                  <LinearGradient
+                    colors={['#00CED1', '#00A5A8']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.shareModalButton}
+                  >
+                    <Text style={styles.shareModalButtonText}>📤 Share Now</Text>
+                  </LinearGradient>
+                </Pressable>
+              </View>
+            </BlurView>
+          </Pressable>
+        </Pressable>
+      </Modal>
+
+      {/* Main content - wrapped in ScrollView for longer content */}
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        bounces={true}
+      >
+        <Animated.View
+          style={[
+            styles.contentInner,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }],
+            },
+          ]}
+        >
         {/* Main App Icon */}
         <View style={styles.mainIconContainer}>
           <Image source={mainIcon} style={styles.mainIcon} />
@@ -400,321 +587,287 @@ export default function WelcomeScreen() {
         {/* Frosted Glass Card */}
         <BlurView intensity={40} tint="light" style={styles.glassCard}>
           <View style={styles.glassCardInner}>
-            <Text style={styles.title}>Beanie Farewell</Text>
+            <Text style={styles.title}>Bean Bye</Text>
             <Text style={styles.tagline}>It's been 25 years. Time for the truth.</Text>
 
-            {/* Level & Streak Section */}
-            {isHydrated && levelInfo && totalXP > 0 && (
-              <View style={styles.levelSection}>
-                {/* Level Badge */}
-                <View style={[styles.levelBadge, { borderColor: levelInfo.color }]}>
-                  <Text style={styles.levelEmoji}>{levelInfo.emoji}</Text>
-                  <View style={styles.levelInfo}>
-                    <Text style={styles.levelNumber}>Lvl {levelInfo.level}</Text>
-                    <Text style={[styles.levelTitle, { color: levelInfo.color }]}>{levelInfo.title}</Text>
-                  </View>
-                </View>
-                {/* XP Progress Bar */}
-                <View style={styles.xpProgressContainer}>
-                  <View style={styles.xpProgressBar}>
-                    <View style={[styles.xpProgressFill, { width: `${levelInfo.progress}%`, backgroundColor: levelInfo.color }]} />
-                  </View>
-                  <Text style={styles.xpProgressText}>{levelInfo.currentXP}/{levelInfo.nextLevelXP} XP</Text>
-                </View>
-              </View>
-            )}
-
-            {/* Streak & Daily Challenge */}
-            {isHydrated && (collectionCount > 0 || currentStreak > 0) && (
-              <View style={styles.streakSection}>
-                {/* Streak Display with Flames */}
-                <View style={styles.streakBadge}>
-                  <View style={styles.flamesContainer}>
-                    {/* More flames for longer streaks */}
-                    {currentStreak >= 7 && <Text style={[styles.streakFlame, styles.flameTiny]}>🔥</Text>}
-                    {currentStreak >= 5 && <Text style={[styles.streakFlame, styles.flameSmall]}>🔥</Text>}
-                    {currentStreak >= 3 && <Text style={[styles.streakFlame, styles.flameMedium]}>🔥</Text>}
-                    <Text style={[styles.streakFlame, styles.flameLarge]}>🔥</Text>
-                    {currentStreak >= 3 && <Text style={[styles.streakFlame, styles.flameMedium]}>🔥</Text>}
-                    {currentStreak >= 5 && <Text style={[styles.streakFlame, styles.flameSmall]}>🔥</Text>}
-                    {currentStreak >= 7 && <Text style={[styles.streakFlame, styles.flameTiny]}>🔥</Text>}
-                  </View>
-                  <View style={styles.streakNumberContainer}>
-                    <Text style={[
-                      styles.streakCount,
-                      currentStreak >= 7 && styles.streakCountHot,
-                      currentStreak >= 14 && styles.streakCountOnFire,
-                    ]}>{currentStreak}</Text>
-                    <Text style={styles.streakLabel}>
-                      {currentStreak >= 14 ? '🔥 ON FIRE!' : currentStreak >= 7 ? 'Hot streak!' : 'day streak'}
-                    </Text>
-                  </View>
-                </View>
-
-                {/* Daily Challenge */}
-                {dailyChallenge && (
-                  <View style={[
-                    styles.challengeCard,
-                    dailyChallenge.completed && styles.challengeCardCompleted
-                  ]}>
-                    <Text style={styles.challengeEmoji}>{dailyChallenge.emoji}</Text>
-                    <View style={styles.challengeInfo}>
-                      <Text style={styles.challengeTitle}>{dailyChallenge.title}</Text>
-                      <Text style={styles.challengeDesc}>{dailyChallenge.description}</Text>
-                    </View>
-                    {dailyChallenge.completed ? (
-                      <View style={styles.challengeCheck}>
-                        <Text style={styles.challengeCheckText}>✓</Text>
-                      </View>
-                    ) : (
-                      <Text style={styles.challengeXP}>+{dailyChallenge.xpReward} XP</Text>
-                    )}
-                  </View>
-                )}
-              </View>
-            )}
-
-            {/* Today's Stats Widget */}
-            {todaysStats && todaysStats.count > 0 && (
-              <View style={styles.todayStatsCard}>
-                <Text style={styles.todayStatsTitle}>📊 Today's Activity</Text>
-                <View style={styles.todayStatsGrid}>
-                  <View style={styles.todayStatItem}>
-                    <Text style={styles.todayStatValue}>{todaysStats.count}</Text>
-                    <Text style={styles.todayStatLabel}>Scans</Text>
-                  </View>
-                  <View style={styles.todayStatDivider} />
-                  <View style={styles.todayStatItem}>
-                    <Text style={styles.todayStatValue}>${todaysStats.totalValue}</Text>
-                    <Text style={styles.todayStatLabel}>Found</Text>
-                  </View>
-                  {todaysStats.bestFind && (
-                    <>
-                      <View style={styles.todayStatDivider} />
-                      <View style={styles.todayStatItem}>
-                        <Text style={styles.todayStatEmoji}>⭐</Text>
-                        <Text style={styles.todayStatBest} numberOfLines={1}>
-                          {todaysStats.bestFind.name}
-                        </Text>
-                      </View>
-                    </>
-                  )}
-                </View>
-              </View>
-            )}
-
-            {/* Tier Distribution Mini Chart */}
-            {isHydrated && collection.length >= 3 && (
-              <View style={styles.tierChartContainer}>
-                <TierDistributionChart collection={collection} compact />
-              </View>
-            )}
-
-            {/* Personal Records */}
-            {isHydrated && (bestFind || longestStreak > 0) && (
-              <View style={styles.personalRecordsCard}>
-                <Text style={styles.personalRecordsTitle}>🏆 Personal Records</Text>
-                <View style={styles.personalRecordsGrid}>
-                  {/* Best Find */}
-                  {bestFind && (
-                    <Pressable
-                      style={styles.personalRecordItem}
-                      onPress={() => router.push({
-                        pathname: '/result',
-                        params: {
-                          name: bestFind.name,
-                          animal_type: bestFind.animal_type,
-                          variant: bestFind.variant,
-                          colors: JSON.stringify(bestFind.colors),
-                          estimated_value_low: String(bestFind.estimated_value_low),
-                          estimated_value_high: String(bestFind.estimated_value_high),
-                          value_notes: bestFind.value_notes,
-                          confidence: 'High',
-                          has_visible_hang_tag: 'true',
-                          fromCollection: 'true',
-                          collectionThumbnail: bestFind.thumbnail,
-                        },
-                      })}
-                    >
-                      <Text style={styles.personalRecordEmoji}>💎</Text>
-                      <View style={styles.personalRecordInfo}>
-                        <Text style={styles.personalRecordLabel}>Best Find</Text>
-                        <Text style={styles.personalRecordValue} numberOfLines={1}>
-                          {bestFind.name}
-                        </Text>
-                        <Text style={styles.personalRecordSubvalue}>
-                          ${bestFind.adjusted_value_high ?? bestFind.estimated_value_high}
-                        </Text>
-                      </View>
-                    </Pressable>
-                  )}
-
-                  {/* Longest Streak */}
-                  {longestStreak > 0 && (
-                    <View style={styles.personalRecordItem}>
-                      <Text style={styles.personalRecordEmoji}>🔥</Text>
-                      <View style={styles.personalRecordInfo}>
-                        <Text style={styles.personalRecordLabel}>Best Streak</Text>
-                        <Text style={styles.personalRecordValue}>
-                          {longestStreak} {longestStreak === 1 ? 'day' : 'days'}
-                        </Text>
-                        {currentStreak > 0 && currentStreak < longestStreak && (
-                          <Text style={styles.personalRecordSubvalue}>
-                            Current: {currentStreak}
-                          </Text>
-                        )}
-                        {currentStreak === longestStreak && currentStreak > 0 && (
-                          <Text style={[styles.personalRecordSubvalue, styles.recordActive]}>
-                            Active!
-                          </Text>
-                        )}
-                      </View>
-                    </View>
-                  )}
-                </View>
-              </View>
-            )}
-
-            {/* Beanie of the Day */}
-            {beanieOfTheDay && (
-              <Pressable
-                onPress={() => router.push('/collection')}
-                style={styles.beanieOfTheDayCard}
-              >
-                <View style={styles.beanieOfTheDayHeader}>
-                  <Text style={styles.beanieOfTheDayLabel}>⭐ {beanieOfTheDay.greeting}</Text>
-                </View>
-                <View style={styles.beanieOfTheDayContent}>
-                  {beanieOfTheDay.beanie.thumbnail ? (
-                    <Image
-                      source={{ uri: `data:image/jpeg;base64,${beanieOfTheDay.beanie.thumbnail}` }}
-                      style={styles.beanieOfTheDayImage}
-                    />
-                  ) : (
-                    <View style={[styles.beanieOfTheDayImage, styles.beanieOfTheDayPlaceholder]}>
-                      <Text style={styles.beanieOfTheDayPlaceholderText}>🧸</Text>
-                    </View>
-                  )}
-                  <View style={styles.beanieOfTheDayInfo}>
-                    <Text style={styles.beanieOfTheDayName}>{beanieOfTheDay.beanie.name}</Text>
-                    <Text style={styles.beanieOfTheDayFact}>{beanieOfTheDay.funFact}</Text>
-                  </View>
-                </View>
-              </Pressable>
-            )}
-
-            <Text style={styles.description}>
-              Find out what your Beanie Babies are actually worth in 2026. Spoiler: probably not millions. But you never know...
-            </Text>
-
-            {/* CTA Button with Pulse Animation */}
-            <Animated.View style={[
-              styles.ctaButtonWrapper,
-              {
-                transform: [
-                  { scale: Animated.multiply(buttonScale, buttonPulse) }
-                ],
-              }
-            ]}>
-              {/* Glow effect behind button */}
-              <Animated.View style={[
-                styles.ctaButtonGlow,
-                {
-                  opacity: buttonGlow.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0.3, 0.7],
-                  }),
-                  transform: [{
-                    scale: buttonGlow.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [1, 1.15],
-                    }),
-                  }],
-                }
-              ]} />
-              <Pressable
-                onPress={() => router.push('/scan')}
-                onPressIn={handlePressIn}
-                onPressOut={handlePressOut}
-              >
-                <LinearGradient
-                  colors={['#FF00FF', '#FF1493']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.ctaButton}
-                >
-                  <Text style={styles.ctaText}>Begin My Farewell</Text>
-                </LinearGradient>
-              </Pressable>
-            </Animated.View>
-
-            {/* Search by Name Link */}
-            <Pressable
-              onPress={() => router.push('/search')}
-              style={styles.searchLink}
-            >
-              <Text style={styles.searchLinkText}>or search by name →</Text>
-            </Pressable>
-
-            {/* My Collection Button - only show if collection has items */}
-            {collectionCount > 0 && (
-              <View style={styles.actionButtonsRow}>
-                <Pressable
-                  onPress={() => router.push('/collection')}
-                  style={[styles.collectionButton, styles.flexButton]}
-                >
-                  <Text style={styles.collectionButtonText}>
-                    📦 Collection ({collectionCount})
-                  </Text>
-                </Pressable>
-
-                {/* Share Best Find Button */}
-                {bestFind && (bestFind.adjusted_value_high ?? bestFind.estimated_value_high) >= 10 && (
-                  <Pressable
-                    onPress={() => router.push({
-                      pathname: '/result',
-                      params: {
-                        name: bestFind.name,
-                        animal_type: bestFind.animal_type,
-                        variant: bestFind.variant,
-                        colors: JSON.stringify(bestFind.colors),
-                        estimated_value_low: String(bestFind.estimated_value_low),
-                        estimated_value_high: String(bestFind.estimated_value_high),
-                        value_notes: bestFind.value_notes,
-                        confidence: 'High',
-                        has_visible_hang_tag: 'true',
-                        fromCollection: 'true',
-                        collectionThumbnail: bestFind.thumbnail,
-                        roast: bestFind.roast || '',
-                      },
-                    })}
-                    style={[styles.shareBestButton, styles.flexButton]}
-                  >
-                    <Text style={styles.shareBestButtonText}>
-                      🏆 Share Best
-                    </Text>
-                  </Pressable>
-                )}
-              </View>
-            )}
-
-            {/* Achievements Button */}
-            <Pressable
-              onPress={() => router.push('/achievements')}
-              style={styles.achievementsButton}
-            >
-              <Text style={styles.achievementsButtonText}>
-                🏆 Achievements {achievementCount > 0 ? `(${achievementCount})` : ''}
+            {/* Description for new users */}
+            {collectionCount === 0 && (
+              <Text style={styles.description}>
+                Find out what your Beanie Babies are actually worth in 2026. Spoiler: probably not millions. But you never know...
               </Text>
-            </Pressable>
+            )}
           </View>
         </BlurView>
-      </Animated.View>
 
-      {/* Footer */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          No dreams were harmed in the making of this app.
+        {/* 3D Carousel info cards - outside glass card */}
+        {isHydrated && collectionCount > 0 && (() => {
+              // Build cards array dynamically
+              const cards: Array<{ key: string; content: React.ReactNode; onPress?: () => void }> = [];
+
+              if (levelInfo && totalXP > 0) {
+                cards.push({
+                  key: 'level',
+                  onPress: () => router.push('/achievements'),
+                  content: (
+                    <>
+                      <Text style={styles.infoCardTitle}>{levelInfo.emoji} Level</Text>
+                      <Text style={styles.infoCardValue}>{levelInfo.level}</Text>
+                      <Text style={styles.infoCardSubvalue} numberOfLines={1}>{levelInfo.title}</Text>
+                    </>
+                  ),
+                });
+              }
+
+              if (todaysStats && todaysStats.count > 0) {
+                cards.push({
+                  key: 'today',
+                  onPress: () => router.push('/collection'),
+                  content: (
+                    <>
+                      <Text style={styles.infoCardTitle}>📊 Today</Text>
+                      <Text style={styles.infoCardValue}>{todaysStats.count}</Text>
+                      <Text style={styles.infoCardSubvalue} numberOfLines={1}>${todaysStats.totalValue} found</Text>
+                    </>
+                  ),
+                });
+              }
+
+              cards.push({
+                key: 'collection',
+                onPress: () => router.push('/collection'),
+                content: (
+                  <>
+                    <Text style={styles.infoCardTitle}>📦 Collection</Text>
+                    <Text style={styles.infoCardValue}>{collectionCount}</Text>
+                    <Text style={styles.infoCardSubvalue}>Beanies</Text>
+                  </>
+                ),
+              });
+
+              if (bestFind) {
+                cards.push({
+                  key: 'bestFind',
+                  onPress: () => router.push({
+                    pathname: '/result',
+                    params: {
+                      name: bestFind.name,
+                      animal_type: bestFind.animal_type,
+                      variant: bestFind.variant,
+                      colors: JSON.stringify(bestFind.colors),
+                      estimated_value_low: String(bestFind.estimated_value_low),
+                      estimated_value_high: String(bestFind.estimated_value_high),
+                      value_notes: bestFind.value_notes,
+                      confidence: 'High',
+                      has_visible_hang_tag: 'true',
+                      fromCollection: 'true',
+                      collectionThumbnail: bestFind.thumbnail,
+                    },
+                  }),
+                  content: (
+                    <>
+                      <Text style={styles.infoCardTitle}>💎 Best Find</Text>
+                      <Text style={styles.infoCardValue} numberOfLines={1}>{bestFind.name}</Text>
+                      <Text style={styles.infoCardSubvalue} numberOfLines={1}>${bestFind.adjusted_value_high ?? bestFind.estimated_value_high}</Text>
+                    </>
+                  ),
+                });
+              }
+
+              if (currentStreak > 0) {
+                cards.push({
+                  key: 'streak',
+                  onPress: () => router.push('/achievements'),
+                  content: (
+                    <>
+                      <Text style={styles.infoCardTitle}>🔥 Streak</Text>
+                      <Text style={styles.infoCardValue}>{currentStreak}</Text>
+                      <Text style={styles.infoCardSubvalue}>{currentStreak === 1 ? 'day' : 'days'}</Text>
+                    </>
+                  ),
+                });
+              }
+
+              if (achievementCount > 0) {
+                cards.push({
+                  key: 'achievements',
+                  onPress: () => router.push('/achievements'),
+                  content: (
+                    <>
+                      <Text style={styles.infoCardTitle}>🏆 Unlocked</Text>
+                      <Text style={styles.infoCardValue}>{achievementCount}</Text>
+                      <Text style={styles.infoCardSubvalue}>achievements</Text>
+                    </>
+                  ),
+                });
+              }
+
+              const centerOffset = (SCREEN_WIDTH - CARD_WIDTH) / 2 - CARD_MARGIN;
+              // Calculate initial scroll to center (scroll to middle card)
+              const middleIndex = Math.floor(cards.length / 2);
+              const initialScrollX = middleIndex * CARD_TOTAL_WIDTH;
+
+              return (
+                <View style={styles.carouselContainer}>
+                  <Animated.ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    snapToInterval={CARD_TOTAL_WIDTH}
+                    decelerationRate="fast"
+                    contentContainerStyle={[
+                      styles.infoCardsContainer,
+                      { paddingHorizontal: centerOffset },
+                    ]}
+                    contentOffset={{ x: initialScrollX, y: 0 }}
+                    onScroll={Animated.event(
+                      [{ nativeEvent: { contentOffset: { x: carouselScrollX } } }],
+                      { useNativeDriver: true }
+                    )}
+                    scrollEventThrottle={16}
+                  >
+                    {cards.map((card, index) => {
+                      const inputRange = [
+                        (index - 2) * CARD_TOTAL_WIDTH,
+                        (index - 1) * CARD_TOTAL_WIDTH,
+                        index * CARD_TOTAL_WIDTH,
+                        (index + 1) * CARD_TOTAL_WIDTH,
+                        (index + 2) * CARD_TOTAL_WIDTH,
+                      ];
+
+                      const scale = carouselScrollX.interpolate({
+                        inputRange,
+                        outputRange: [0.8, 0.9, 1.05, 0.9, 0.8],
+                        extrapolate: 'clamp',
+                      });
+
+                      const opacity = carouselScrollX.interpolate({
+                        inputRange,
+                        outputRange: [0.5, 0.7, 1, 0.7, 0.5],
+                        extrapolate: 'clamp',
+                      });
+
+                      const translateY = carouselScrollX.interpolate({
+                        inputRange,
+                        outputRange: [10, 5, -5, 5, 10],
+                        extrapolate: 'clamp',
+                      });
+
+                      // Border shimmer opacity - more visible
+                      const borderOpacity = shimmerAnim.interpolate({
+                        inputRange: [0, 0.5, 1],
+                        outputRange: [0.2, 1, 0.2],
+                      });
+
+                      const CardWrapper = card.onPress ? Pressable : View;
+
+                      return (
+                        <Animated.View
+                          key={card.key}
+                          style={[
+                            styles.carouselCardWrapper,
+                            {
+                              transform: [{ scale }, { translateY }],
+                              opacity,
+                            },
+                          ]}
+                        >
+                          {/* Subtle border glow */}
+                          <Animated.View
+                            style={[
+                              styles.cardBorderGlow,
+                              { opacity: borderOpacity },
+                            ]}
+                            pointerEvents="none"
+                          />
+                          <CardWrapper
+                            style={styles.infoCard}
+                            {...(card.onPress && { onPress: card.onPress })}
+                          >
+                            {card.content}
+                          </CardWrapper>
+                        </Animated.View>
+                      );
+                    })}
+                  </Animated.ScrollView>
+                </View>
+              );
+            })()}
+      </Animated.View>
+      </ScrollView>
+
+      {/* Fixed CTA Section at bottom - always visible */}
+      <View style={styles.fixedCtaSection}>
+        {/* CTA Button with Pulse Animation */}
+        <Animated.View style={[
+          styles.ctaButtonWrapper,
+          {
+            transform: [
+              { scale: Animated.multiply(buttonScale, buttonPulse) }
+            ],
+          }
+        ]}>
+          {/* Glow effect behind button */}
+          <Animated.View style={[
+            styles.ctaButtonGlow,
+            {
+              opacity: buttonGlow.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0.3, 0.7],
+              }),
+              transform: [{
+                scale: buttonGlow.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [1, 1.15],
+                }),
+              }],
+            }
+          ]} />
+          <Pressable
+            onPress={() => router.push('/scan')}
+            onPressIn={handlePressIn}
+            onPressOut={handlePressOut}
+          >
+            <LinearGradient
+              colors={['#FF00FF', '#FF1493']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.ctaButton}
+            >
+              <Text style={styles.ctaText}>{collectionCount > 0 ? 'Continue My Farewell' : 'Begin My Farewell'}</Text>
+            </LinearGradient>
+          </Pressable>
+        </Animated.View>
+
+        {/* Secondary actions row */}
+        <View style={styles.secondaryActions}>
+          <Pressable
+            onPress={() => router.push('/search')}
+            style={styles.secondaryButton}
+          >
+            <Text style={styles.secondaryButtonText}>🔍 Search</Text>
+          </Pressable>
+
+          {collectionCount > 0 && (
+            <Pressable
+              onPress={() => router.push('/collection')}
+              style={styles.secondaryButton}
+            >
+              <Text style={styles.secondaryButtonText}>📦 Collection</Text>
+            </Pressable>
+          )}
+
+          {collectionCount > 0 && (
+            <Pressable
+              onPress={() => setShowSharePreview(true)}
+              style={styles.shareButton}
+            >
+              <Text style={styles.shareButtonText}>📤 Share</Text>
+            </Pressable>
+          )}
+        </View>
+
+        {/* Footer */}
+        <Text style={styles.footerTextCompact}>
+          No Beanies were harmed in the making of this app.
         </Text>
       </View>
     </View>
@@ -741,9 +894,13 @@ const styles = StyleSheet.create({
     height: '100%',
     opacity: 0.5,
   },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'flex-start',
+    paddingTop: 60,
+    paddingBottom: 20,
+  },
+  contentInner: {
     alignItems: 'center',
     paddingHorizontal: 24,
   },
@@ -767,17 +924,19 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   glassCardInner: {
-    backgroundColor: 'rgba(255, 255, 255, 0.72)',
+    backgroundColor: 'rgba(255, 255, 255, 0.32)',
     padding: 32,
     paddingHorizontal: 28,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: 'rgba(255, 255, 255, 0.6)',
+    borderTopColor: 'rgba(255, 255, 255, 0.85)',
+    borderLeftColor: 'rgba(255, 255, 255, 0.7)',
     borderRadius: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.08,
-    shadowRadius: 32,
-    elevation: 12,
+    shadowOffset: { width: 0, height: 16 },
+    shadowOpacity: 0.12,
+    shadowRadius: 40,
+    elevation: 16,
     alignItems: 'center',
   },
   title: {
@@ -847,6 +1006,240 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#999999',
     textAlign: 'center',
+  },
+  // 3D Carousel styles
+  carouselContainer: {
+    marginTop: 16,
+    marginBottom: 16,
+    height: 175,
+  },
+  infoCardsContainer: {
+    alignItems: 'center',
+  },
+  carouselCardWrapper: {
+    width: CARD_WIDTH,
+    marginHorizontal: CARD_MARGIN,
+  },
+  infoCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: 20,
+    padding: 12,
+    paddingVertical: 18,
+    width: CARD_WIDTH,
+    height: 150,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.8)',
+    borderTopColor: 'rgba(255, 255, 255, 0.95)',
+    borderLeftColor: 'rgba(255, 255, 255, 0.9)',
+    // Liquid glass shadow effect
+    shadowColor: 'rgba(0, 0, 0, 0.12)',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 1,
+    shadowRadius: 20,
+    elevation: 8,
+  },
+  infoCardTitle: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#555555',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  infoCardValue: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#1a1a2e',
+    textAlign: 'center',
+    width: '100%',
+    paddingHorizontal: 4,
+  },
+  infoCardSubvalue: {
+    fontSize: 11,
+    color: '#666666',
+    marginTop: 8,
+    textAlign: 'center',
+    width: '100%',
+    paddingHorizontal: 4,
+  },
+  cardBorderGlow: {
+    position: 'absolute',
+    top: -2,
+    left: -2,
+    right: -2,
+    bottom: -2,
+    borderRadius: 22,
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.8)',
+    shadowColor: 'rgba(255, 255, 255, 0.9)',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  // Fixed CTA section at bottom
+  fixedCtaSection: {
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 24,
+  },
+  secondaryActions: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 10,
+    marginTop: 14,
+  },
+  secondaryButton: {
+    paddingVertical: 11,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.8)',
+    borderTopColor: 'rgba(255, 255, 255, 0.95)',
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  secondaryButtonText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#555555',
+  },
+  shareButton: {
+    paddingVertical: 11,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0, 206, 209, 0.15)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(0, 206, 209, 0.5)',
+    shadowColor: '#00CED1',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  shareButtonText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#00A5A5',
+  },
+  footerTextCompact: {
+    fontSize: 11,
+    color: '#AAAAAA',
+    textAlign: 'center',
+    marginTop: 12,
+  },
+  // Share Modal styles
+  shareModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    justifyContent: 'flex-end',
+  },
+  shareModalContent: {
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    overflow: 'hidden',
+  },
+  shareModalBlur: {
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+  shareModalInner: {
+    backgroundColor: 'rgba(255, 255, 255, 0.92)',
+    padding: 20,
+    paddingBottom: 40,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+  shareModalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  shareModalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1a1a2e',
+  },
+  shareModalClose: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(0, 0, 0, 0.08)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  shareModalCloseText: {
+    fontSize: 16,
+    color: '#666',
+  },
+  shareTemplateSelector: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 16,
+  },
+  shareTemplateTab: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    alignItems: 'center',
+    gap: 4,
+  },
+  shareTemplateTabActive: {
+    backgroundColor: 'rgba(0, 206, 209, 0.15)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(0, 206, 209, 0.4)',
+  },
+  shareTemplateEmoji: {
+    fontSize: 20,
+  },
+  shareTemplateLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#666',
+  },
+  shareTemplateLabelActive: {
+    color: '#00A5A5',
+  },
+  certificatePreviewContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: '#f5f5f5',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  certificatePreviewScaler: {
+    transform: [{ scale: 0.85 }],
+    marginVertical: -20,
+  },
+  shareModalButton: {
+    paddingVertical: 16,
+    borderRadius: 50,
+    alignItems: 'center',
+    shadowColor: '#00CED1',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 6,
+  },
+  shareModalButtonText: {
+    color: 'white',
+    fontSize: 17,
+    fontWeight: '600',
   },
   actionButtonsRow: {
     flexDirection: 'row',

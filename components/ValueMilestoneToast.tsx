@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated, Platform } from 'react-native';
+import { View, Text, StyleSheet, Animated, Platform, Pressable, Share } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 
@@ -80,6 +80,16 @@ export function ValueMilestoneToast({ milestone, onDismiss }: ValueMilestoneToas
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
   const dollarPulse = useRef(new Animated.Value(1)).current;
   const shimmerAnim = useRef(new Animated.Value(0)).current;
+
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `${milestone.emoji} ${milestone.title}\n\n${milestone.message}\n\nMy Beanie Baby collection just hit $${milestone.value.toLocaleString()}! 💰\n\nFind out what yours is worth with Bean Bye! 📦`,
+      });
+    } catch (error) {
+      // Silently fail
+    }
+  };
 
   useEffect(() => {
     // Haptic feedback
@@ -197,6 +207,11 @@ export function ValueMilestoneToast({ milestone, onDismiss }: ValueMilestoneToas
             <Text style={styles.valueAmount}>${milestone.value.toLocaleString()}</Text>
             <Text style={styles.valueLabel}>REACHED</Text>
           </View>
+
+          {/* Share button */}
+          <Pressable onPress={handleShare} style={styles.shareBtn}>
+            <Text style={styles.shareBtnText}>📤</Text>
+          </Pressable>
         </View>
 
         {/* Money decorations */}
@@ -287,6 +302,19 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.9)',
     letterSpacing: 1,
     marginTop: 2,
+  },
+  shareBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+  },
+  shareBtnText: {
+    fontSize: 18,
   },
   moneyRow: {
     flexDirection: 'row',
