@@ -480,7 +480,12 @@ export default function WelcomeScreen() {
         >
           <Pressable style={styles.shareModalContent} onPress={e => e.stopPropagation()}>
             <BlurView intensity={80} tint="light" style={styles.shareModalBlur}>
-              <View style={styles.shareModalInner}>
+              <ScrollView
+                style={styles.shareModalScroll}
+                contentContainerStyle={styles.shareModalScrollContent}
+                showsVerticalScrollIndicator={false}
+                bounces={false}
+              >
                 {/* Header */}
                 <View style={styles.shareModalHeader}>
                   <Text style={styles.shareModalTitle}>Share Your Progress</Text>
@@ -558,7 +563,7 @@ export default function WelcomeScreen() {
                     <Text style={styles.shareModalButtonText}>📤 Share Now</Text>
                   </LinearGradient>
                 </Pressable>
-              </View>
+              </ScrollView>
             </BlurView>
           </Pressable>
         </Pressable>
@@ -587,7 +592,14 @@ export default function WelcomeScreen() {
         {/* Frosted Glass Card */}
         <BlurView intensity={40} tint="light" style={styles.glassCard}>
           <View style={styles.glassCardInner}>
-            <Text style={styles.title}>Bean Bye</Text>
+            <Pressable onLongPress={() => {
+              if (__DEV__) {
+                useCollectionStore.getState().resetAllData();
+                router.replace('/onboarding');
+              }
+            }} delayLongPress={2000}>
+              <Text style={styles.title}>Bean Bye</Text>
+            </Pressable>
             <Text style={styles.tagline}>It's been 25 years. Time for the truth.</Text>
 
             {/* Description for new users */}
@@ -1210,6 +1222,16 @@ const styles = StyleSheet.create({
   shareTemplateLabelActive: {
     color: '#00A5A5',
   },
+  shareModalScroll: {
+    maxHeight: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.92)',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+  shareModalScrollContent: {
+    padding: 20,
+    paddingBottom: 40,
+  },
   certificatePreviewContainer: {
     alignItems: 'center',
     marginBottom: 16,
@@ -1223,8 +1245,8 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   certificatePreviewScaler: {
-    transform: [{ scale: 0.85 }],
-    marginVertical: -20,
+    transform: [{ scale: 0.75 }],
+    marginVertical: -30,
   },
   shareModalButton: {
     paddingVertical: 16,

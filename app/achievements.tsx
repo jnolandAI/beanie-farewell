@@ -262,7 +262,12 @@ export default function AchievementsScreen() {
         >
           <Pressable style={styles.shareModalContent} onPress={e => e.stopPropagation()}>
             <BlurView intensity={80} tint="light" style={styles.shareModalBlur}>
-              <View style={styles.shareModalInner}>
+              <ScrollView
+                style={styles.shareModalScroll}
+                contentContainerStyle={styles.shareModalScrollContent}
+                showsVerticalScrollIndicator={false}
+                bounces={false}
+              >
                 {/* Header */}
                 <View style={styles.shareModalHeader}>
                   <Text style={styles.shareModalTitle}>Share Achievements</Text>
@@ -306,7 +311,7 @@ export default function AchievementsScreen() {
                     <Text style={styles.shareModalButtonText}>📤 Share Now</Text>
                   </LinearGradient>
                 </Pressable>
-              </View>
+              </ScrollView>
             </BlurView>
           </Pressable>
         </Pressable>
@@ -703,6 +708,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
   },
+  shareModalScroll: {
+    maxHeight: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.92)',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+  shareModalScrollContent: {
+    padding: 20,
+    paddingBottom: 40,
+  },
   certificatePreviewContainer: {
     alignItems: 'center',
     marginBottom: 16,
@@ -716,8 +731,8 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   certificatePreviewScaler: {
-    transform: [{ scale: 0.85 }],
-    marginVertical: -20,
+    transform: [{ scale: 0.75 }],
+    marginVertical: -30,
   },
   shareModalButton: {
     paddingVertical: 16,

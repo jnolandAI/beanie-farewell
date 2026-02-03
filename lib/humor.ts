@@ -32,6 +32,14 @@ const LOADING_TITLES = [
   "Consulting the oracle...",
   "Hacking the mainframe...",
   "Warming up the flux capacitor...",
+  "Bribing the algorithm...",
+  "Consulting a magic 8-ball...",
+  "Asking Jeeves (he's still around)...",
+  "Phoning a friend...",
+  "Checking the prophecy...",
+  "Communing with the pellets...",
+  "Reading the tea leaves...",
+  "Activating beast mode...",
 
   // Dramatic investigation
   "Enhancing... enhancing...",
@@ -40,6 +48,10 @@ const LOADING_TITLES = [
   "Interviewing witnesses...",
   "Reviewing the evidence...",
   "Building the case file...",
+  "Checking the security footage...",
+  "Following the paper trail...",
+  "Questioning the suspects...",
+  "Analyzing DNA (stuffing)...",
 
   // Beanie-themed
   "Counting beans...",
@@ -50,6 +62,11 @@ const LOADING_TITLES = [
   "Searching auction records...",
   "Analyzing the fluff...",
   "Measuring the stuffing...",
+  "Inspecting the stitching...",
+  "Verifying authenticity...",
+  "Scanning for tag errors...",
+  "Cross-checking with Ty records...",
+  "Evaluating cuteness levels...",
 
   // Tech parody
   "Initializing bean protocol...",
@@ -57,6 +74,11 @@ const LOADING_TITLES = [
   "Calibrating the algorithm...",
   "Compiling the verdict...",
   "Running AI diagnostics...",
+  "Defragmenting nostalgia...",
+  "Rebooting childhood memories...",
+  "Installing emotional support...",
+  "Updating your expectations...",
+  "Buffering reality...",
 
   // Self-aware
   "This is taking a moment...",
@@ -65,6 +87,12 @@ const LOADING_TITLES = [
   "Worth the wait (probably)...",
   "Bear with us...",
   "Almost done (maybe)...",
+  "Patience is a virtue...",
+  "Good things come to those who wait...",
+  "Trust the process...",
+  "We're getting there...",
+  "Don't look away now...",
+  "The suspense is intentional...",
 ];
 
 // ============================================
@@ -78,9 +106,13 @@ const BEANIE_FACTS = [
   "Ty deliberately 'retired' Beanies to create artificial scarcity. Classic.",
   "The first nine Beanie Babies debuted at a Chicago trade show in 1993.",
   "Ty sold over 2 billion dollars worth of Beanie Babies in 1998 alone.",
-  "McDonald's gave away 100 million Teenie Beanies in 10 days in 1997.",
+  "Ty sold Beanie Babies exclusively through small gift shops to create scarcity.",
   "Beanie Babies were the first internet-driven collectible craze.",
   "Ty employees were forbidden from confirming which Beanies would be retired.",
+  "Ty Warner personally approved every Beanie Baby design. Every. Single. One.",
+  "The original Beanies were stuffed with PVC pellets. Kids definitely ate some.",
+  "Beanie Babies were intentionally under-stuffed to make them 'poseable.'",
+  "Ty's factories produced over 2 million Beanies per day at peak production.",
 
   // Cultural moments
   "People literally fought in stores during Beanie releases in the late 90s.",
@@ -89,6 +121,12 @@ const BEANIE_FACTS = [
   "Beanie Baby theft was so common that police departments issued warnings.",
   "In 1999, Ty announced Beanies would be discontinued. The internet panicked.",
   "Collectors would call stores at 6am to ask about new shipments.",
+  "Some people took out second mortgages to buy Beanie Babies. This is not a joke.",
+  "Beanie Baby conventions were a real thing. Thousands attended.",
+  "Parents would bribe store employees for early access to new releases.",
+  "People waited in lines for hours, in the cold, for stuffed animals. Peak 90s.",
+  "A woman was arrested for stealing a rare Beanie from a child. In 1999.",
+  "Nurses and doctors were caught stealing Beanies from hospital gift shops.",
 
   // Value history
   "In 1999, a 1st edition Princess Bear sold for $500,000. It's not worth that now.",
@@ -96,12 +134,20 @@ const BEANIE_FACTS = [
   "Most Beanies that sold for hundreds in the 90s are worth $3-5 today.",
   "Tag protectors were a $2 billion industry. For plastic sleeves.",
   "Beanie price guides from 1998 make hilarious reading today.",
+  "Some 'rare' Beanies from 1998 are now literally unsellable at any price.",
+  "The entire Beanie Baby market peaked and crashed in less than 3 years.",
+  "Insurance companies actually wrote policies for Beanie collections. Seriously.",
 
   // Absurd facts
   "There's a term for Beanie regret: 'Bean Buyer's Remorse.' We made that up. But it should exist.",
   "Some people still have unopened Beanies in storage, waiting for 'the right time.'",
   "Ty Warner once bought the Four Seasons Hotel in New York. With Beanie money.",
   "The rarest error Beanies are worth thousands. The other 99.9% are worth nothing.",
+  "If you kept your Beanie Babies, congratulations: you're statistically average.",
+  "Your Beanie collection has probably moved at least 3 times without being opened.",
+  "The average Beanie Baby has been in storage longer than some marriages last.",
+  "Beanies were the original FOMO purchase. We just didn't have that word yet.",
+  "Your parents were right. Your other parent was also right. Everyone was right.",
 ];
 
 // ============================================
@@ -117,12 +163,21 @@ const LOADING_SUBTITLES = [
   "Auditing your parents' decision to enable this.",
   "Calculating years of closet real estate wasted.",
   "Reviewing decades of emotional attachment.",
+  "Questioning all your life choices...",
+  "Measuring the weight of your nostalgia...",
+  "Evaluating your 8-year-old's investment strategy...",
+  "Your portfolio from 1997 is loading...",
+  "Somewhere, your younger self is nervous...",
 
   // Beanie-specific
   "Checking if your tag protector was worth it.",
   "Analyzing those 'investment grade' pellets.",
   "Cross-referencing with disappointed collectors worldwide.",
   "Searching for someone who still cares.",
+  "Consulting Ty Warner's ghost (he's not dead, just hiding).",
+  "Reviewing your commitment to plastic tag covers...",
+  "Scanning millions of eBay listings for context...",
+  "Counting exactly how many beans are inside...",
 
   // Inflation/economy humor (sprinkled in)
   "Adjusting for 27 years of inflation...",
@@ -130,6 +185,9 @@ const LOADING_SUBTITLES = [
   "At least Beanies don't have shrinkflation.",
   "Still a better store of value than some currencies.",
   "Calculating what this could buy at 2026 prices...",
+  "Factoring in the cost of therapy...",
+  "Comparing to what you could have earned at minimum wage...",
+  "Running the numbers. They're not great.",
 
   // Pop culture (mainstream only)
   "This is faster than waiting for your eBay auction to end.",
@@ -137,6 +195,9 @@ const LOADING_SUBTITLES = [
   "Loading faster than dial-up. You're welcome.",
   "Faster than streaming on hotel WiFi.",
   "Quicker than finding parking at Costco.",
+  "Still quicker than your Amazon delivery estimate...",
+  "Faster than your wifi at a coffee shop...",
+  "Quicker than explaining what a Beanie Baby is to Gen Z...",
 
   // Meta/absurd
   "Generating an emotional buffer...",
@@ -146,6 +207,13 @@ const LOADING_SUBTITLES = [
   "Locating closure...",
   "Warming up the copium dispenser...",
   "Preparing the participation trophy...",
+  "Loading your sense of humor. You'll need it.",
+  "Generating excuses for your 1998 self...",
+  "Preparing something between hope and reality...",
+  "Manufacturing acceptance...",
+  "Loading... your emotional support results...",
+  "Buffering some hard truths...",
+  "Compiling a gentle letdown...",
 ];
 
 export function getLoadingText(): { title: string; subtitle: string; fact?: string } {
@@ -354,7 +422,7 @@ function get90sNostalgiaFact(avgValue: number): string {
       "Worth less than a Blockbuster late fee. Remember those?",
       "You could buy this OR one song on iTunes in 2003. Choose wisely.",
       "In 1998 money, this would buy you two slices of mall pizza.",
-      "Worth about what your parents spent on Happy Meals to get McDonald's Teenie Beanies.",
+      "Worth about what your parents spent on tag protectors. Remember those?",
       "Current value: approximately one pack of Gushers at 1998 prices.",
     ]);
   } else if (avgValue < 30) {
@@ -494,6 +562,14 @@ const TIER_1_TITLES = [
   "Oof",
   "Mmm, No",
   "So...",
+  "Yikes",
+  "Well...",
+  "Bless Its Heart",
+  "Oh Honey",
+  "Bruh",
+  "About That...",
+  "Narrator: It Wasn't",
+  "RIP",
 ];
 
 const TIER_1_MESSAGES = [
@@ -509,6 +585,18 @@ const TIER_1_MESSAGES = [
   "Worth less than what a Happy Meal costs now. Let that sink in.",
   "The Beanie market crashed harder than... well, everything else lately.",
   "At least it didn't charge you a subscription fee to exist.",
+  "This Beanie has opinions about you keeping it this long.",
+  "Your storage space deserves better. And so do you.",
+  "It's not worthless! It's just... value-challenged.",
+  "Somewhere, Marie Kondo is sighing loudly.",
+  "The tag protector did its job. The market did not.",
+  "This is what closure looks like. Embrace it.",
+  "Worth approximately one pack of gum. Choose your nostalgia.",
+  "The real treasure was the closet space you'll reclaim.",
+  "This Beanie peaked in 1998. We all peaked somewhere.",
+  "Consider this an expensive reminder of the 90s.",
+  "Your parents were right. Sorry to be the one to tell you.",
+  "On the bright side, it never needed software updates.",
 ];
 
 // Tier 2: $10-50
@@ -521,6 +609,12 @@ const TIER_2_TITLES = [
   "Fine, I Guess",
   "Modest Returns",
   "Par for the Course",
+  "Eh",
+  "It's Something",
+  "A Whole $20",
+  "Break Even-ish",
+  "Participation Award",
+  "Silver Lining",
 ];
 
 const TIER_2_MESSAGES = [
@@ -535,6 +629,16 @@ const TIER_2_MESSAGES = [
   "Could buy you a nice houseplant. That might also die. Circle of life.",
   "About two gallons of gas. Remember when that was cheap?",
   "Worth a month of that app subscription you forgot to cancel.",
+  "This is the 'I'm not mad, I'm just disappointed' of Beanie values.",
+  "Could be converted into one (1) fancy coffee. Weekly. For a month.",
+  "Worth just enough to make selling it feel like effort.",
+  "The financial equivalent of 'we have food at home.'",
+  "Your Beanie performed exactly as well as a savings account. So, poorly.",
+  "Technically outperformed some crypto. That's... something.",
+  "Worth one impulse Amazon purchase. The kind you forget about.",
+  "This Beanie said 'at least I tried' and honestly, same.",
+  "Not retirement money. More like 'treat yourself to lunch' money.",
+  "Your childhood investment returned... bus fare.",
 ];
 
 // Tier 3: $50-200
@@ -545,6 +649,13 @@ const TIER_3_TITLES = [
   "Well Then",
   "Okay!",
   "Interesting...",
+  "Plot Twist",
+  "Eyebrow Raise",
+  "Hold On",
+  "Actually?",
+  "Not Bad",
+  "Surprise!",
+  "Well Well Well",
 ];
 
 const TIER_3_MESSAGES = [
@@ -554,6 +665,18 @@ const TIER_3_MESSAGES = [
   "This is actually worth your time to sell properly.",
   "Not bad! Your childhood investment strategy had a winner.",
   "Worth more than a tank of gas. That's the 2026 bar.",
+  "This Beanie didn't get the memo about the crash. Good for it.",
+  "Your 1998 self is doing a little victory dance right now.",
+  "Better than a savings account! Lower bar than you'd think.",
+  "This one actually held its stuffing AND its value.",
+  "Worth a nice dinner. You deserve it after all that waiting.",
+  "Someone will actually pay real money for this. Wild.",
+  "Your collection isn't entirely a write-off. Just mostly.",
+  "This is what hope looks like. Stuffed and slightly dusty.",
+  "Worth photographing for eBay with good lighting.",
+  "Congratulations, your childhood self wasn't completely wrong.",
+  "This one beat the average. Unlike your fantasy football team.",
+  "Actually worth keeping in a safe place now.",
 ];
 
 // Tier 4: $200-1000
@@ -564,6 +687,13 @@ const TIER_4_TITLES = [
   "Wait What",
   "Seriously?!",
   "Oh My",
+  "Excuse Me?",
+  "Come Again?",
+  "I'm Sorry What",
+  "Uhhhh",
+  "Holy...",
+  "Sir/Ma'am",
+  "Beg Pardon?",
 ];
 
 const TIER_4_MESSAGES = [
@@ -573,6 +703,18 @@ const TIER_4_MESSAGES = [
   "Worth more than most people's first paycheck. Handle with care.",
   "This isn't a drill. This is actual money.",
   "Your parents who said Beanies were a waste? Show them this.",
+  "This Beanie is worth more than some of your furniture.",
+  "Maybe don't let the dog near this one anymore.",
+  "Your childhood self was playing 4D chess and didn't even know it.",
+  "This is worth a weekend getaway. A nice one.",
+  "Stop. Put on gloves. We're not joking.",
+  "This Beanie could pay your phone bill for a year.",
+  "Worth more than your first car. Maybe your current car.",
+  "Your 'worthless collection' would like a word.",
+  "This one did the opposite of what Beanies usually do.",
+  "Somewhere, a collector is very jealous of you right now.",
+  "Worth enough to make this whole app worthwhile.",
+  "Your closet is basically a savings account now.",
 ];
 
 // Tier 5: $1000+
@@ -583,6 +725,13 @@ const TIER_5_TITLES = [
   "HOLD EVERYTHING",
   "!!!",
   "ARE YOU KIDDING",
+  "SHUT UP",
+  "I CAN'T",
+  "EXCUSE ME",
+  "STOP",
+  "THIS IS REAL",
+  "NO REALLY",
+  "BRUH",
 ];
 
 const TIER_5_MESSAGES = [
@@ -592,6 +741,18 @@ const TIER_5_MESSAGES = [
   "You won the Beanie lottery. Buy a lottery ticket today.",
   "This is the one everyone was hoping they had. And you actually have it.",
   "Stop touching it. Get a professional. This is not a drill.",
+  "This Beanie is worth more than some people's savings accounts.",
+  "Do NOT post this on social media until you've secured it properly.",
+  "Your childhood self was an accidental genius.",
+  "This could pay rent. Multiple months of rent.",
+  "Consider getting a safe. A real safe. Today.",
+  "The 1% of Beanie Babies. You found one.",
+  "Insurance. Get insurance. We mean it.",
+  "This is the Beanie equivalent of finding gold in your backyard.",
+  "Your collection just became a legitimate asset.",
+  "Worth more than many people's first job paid in a year.",
+  "This is not a joke. Get this authenticated yesterday.",
+  "Your parents owe you an apology. A big one.",
 ];
 
 // Icons for each tier
@@ -664,6 +825,18 @@ export const CERTIFICATE_DISCLAIMERS = [
   "* Generated by AI. Verified by vibes. Approved by absolutely no one.",
   "* May cause mild disappointment. Side effects include closure and acceptance.",
   "* Valid in all 50 states. Also completely meaningless in all 50 states.",
+  "* Not endorsed by Ty Inc., the SEC, or anyone's financial advisor.",
+  "* This certificate cannot be used as ID, collateral, or proof of good judgment.",
+  "* Void where prohibited. Which is nowhere, because this isn't real.",
+  "* The surgeon general has not approved this for your financial health.",
+  "* Results typical. Unfortunately.",
+  "* May contain traces of shattered childhood dreams.",
+  "* Printed on digital paper. Environmentally neutral. Emotionally charged.",
+  "* Not responsible for any decisions made while viewing this document.",
+  "* This certificate is for entertainment purposes. The entertainment is questionable.",
+  "* In the event of buyer's remorse, blame the 90s.",
+  "* Certified by an AI that has never owned a Beanie Baby.",
+  "* Your results may vary. But probably not by much.",
 ];
 
 export function getCertificateDisclaimer(): string {
@@ -684,6 +857,18 @@ export const CERTIFICATE_TAGLINES = [
   "PEER-REVIEWED* (*BY BOTS)",
   "JUDGMENT DAY RESULTS",
   "YOUR FINANCIAL RECKONING",
+  "MOSTLY ACCURATE ASSESSMENT",
+  "LEGALLY UNENFORCEABLE APPRAISAL",
+  "EMOTIONAL DAMAGE REPORT",
+  "OFFICIAL-LOOKING DOCUMENT",
+  "TRUTH-ADJACENT VALUATION",
+  "VIBE-BASED ANALYSIS",
+  "CERTIFIED NOSTALGIA AUDIT",
+  "CLINICALLY UNHELPFUL ESTIMATE",
+  "SURPRISINGLY RESEARCHED GUESS",
+  "STATISTICALLY PLAUSIBLE VALUE",
+  "INTERNET-SOURCED WISDOM",
+  "ALGORITHMICALLY GENERATED TRUTH",
 ];
 
 export function getCertificateTagline(): string {
@@ -702,6 +887,13 @@ const TIER_1_PERMISSIONS = [
   "You are officially authorized to regift this to a child who won't check eBay.",
   "This Beanie is cleared for donation to any thrift store within a 50-mile radius.",
   "You have earned the right to stop wondering 'what if' about this one.",
+  "You may now reclaim the drawer space this has been hogging since 1998.",
+  "Permission granted to use this as a packing material for your next move.",
+  "This certificate officially releases you from caring about this Beanie.",
+  "You are authorized to let your cat have this. It will enjoy it more.",
+  "Permission to include this in a 'free box' at your next yard sale.",
+  "You may now stop guiltily avoiding eye contact with this Beanie.",
+  "This certificate grants closure. Frame it instead of the Beanie.",
 ];
 
 const TIER_2_PERMISSIONS = [
@@ -715,6 +907,11 @@ const TIER_2_PERMISSIONS = [
   "Permission granted to convert this into groceries. Not many groceries.",
   "You may trade this for approximately one bouquet of flowers. A small one.",
   "This certificate authorizes you to feel neutral about this transaction.",
+  "You may list this on eBay with medium effort and low expectations.",
+  "Permission to sell this and get a nice candle. You've earned it.",
+  "You are cleared to convert this into about two movie tickets.",
+  "This certificate authorizes mild satisfaction with this outcome.",
+  "Permission granted to tell people 'it's worth more than you'd think.'",
 ];
 
 const TIER_3_PERMISSIONS = [
@@ -724,6 +921,12 @@ const TIER_3_PERMISSIONS = [
   "Permission granted to list this at full price without shame.",
   "You are authorized to spend actual time writing a good eBay description.",
   "This Beanie has earned a spot in your 'actually worth something' pile.",
+  "You may now casually mention this value in conversations. Once.",
+  "Permission to screenshot this and send it to that one friend.",
+  "This certificate authorizes moderate bragging at family gatherings.",
+  "You are cleared to feel vindicated about saving this for 27 years.",
+  "Permission granted to take multiple photos with good lighting.",
+  "You may now carefully clean this with appropriate materials.",
 ];
 
 const TIER_4_PERMISSIONS = [
@@ -733,6 +936,12 @@ const TIER_4_PERMISSIONS = [
   "You are authorized to carefully move this away from children and pets.",
   "This Beanie has earned a protective case and your respect.",
   "You have permission to brag about this at your next family gathering.",
+  "You may NOT touch this without clean hands. That's an order.",
+  "This certificate demands you research proper storage immediately.",
+  "Permission to be insufferable about this for at least 24 hours.",
+  "You are required to take this more seriously than before.",
+  "This Beanie has graduated from 'clutter' to 'asset.' Treat it accordingly.",
+  "Permission granted to tell everyone. And we mean everyone.",
 ];
 
 const TIER_5_PERMISSIONS = [
@@ -742,6 +951,13 @@ const TIER_5_PERMISSIONS = [
   "This certificate demands you stop touching this with your bare hands.",
   "You have permission to finally prove your parents wrong about everything.",
   "This Beanie requires its own insurance policy. We're not joking.",
+  "You are NOT authorized to tell anyone where you keep this.",
+  "Permission to panic slightly. Then get professional help (the Beanie kind).",
+  "This certificate orders you to buy archival-quality storage today.",
+  "You have permission to call in sick tomorrow to deal with this properly.",
+  "This Beanie is now a financial instrument. Act accordingly.",
+  "Permission to use this as your new personality. You've earned it.",
+  "You are required to photograph this with white gloves. Not optional.",
 ];
 
 export function getPermissionText(tier: number): string {
@@ -881,26 +1097,41 @@ const FLEX_FLOP_LABELS: Record<FlexFlopStatus, Omit<FlexFlopLabel, 'status'>[]> 
     { label: 'MEGA FLEX', emoji: '👑', color: '#FFD700', tagline: 'You actually won the Beanie lottery' },
     { label: 'LEGENDARY', emoji: '🏆', color: '#FFD700', tagline: 'Screenshot this. Frame it.' },
     { label: 'UNREAL', emoji: '🤯', color: '#FFD700', tagline: 'Is this real life?' },
+    { label: 'UNICORN', emoji: '🦄', color: '#FFD700', tagline: 'Rarer than rare' },
+    { label: 'GOAT', emoji: '🐐', color: '#FFD700', tagline: 'Greatest of all Beanies' },
+    { label: 'HOLY GRAIL', emoji: '🏆', color: '#FFD700', tagline: 'The one everyone wants' },
   ],
   flex: [
     { label: 'FLEX', emoji: '💪', color: '#FF00FF', tagline: 'Not bad at all' },
     { label: 'W', emoji: '🔥', color: '#FF00FF', tagline: 'Taking this W' },
     { label: 'NICE', emoji: '✨', color: '#FF00FF', tagline: 'Actually worth something' },
+    { label: 'SOLID', emoji: '💰', color: '#FF00FF', tagline: 'Better than expected' },
+    { label: 'WINNER', emoji: '🎯', color: '#FF00FF', tagline: 'You called it' },
+    { label: 'CLUTCH', emoji: '🙌', color: '#FF00FF', tagline: 'Coming through when it matters' },
   ],
   mid: [
     { label: 'MID', emoji: '😐', color: '#00CED1', tagline: 'Could be worse, could be better' },
     { label: 'MEH', emoji: '🤷', color: '#00CED1', tagline: 'It is what it is' },
     { label: 'OKAY', emoji: '👌', color: '#00CED1', tagline: 'Not great, not terrible' },
+    { label: 'FINE', emoji: '😑', color: '#00CED1', tagline: 'Aggressively average' },
+    { label: 'WHATEVER', emoji: '🙃', color: '#00CED1', tagline: 'Peak mediocrity' },
+    { label: 'SHRUG', emoji: '¯\\_(ツ)_/¯', color: '#00CED1', tagline: 'What did you expect?' },
   ],
   flop: [
     { label: 'FLOP', emoji: '📉', color: '#666666', tagline: 'The dream is dead' },
     { label: 'L', emoji: '😬', color: '#666666', tagline: 'Taking this L' },
     { label: 'RIP', emoji: '💀', color: '#666666', tagline: 'RIP your investment' },
+    { label: 'OOF', emoji: '😔', color: '#666666', tagline: 'That stings a little' },
+    { label: 'YIKES', emoji: '😅', color: '#666666', tagline: 'Well this is awkward' },
+    { label: 'NOPE', emoji: '🚫', color: '#666666', tagline: 'Not what you hoped' },
   ],
   mega_flop: [
     { label: 'MEGA FLOP', emoji: '☠️', color: '#333333', tagline: 'Peak financial regret' },
     { label: 'DISASTER', emoji: '🗑️', color: '#333333', tagline: 'Certified worthless' },
     { label: 'TRAGIC', emoji: '😭', color: '#333333', tagline: 'A cautionary tale' },
+    { label: 'BRUTAL', emoji: '💔', color: '#333333', tagline: 'Emotional damage' },
+    { label: 'PAINFUL', emoji: '🤕', color: '#333333', tagline: 'This hurts to see' },
+    { label: 'VOID', emoji: '🕳️', color: '#333333', tagline: 'Into the abyss' },
   ],
 };
 
@@ -1000,6 +1231,13 @@ const PORTFOLIO_ROASTS_LOW = [
   "You've spent more on coffee this month than this entire collection is worth.",
   "This portfolio has all the investment potential of a savings account. In a country with hyperinflation.",
   "Your retirement fund called. It's laughing. Not in a good way.",
+  "This collection is worth less than the gas to drive it to a consignment shop.",
+  "If Beanie Babies were stocks, you'd be getting margin called. Hard.",
+  "Your storage container has more value than what's inside it.",
+  "This is what diversified disappointment looks like.",
+  "The real value here is the tax write-off for donating it.",
+  "This portfolio peaked sometime in the late Clinton administration.",
+  "Your collection and the Titanic have something in common. You know what.",
 ];
 
 const PORTFOLIO_ROASTS_MID = [
@@ -1009,6 +1247,12 @@ const PORTFOLIO_ROASTS_MID = [
   "Your collection is worth more than most, which is like being the tallest person in a room of hobbits.",
   "Solid middle-class Beanie portfolio. The Honda Civic of collections.",
   "This collection screams 'I had restraint in 1997.' Rare. Valuable. Unlike most of these Beanies.",
+  "You're in the top 50% of Beanie investors. That's... a thing you can say.",
+  "Not great, not terrible. Like most things in life, honestly.",
+  "This collection is the 'solid B student' of Beanie portfolios.",
+  "Worth enough to make you curious, not enough to change your life.",
+  "Your collection said 'meh' and we have to respect that.",
+  "The definition of 'could be worse, could be better.'",
 ];
 
 const PORTFOLIO_ROASTS_HIGH = [
@@ -1017,6 +1261,12 @@ const PORTFOLIO_ROASTS_HIGH = [
   "You beat the Beanie market. That's like winning at checkers against a pigeon, but still—a win is a win.",
   "Your collection might actually be a better investment than some crypto portfolios. Low bar, but cleared.",
   "Somewhere, a Ty executive is impressed. And a little confused.",
+  "This is what happens when childhood hoarding meets accidental genius.",
+  "Your collection outperformed the vast majority of collectors. Feel something.",
+  "This portfolio is the exception that proves the rule that Beanies are worthless.",
+  "You zigged when everyone zagged. Or just got really lucky. Either way.",
+  "Your parents definitely owe you an apology after seeing this.",
+  "This collection is worth bragging about. Don't be humble. Brag.",
 ];
 
 export function getPortfolioRoast(stats: PortfolioStats): string {
@@ -1405,40 +1655,66 @@ export function getBeanieOfTheDay(collectionLength: number, beanieName: string, 
 export function getShareCaption(beanieName: string, value: number, flexFlop: FlexFlopStatus): string {
   const captions: Record<FlexFlopStatus, string[]> = {
     mega_flex: [
-      `My ${beanieName} is worth $${value}?! 💀 I'M RICH`,
-      `$${value} BEANIE BABY FLEX 🏆 #BeanieMillionaire`,
-      `Mom was right. ${beanieName}: $${value} 👑`,
-      `27 years of patience finally paid off! ${beanieName}: $${value}`,
-      `Plot twist: ${beanieName} = $${value} 🎰`,
+      `My '90s Beanie Baby ${beanieName} is worth $${value}?! 💀 I'M ACTUALLY RICH`,
+      `$${value} BEANIE BABY FLEX 🏆 They said I was crazy to save these`,
+      `Mom was right about ${beanieName}. $${value} after 27 years! 👑`,
+      `27 years of patience finally paid off! My ${beanieName} Beanie Baby: $${value}`,
+      `Plot twist: my childhood ${beanieName} is actually worth $${value} 🎰`,
+      `I need to sit down. My ${beanieName} Beanie Baby: $${value} 🤯`,
+      `Retirement plan unlocked?? ${beanieName}: $${value} 💰`,
+      `Literally shaking. My childhood ${beanieName} is worth $${value}`,
+      `The prophecy was true. ${beanieName}: $${value} 👑`,
+      `My 8-year-old self was a financial genius. ${beanieName}: $${value}`,
     ],
     flex: [
-      `${beanieName}: $${value} 💪 Not bad for a 90s toy!`,
-      `Turns out ${beanieName} was the real investment`,
-      `My ${beanieName} just paid for dinner`,
-      `${beanieName} outperformed my expectations ($${value})`,
-      `Against all odds: ${beanieName} = $${value} ✨`,
+      `My ${beanieName} Beanie Baby: $${value} 💪 Not bad for a '90s toy!`,
+      `Turns out saving ${beanieName} since 1997 was the real investment. $${value}!`,
+      `Dug up my old ${beanieName} Beanie Baby. It just paid for dinner at $${value}`,
+      `${beanieName} outperformed my expectations. '90s nostalgia = $${value}`,
+      `Against all odds, my childhood ${beanieName} is worth $${value} ✨`,
+      `${beanieName} said "I got you" and delivered $${value} 💪`,
+      `Not all childhood decisions were bad. ${beanieName}: $${value}`,
+      `My Beanie Baby ${beanieName} came through! $${value} 🎯`,
+      `Sometimes the old ways are the best. ${beanieName}: $${value}`,
+      `1997 me made ONE good call. ${beanieName}: $${value}`,
     ],
     mid: [
-      `${beanieName}: $${value} 🤷 Could be worse!`,
-      `Solid meh from my ${beanieName} collection`,
-      `${beanieName} said: "I'm worth something" ($${value})`,
-      `${beanieName}: peak mediocrity at $${value}`,
-      `Neither flex nor flop: ${beanieName} = $${value}`,
+      `My ${beanieName} Beanie Baby: $${value} 🤷 Could be worse!`,
+      `Solid meh from my '90s Beanie collection. ${beanieName}: $${value}`,
+      `${beanieName} the Beanie Baby said: "I'm worth something" ($${value})`,
+      `Checked my old ${beanieName}. Peak mediocrity at $${value}`,
+      `Neither flex nor flop: my childhood ${beanieName} = $${value}`,
+      `${beanieName}: $${value}. Not mad, not impressed. Just here.`,
+      `My ${beanieName} is worth exactly what you'd expect: $${value} 😐`,
+      `The physical embodiment of "fine." ${beanieName}: $${value}`,
+      `${beanieName} said "I am what I am" and it's $${value}`,
+      `Aggressively average. ${beanieName}: $${value} 🤷`,
     ],
     flop: [
-      `${beanieName}: $${value} 📉 The dream is dead`,
-      `RIP to my ${beanieName} investment strategy`,
-      `${beanieName} really said $${value} and nothing else`,
-      `Thanks for nothing, ${beanieName} ($${value})`,
-      `${beanieName}: a $${value} lesson in humility`,
+      `My '90s Beanie Baby ${beanieName} is worth $${value} 📉 The dream is dead`,
+      `Kept ${beanieName} for 27 years thinking it'd fund my retirement. It's worth $${value}.`,
+      `${beanieName} the Beanie Baby: $${value}. So much for that investment strategy.`,
+      `Scanned my childhood ${beanieName}. Worth $${value}. At least the memories are free.`,
+      `${beanieName}: paid $5 in 1998, worth $${value} now. Math isn't mathing.`,
+      `Well this is humbling. ${beanieName}: $${value} 📉`,
+      `${beanieName} really said "expect nothing and you'll still be disappointed" 💀`,
+      `Found my childhood ${beanieName}. It has the financial energy of... $${value}`,
+      `Plot twist nobody wanted: ${beanieName} = $${value}`,
+      `${beanieName} and my hopes have something in common: both crushed. $${value}`,
     ],
     mega_flop: [
-      `${beanieName}: $${value} ☠️ EMOTIONAL DAMAGE`,
-      `My retirement plan (${beanieName}) is worth $${value}`,
-      `$${value}. That's it. That's the tweet. 💀`,
-      `${beanieName} chose violence ($${value})`,
-      `POV: You discover ${beanieName} is worth $${value}`,
-      `Generational wealth this is not. ${beanieName}: $${value}`,
+      `My childhood Beanie Baby ${beanieName}: $${value} ☠️ EMOTIONAL DAMAGE`,
+      `Kept this Beanie Baby since '97 thinking it'd be worth thousands. ${beanieName}: $${value}`,
+      `My parents said Beanie Babies were a waste of money. ${beanieName} at $${value} proves them right.`,
+      `POV: You finally check what your '90s ${beanieName} Beanie Baby is worth... $${value} 💀`,
+      `27 years of careful storage. Tag protector and everything. ${beanieName}: $${value}`,
+      `The Beanie Baby bubble popped and took ${beanieName} with it. $${value} for my retirement fund.`,
+      `I could have invested in literally anything else. ${beanieName}: $${value} 😭`,
+      `The audacity of ${beanieName} to only be worth $${value} after all these years`,
+      `${beanieName} really said "it's not about the money" because it's $${value}`,
+      `Childhood me: this will be worth millions! Reality: ${beanieName} = $${value} ☠️`,
+      `${beanieName} has depreciated more than my car. And my hope. $${value}`,
+      `Breaking: Local millennial discovers ${beanieName} is worth $${value}. More at 11.`,
     ],
   };
 

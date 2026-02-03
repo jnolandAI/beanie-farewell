@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "last_updated": "2025-01-11",
+  "version": "2.0.0",
+  "last_updated": "2025-01-31",
   "beanies": [
     {
       "name": "Princess",
@@ -901,6 +901,2040 @@
         "1st_gen": { "min": 110, "max": 300 }
       },
       "special_notes": "Blue pelican with distinctive beak pouch."
+    },
+    {
+      "name": "Blackie",
+      "animal_type": "Bear",
+      "style_number": "4011",
+      "birthday": "1994-07-15",
+      "introduced": "1994",
+      "retired": "1998",
+      "description": "Black bear, one of the early classic bears",
+      "visual_identifiers": ["solid black fur", "black nose", "basic bear shape"],
+      "values": {
+        "no_tag": { "min": 3, "max": 8 },
+        "4th_gen_plus": { "min": 8, "max": 20 },
+        "3rd_gen": { "min": 35, "max": 85 },
+        "2nd_gen": { "min": 100, "max": 275 },
+        "1st_gen": { "min": 250, "max": 650 }
+      },
+      "special_notes": "Classic early bear. One of the more common early bears but still valuable with 1st/2nd gen tags."
+    },
+    {
+      "name": "Teddy Brown",
+      "animal_type": "Bear",
+      "style_number": "4050",
+      "birthday": "1995-11-28",
+      "introduced": "1995",
+      "retired": "1997",
+      "description": "Brown teddy bear with old face or new face design",
+      "visual_identifiers": ["brown fur", "old face (pointed snout) or new face (rounder)", "no accessories"],
+      "values": {
+        "no_tag": { "min": 5, "max": 12 },
+        "4th_gen_plus": { "min": 15, "max": 40 },
+        "3rd_gen": { "min": 60, "max": 150 },
+        "2nd_gen": { "min": 200, "max": 500 },
+        "1st_gen": { "min": 500, "max": 1200 }
+      },
+      "special_notes": "Old face version (pointed snout) more valuable than new face. Part of the original Teddy series."
+    },
+    {
+      "name": "Teddy Cranberry",
+      "animal_type": "Bear",
+      "style_number": "4052",
+      "birthday": "1995-11-28",
+      "introduced": "1995",
+      "retired": "1996",
+      "description": "Cranberry/maroon colored teddy bear",
+      "visual_identifiers": ["cranberry/maroon fur", "old face or new face design"],
+      "values": {
+        "no_tag": { "min": 8, "max": 20 },
+        "4th_gen_plus": { "min": 25, "max": 60 },
+        "3rd_gen": { "min": 100, "max": 250 },
+        "2nd_gen": { "min": 300, "max": 700 },
+        "1st_gen": { "min": 700, "max": 1800 }
+      },
+      "special_notes": "Early retirement makes this more valuable. Old face version worth more."
+    },
+    {
+      "name": "Teddy Jade",
+      "animal_type": "Bear",
+      "style_number": "4057",
+      "birthday": "1995-11-28",
+      "introduced": "1995",
+      "retired": "1996",
+      "description": "Jade/teal colored teddy bear",
+      "visual_identifiers": ["jade/teal green fur", "old face or new face design"],
+      "values": {
+        "no_tag": { "min": 8, "max": 20 },
+        "4th_gen_plus": { "min": 25, "max": 60 },
+        "3rd_gen": { "min": 100, "max": 250 },
+        "2nd_gen": { "min": 300, "max": 700 },
+        "1st_gen": { "min": 700, "max": 1800 }
+      },
+      "special_notes": "Early retirement makes this more valuable. Old face version worth more."
+    },
+    {
+      "name": "Teddy Magenta",
+      "animal_type": "Bear",
+      "style_number": "4056",
+      "birthday": "1995-11-28",
+      "introduced": "1995",
+      "retired": "1996",
+      "description": "Magenta/pink colored teddy bear",
+      "visual_identifiers": ["magenta/hot pink fur", "old face or new face design"],
+      "values": {
+        "no_tag": { "min": 8, "max": 20 },
+        "4th_gen_plus": { "min": 25, "max": 60 },
+        "3rd_gen": { "min": 100, "max": 250 },
+        "2nd_gen": { "min": 300, "max": 700 },
+        "1st_gen": { "min": 700, "max": 1800 }
+      },
+      "special_notes": "Early retirement makes this more valuable. Old face version worth more."
+    },
+    {
+      "name": "Teddy Teal",
+      "animal_type": "Bear",
+      "style_number": "4051",
+      "birthday": "1995-11-28",
+      "introduced": "1995",
+      "retired": "1996",
+      "description": "Teal colored teddy bear",
+      "visual_identifiers": ["teal/blue-green fur", "old face or new face design"],
+      "values": {
+        "no_tag": { "min": 8, "max": 20 },
+        "4th_gen_plus": { "min": 25, "max": 60 },
+        "3rd_gen": { "min": 100, "max": 250 },
+        "2nd_gen": { "min": 300, "max": 700 },
+        "1st_gen": { "min": 700, "max": 1800 }
+      },
+      "special_notes": "Early retirement makes this more valuable. Old face version worth more."
+    },
+    {
+      "name": "Teddy Violet",
+      "animal_type": "Bear",
+      "style_number": "4055",
+      "birthday": "1995-11-28",
+      "introduced": "1995",
+      "retired": "1996",
+      "description": "Violet/purple colored teddy bear",
+      "visual_identifiers": ["violet/purple fur", "old face or new face design"],
+      "values": {
+        "no_tag": { "min": 8, "max": 20 },
+        "4th_gen_plus": { "min": 25, "max": 60 },
+        "3rd_gen": { "min": 100, "max": 250 },
+        "2nd_gen": { "min": 300, "max": 700 },
+        "1st_gen": { "min": 700, "max": 1800 }
+      },
+      "special_notes": "Early retirement makes this more valuable. Old face version worth more."
+    },
+    {
+      "name": "Chilly",
+      "animal_type": "Bear",
+      "style_number": "4012",
+      "birthday": "1994-05-07",
+      "introduced": "1994",
+      "retired": "1996",
+      "description": "White polar bear",
+      "visual_identifiers": ["white fur", "polar bear shape", "black nose"],
+      "values": {
+        "no_tag": { "min": 50, "max": 120 },
+        "4th_gen_plus": { "min": 150, "max": 350 },
+        "3rd_gen": { "min": 400, "max": 900 },
+        "2nd_gen": { "min": 900, "max": 1800 },
+        "1st_gen": { "min": 1500, "max": 3000 }
+      },
+      "special_notes": "Very early retirement makes this one of the more valuable bears. Don't confuse with later polar bears."
+    },
+    {
+      "name": "Peking",
+      "animal_type": "Bear",
+      "style_number": "4013",
+      "birthday": "1994-04-28",
+      "introduced": "1994",
+      "retired": "1996",
+      "description": "Panda bear with black and white coloring",
+      "visual_identifiers": ["black and white panda coloring", "black eye patches", "black ears"],
+      "values": {
+        "no_tag": { "min": 40, "max": 100 },
+        "4th_gen_plus": { "min": 120, "max": 280 },
+        "3rd_gen": { "min": 350, "max": 750 },
+        "2nd_gen": { "min": 800, "max": 1600 },
+        "1st_gen": { "min": 1400, "max": 2800 }
+      },
+      "special_notes": "Early retirement makes this valuable. Classic panda design."
+    },
+    {
+      "name": "Valentina",
+      "animal_type": "Bear",
+      "style_number": "4233",
+      "birthday": "1998-02-14",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Fuchsia/magenta bear with white heart on chest",
+      "visual_identifiers": ["fuchsia/magenta fur", "white heart on chest", "white ribbon"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 50, "max": 125 }
+      },
+      "special_notes": "Female counterpart to Valentino. Later production, mostly 5th gen tags."
+    },
+    {
+      "name": "Millennium",
+      "animal_type": "Bear",
+      "style_number": "4226",
+      "birthday": "1999-01-01",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Purple bear with gold MILLENNIUM embroidery",
+      "visual_identifiers": ["purple fur", "gold 'MILLENNIUM' text on chest", "gold ribbon"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 50, "max": 125 }
+      },
+      "special_notes": "Mass produced for Y2K, extremely common. Misspelled 'Millenium' tags worth slightly more."
+    },
+    {
+      "name": "The End",
+      "animal_type": "Bear",
+      "style_number": "4265",
+      "birthday": "1999-12-31",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Black bear with THE END embroidery",
+      "visual_identifiers": ["black fur", "THE END embroidered on chest", "black ribbon"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 50, "max": 120 }
+      },
+      "special_notes": "Final bear of the original Beanie Baby era. Mass produced, common."
+    },
+    {
+      "name": "Halo",
+      "animal_type": "Bear",
+      "style_number": "4208",
+      "birthday": "1998-08-31",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "White angel bear with wings and halo",
+      "visual_identifiers": ["white fur", "iridescent wings", "gold halo", "angel theme"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 15, "max": 40 },
+        "2nd_gen": { "min": 40, "max": 100 },
+        "1st_gen": { "min": 90, "max": 225 }
+      },
+      "special_notes": "Brown nose version slightly rarer. Wings can be iridescent or plain."
+    },
+    {
+      "name": "Spangle",
+      "animal_type": "Bear",
+      "style_number": "4245",
+      "birthday": "1999-06-14",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Patriotic American flag bear with stars and stripes",
+      "visual_identifiers": ["blue head with stars", "red and white striped body", "patriotic theme"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 50, "max": 125 }
+      },
+      "special_notes": "Pink face version exists. Part of patriotic bear series."
+    },
+    {
+      "name": "Britannia",
+      "animal_type": "Bear",
+      "style_number": "4601",
+      "birthday": "1997-12-15",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Brown bear with UK flag on chest",
+      "visual_identifiers": ["brown fur", "Union Jack flag on chest", "UK exclusive originally"],
+      "values": {
+        "no_tag": { "min": 5, "max": 12 },
+        "4th_gen_plus": { "min": 15, "max": 35 },
+        "3rd_gen": { "min": 50, "max": 120 },
+        "2nd_gen": { "min": 120, "max": 280 },
+        "1st_gen": { "min": 250, "max": 600 }
+      },
+      "special_notes": "UK exclusive initially. One of the more valuable country bears."
+    },
+    {
+      "name": "Fortune",
+      "animal_type": "Bear",
+      "style_number": "4196",
+      "birthday": "1997-12-06",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Panda bear celebrating Chinese New Year",
+      "visual_identifiers": ["black and white panda coloring", "red ribbon"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 30, "max": 75 },
+        "1st_gen": { "min": 65, "max": 160 }
+      },
+      "special_notes": "Panda for Chinese New Year. More common than original Peking panda."
+    },
+    {
+      "name": "Fuzz",
+      "animal_type": "Bear",
+      "style_number": "4237",
+      "birthday": "1998-07-23",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Brown bear with extra fuzzy fur texture",
+      "visual_identifiers": ["brown fuzzy fur", "textured plush", "shaggy appearance"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 8 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 50, "max": 125 }
+      },
+      "special_notes": "Unique fuzzy texture. Later production, mostly 5th gen tags."
+    },
+    {
+      "name": "Groovy",
+      "animal_type": "Bear",
+      "style_number": "4256",
+      "birthday": "1999-01-10",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Tie-dye bear with bright colors",
+      "visual_identifiers": ["bright tie-dye pattern", "multi-colored", "peace era theme"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 50, "max": 125 }
+      },
+      "special_notes": "Brighter colors than Peace bear. Each pattern unique."
+    },
+    {
+      "name": "Libearty",
+      "animal_type": "Bear",
+      "style_number": "4057",
+      "birthday": "1996-06-15",
+      "introduced": "1996",
+      "retired": "1997",
+      "description": "White bear with American flag on chest",
+      "visual_identifiers": ["white fur", "American flag on chest", "patriotic theme"],
+      "values": {
+        "no_tag": { "min": 20, "max": 50 },
+        "4th_gen_plus": { "min": 60, "max": 140 },
+        "3rd_gen": { "min": 175, "max": 400 },
+        "2nd_gen": { "min": 400, "max": 900 },
+        "1st_gen": { "min": 800, "max": 1800 }
+      },
+      "special_notes": "Early patriotic bear. Beanie Babies Official Club exclusive version exists."
+    },
+    {
+      "name": "Osito",
+      "animal_type": "Bear",
+      "style_number": "4244",
+      "birthday": "1999-02-05",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Red bear with Mexican flag on chest",
+      "visual_identifiers": ["red fur", "Mexican flag on chest"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 30, "max": 75 },
+        "1st_gen": { "min": 65, "max": 160 }
+      },
+      "special_notes": "Mexican flag bear. Part of the country bear series."
+    },
+    {
+      "name": "Germania",
+      "animal_type": "Bear",
+      "style_number": "4236",
+      "birthday": "1999-01-26",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Bear with German flag colors",
+      "visual_identifiers": ["black, red, and gold stripes", "German flag colors"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 18, "max": 45 },
+        "2nd_gen": { "min": 45, "max": 110 },
+        "1st_gen": { "min": 100, "max": 250 }
+      },
+      "special_notes": "German flag bear. European exclusive initially."
+    },
+    {
+      "name": "Inky",
+      "animal_type": "Octopus",
+      "style_number": "4028",
+      "birthday": "1994-11-29",
+      "introduced": "1994",
+      "retired": "1997",
+      "description": "Pink or tan octopus with eight tentacles",
+      "visual_identifiers": ["pink or tan color", "eight tentacles", "round body"],
+      "values": {
+        "no_tag": { "min": 3, "max": 8 },
+        "4th_gen_plus": { "min": 10, "max": 25 },
+        "3rd_gen": { "min": 50, "max": 120 },
+        "2nd_gen": { "min": 150, "max": 375 },
+        "1st_gen": { "min": 350, "max": 850 }
+      },
+      "special_notes": "Tan version without mouth more valuable. Pink version most common."
+    },
+    {
+      "name": "Goldie",
+      "animal_type": "Fish",
+      "style_number": "4023",
+      "birthday": "1994-11-14",
+      "introduced": "1994",
+      "retired": "1998",
+      "description": "Gold/orange goldfish",
+      "visual_identifiers": ["gold/orange color", "fish shape", "fins"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 60 },
+        "2nd_gen": { "min": 75, "max": 200 },
+        "1st_gen": { "min": 175, "max": 450 }
+      },
+      "special_notes": "Classic goldfish design. Early production more valuable."
+    },
+    {
+      "name": "Bubbles",
+      "animal_type": "Fish",
+      "style_number": "4078",
+      "birthday": "1995-07-02",
+      "introduced": "1996",
+      "retired": "1997",
+      "description": "Yellow and black striped fish",
+      "visual_identifiers": ["yellow body", "black stripes", "tropical fish shape"],
+      "values": {
+        "no_tag": { "min": 5, "max": 12 },
+        "4th_gen_plus": { "min": 15, "max": 40 },
+        "3rd_gen": { "min": 60, "max": 150 },
+        "2nd_gen": { "min": 175, "max": 400 },
+        "1st_gen": { "min": 375, "max": 900 }
+      },
+      "special_notes": "Early retirement makes this more valuable than other fish."
+    },
+    {
+      "name": "Coral",
+      "animal_type": "Fish",
+      "style_number": "4079",
+      "birthday": "1995-03-02",
+      "introduced": "1996",
+      "retired": "1997",
+      "description": "Tie-dye colored tropical fish",
+      "visual_identifiers": ["tie-dye pattern", "tropical fish shape", "colorful"],
+      "values": {
+        "no_tag": { "min": 5, "max": 12 },
+        "4th_gen_plus": { "min": 15, "max": 40 },
+        "3rd_gen": { "min": 60, "max": 150 },
+        "2nd_gen": { "min": 175, "max": 400 },
+        "1st_gen": { "min": 375, "max": 900 }
+      },
+      "special_notes": "Early retirement makes this valuable. Tie-dye pattern varies."
+    },
+    {
+      "name": "Manny",
+      "animal_type": "Manatee",
+      "style_number": "4081",
+      "birthday": "1995-06-08",
+      "introduced": "1996",
+      "retired": "1997",
+      "description": "Gray manatee/sea cow",
+      "visual_identifiers": ["gray body", "manatee shape", "flippers", "round snout"],
+      "values": {
+        "no_tag": { "min": 5, "max": 12 },
+        "4th_gen_plus": { "min": 15, "max": 40 },
+        "3rd_gen": { "min": 60, "max": 150 },
+        "2nd_gen": { "min": 175, "max": 400 },
+        "1st_gen": { "min": 375, "max": 900 }
+      },
+      "special_notes": "Early retirement. One of the rarer sea creatures."
+    },
+    {
+      "name": "Sting",
+      "animal_type": "Stingray",
+      "style_number": "4077",
+      "birthday": "1995-08-27",
+      "introduced": "1996",
+      "retired": "1997",
+      "description": "Tie-dye colored stingray",
+      "visual_identifiers": ["tie-dye pattern", "flat stingray shape", "long tail"],
+      "values": {
+        "no_tag": { "min": 5, "max": 12 },
+        "4th_gen_plus": { "min": 15, "max": 40 },
+        "3rd_gen": { "min": 60, "max": 150 },
+        "2nd_gen": { "min": 175, "max": 400 },
+        "1st_gen": { "min": 375, "max": 900 }
+      },
+      "special_notes": "Early retirement. Tie-dye pattern varies."
+    },
+    {
+      "name": "Crunch",
+      "animal_type": "Shark",
+      "style_number": "4130",
+      "birthday": "1996-01-13",
+      "introduced": "1997",
+      "retired": "1998",
+      "description": "Blue shark with white belly",
+      "visual_identifiers": ["blue top", "white belly", "shark shape", "fin"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 18, "max": 45 },
+        "2nd_gen": { "min": 50, "max": 125 },
+        "1st_gen": { "min": 110, "max": 300 }
+      },
+      "special_notes": "Popular shark design. Relatively common."
+    },
+    {
+      "name": "Echo",
+      "animal_type": "Dolphin",
+      "style_number": "4180",
+      "birthday": "1996-12-21",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Blue and white dolphin",
+      "visual_identifiers": ["blue body", "white belly", "dolphin shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Later dolphin than Flash. Waves with wrong Echo tush tag rare."
+    },
+    {
+      "name": "Waves",
+      "animal_type": "Whale",
+      "style_number": "4084",
+      "birthday": "1996-12-08",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Black and white orca whale",
+      "visual_identifiers": ["black top", "white belly", "orca pattern"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Similar to Splash but later production. Echo tush tag error version exists."
+    },
+    {
+      "name": "Jolly",
+      "animal_type": "Walrus",
+      "style_number": "4082",
+      "birthday": "1996-12-02",
+      "introduced": "1997",
+      "retired": "1998",
+      "description": "Brown walrus with tusks",
+      "visual_identifiers": ["brown body", "white tusks", "whiskers"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 18, "max": 45 },
+        "2nd_gen": { "min": 50, "max": 125 },
+        "1st_gen": { "min": 110, "max": 300 }
+      },
+      "special_notes": "Replaced earlier Tusk walrus."
+    },
+    {
+      "name": "Tusk",
+      "animal_type": "Walrus",
+      "style_number": "4076",
+      "birthday": "1995-09-18",
+      "introduced": "1995",
+      "retired": "1997",
+      "description": "Brown walrus with tusks, original version",
+      "visual_identifiers": ["brown body", "white tusks", "earlier version"],
+      "values": {
+        "no_tag": { "min": 5, "max": 12 },
+        "4th_gen_plus": { "min": 15, "max": 35 },
+        "3rd_gen": { "min": 50, "max": 120 },
+        "2nd_gen": { "min": 140, "max": 325 },
+        "1st_gen": { "min": 300, "max": 750 }
+      },
+      "special_notes": "Original walrus, retired earlier than Jolly."
+    },
+    {
+      "name": "Seamore",
+      "animal_type": "Seal",
+      "style_number": "4029",
+      "birthday": "1994-12-14",
+      "introduced": "1994",
+      "retired": "1997",
+      "description": "White seal/sea lion",
+      "visual_identifiers": ["white body", "seal shape", "flippers", "black nose"],
+      "values": {
+        "no_tag": { "min": 5, "max": 12 },
+        "4th_gen_plus": { "min": 15, "max": 35 },
+        "3rd_gen": { "min": 50, "max": 120 },
+        "2nd_gen": { "min": 140, "max": 325 },
+        "1st_gen": { "min": 300, "max": 750 }
+      },
+      "special_notes": "Early sea creature. Play on words 'see more'."
+    },
+    {
+      "name": "Claude",
+      "animal_type": "Crab",
+      "style_number": "4083",
+      "birthday": "1996-09-03",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Tie-dye colored crab",
+      "visual_identifiers": ["tie-dye pattern", "crab shape", "claws", "colorful"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 15, "max": 40 },
+        "2nd_gen": { "min": 45, "max": 110 },
+        "1st_gen": { "min": 100, "max": 275 }
+      },
+      "special_notes": "Tie-dye crab. Each pattern unique."
+    },
+    {
+      "name": "Digger",
+      "animal_type": "Crab",
+      "style_number": "4027",
+      "birthday": "1995-08-23",
+      "introduced": "1995",
+      "retired": "1997",
+      "description": "Orange or red crab",
+      "visual_identifiers": ["orange or red color", "crab shape", "claws"],
+      "values": {
+        "no_tag": { "min": 5, "max": 12 },
+        "4th_gen_plus": { "min": 15, "max": 35 },
+        "3rd_gen": { "min": 50, "max": 120 },
+        "2nd_gen": { "min": 140, "max": 325 },
+        "1st_gen": { "min": 300, "max": 750 }
+      },
+      "special_notes": "Orange version rarer than red. Earlier crab design."
+    },
+    {
+      "name": "Baldy",
+      "animal_type": "Eagle",
+      "style_number": "4074",
+      "birthday": "1996-02-17",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Bald eagle with white head",
+      "visual_identifiers": ["brown body", "white head", "yellow beak", "eagle shape"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 18, "max": 45 },
+        "2nd_gen": { "min": 50, "max": 125 },
+        "1st_gen": { "min": 110, "max": 300 }
+      },
+      "special_notes": "Patriotic bald eagle design. Popular Americana piece."
+    },
+    {
+      "name": "Caw",
+      "animal_type": "Crow",
+      "style_number": "4071",
+      "birthday": "1995-09-21",
+      "introduced": "1995",
+      "retired": "1996",
+      "description": "Black crow",
+      "visual_identifiers": ["all black", "crow shape", "beak"],
+      "values": {
+        "no_tag": { "min": 100, "max": 250 },
+        "4th_gen_plus": { "min": 275, "max": 600 },
+        "3rd_gen": { "min": 650, "max": 1400 },
+        "2nd_gen": { "min": 1200, "max": 2500 },
+        "1st_gen": { "min": 2000, "max": 4000 }
+      },
+      "special_notes": "Very early retirement makes this one of the rarer Beanies. All black."
+    },
+    {
+      "name": "Pinky",
+      "animal_type": "Flamingo",
+      "style_number": "4072",
+      "birthday": "1995-02-13",
+      "introduced": "1995",
+      "retired": "1999",
+      "description": "Pink flamingo",
+      "visual_identifiers": ["bright pink color", "long neck", "flamingo shape", "long legs"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 18, "max": 45 },
+        "2nd_gen": { "min": 50, "max": 125 },
+        "1st_gen": { "min": 110, "max": 300 }
+      },
+      "special_notes": "Classic flamingo design. Long production run makes it common."
+    },
+    {
+      "name": "Waddle",
+      "animal_type": "Penguin",
+      "style_number": "4075",
+      "birthday": "1995-12-19",
+      "introduced": "1995",
+      "retired": "1998",
+      "description": "Black and white penguin",
+      "visual_identifiers": ["black back", "white front", "penguin shape", "orange beak"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 60 },
+        "2nd_gen": { "min": 75, "max": 200 },
+        "1st_gen": { "min": 175, "max": 450 }
+      },
+      "special_notes": "Classic penguin design."
+    },
+    {
+      "name": "Zero",
+      "animal_type": "Penguin",
+      "style_number": "4207",
+      "birthday": "1998-01-02",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Black and white penguin with holiday theme",
+      "visual_identifiers": ["black back", "white front", "red cap", "holiday theme"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Holiday penguin with cap."
+    },
+    {
+      "name": "Puffer",
+      "animal_type": "Puffin",
+      "style_number": "4181",
+      "birthday": "1997-11-03",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Black and white puffin bird",
+      "visual_identifiers": ["black back", "white front", "colorful beak", "puffin shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Puffin bird. Later production."
+    },
+    {
+      "name": "Stretch",
+      "animal_type": "Ostrich",
+      "style_number": "4182",
+      "birthday": "1997-09-21",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Brown ostrich with long neck",
+      "visual_identifiers": ["brown body", "long neck", "ostrich shape", "long legs"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Ostrich with distinctive long neck."
+    },
+    {
+      "name": "Jabber",
+      "animal_type": "Parrot",
+      "style_number": "4197",
+      "birthday": "1997-10-10",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Colorful parrot",
+      "visual_identifiers": ["multi-colored", "parrot shape", "curved beak"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Colorful parrot design."
+    },
+    {
+      "name": "Early",
+      "animal_type": "Robin",
+      "style_number": "4190",
+      "birthday": "1997-03-20",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Robin bird with red breast",
+      "visual_identifiers": ["brown body", "red/orange breast", "robin shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Robin - the early bird."
+    },
+    {
+      "name": "Jake",
+      "animal_type": "Duck",
+      "style_number": "4199",
+      "birthday": "1997-04-16",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Mallard duck with green head",
+      "visual_identifiers": ["brown body", "green head", "mallard coloring"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Mallard duck design."
+    },
+    {
+      "name": "Gracie",
+      "animal_type": "Swan",
+      "style_number": "4126",
+      "birthday": "1996-06-17",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "White swan",
+      "visual_identifiers": ["white body", "long curved neck", "swan shape", "orange beak"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 15, "max": 40 },
+        "2nd_gen": { "min": 45, "max": 110 },
+        "1st_gen": { "min": 100, "max": 275 }
+      },
+      "special_notes": "Elegant swan design."
+    },
+    {
+      "name": "Rocket",
+      "animal_type": "Bluejay",
+      "style_number": "4202",
+      "birthday": "1997-03-12",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Blue jay bird",
+      "visual_identifiers": ["blue feathers", "white and black markings", "crest"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Blue jay design."
+    },
+    {
+      "name": "Wise",
+      "animal_type": "Owl",
+      "style_number": "4194",
+      "birthday": "1997-05-31",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Owl with graduation cap",
+      "visual_identifiers": ["brown owl", "graduation cap", "class of 98 theme"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Graduation owl - Class of 98."
+    },
+    {
+      "name": "Snort",
+      "animal_type": "Bull",
+      "style_number": "4002",
+      "birthday": "1995-05-15",
+      "introduced": "1997",
+      "retired": "1998",
+      "description": "Red bull with cream colored feet",
+      "visual_identifiers": ["red body", "cream feet", "horns", "bull shape"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 18, "max": 45 },
+        "2nd_gen": { "min": 50, "max": 125 },
+        "1st_gen": { "min": 110, "max": 300 }
+      },
+      "special_notes": "Replaced Tabasco due to trademark issues."
+    },
+    {
+      "name": "Tabasco",
+      "animal_type": "Bull",
+      "style_number": "4002",
+      "birthday": "1995-05-15",
+      "introduced": "1995",
+      "retired": "1997",
+      "description": "Red bull, original version before Snort",
+      "visual_identifiers": ["red body", "horns", "bull shape"],
+      "values": {
+        "no_tag": { "min": 30, "max": 75 },
+        "4th_gen_plus": { "min": 90, "max": 200 },
+        "3rd_gen": { "min": 250, "max": 550 },
+        "2nd_gen": { "min": 550, "max": 1200 },
+        "1st_gen": { "min": 1000, "max": 2200 }
+      },
+      "special_notes": "Retired due to Tabasco sauce trademark. Much more valuable than Snort."
+    },
+    {
+      "name": "Daisy",
+      "animal_type": "Cow",
+      "style_number": "4006",
+      "birthday": "1994-05-10",
+      "introduced": "1994",
+      "retired": "1999",
+      "description": "Black and white cow",
+      "visual_identifiers": ["black and white spots", "cow shape", "pink udder"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 18, "max": 45 },
+        "2nd_gen": { "min": 50, "max": 130 },
+        "1st_gen": { "min": 120, "max": 325 }
+      },
+      "special_notes": "Classic cow design. Long production run."
+    },
+    {
+      "name": "Bessie",
+      "animal_type": "Cow",
+      "style_number": "4009",
+      "birthday": "1995-06-27",
+      "introduced": "1995",
+      "retired": "1997",
+      "description": "Brown and white cow",
+      "visual_identifiers": ["brown and white spots", "cow shape"],
+      "values": {
+        "no_tag": { "min": 5, "max": 12 },
+        "4th_gen_plus": { "min": 15, "max": 35 },
+        "3rd_gen": { "min": 50, "max": 120 },
+        "2nd_gen": { "min": 140, "max": 325 },
+        "1st_gen": { "min": 300, "max": 750 }
+      },
+      "special_notes": "Brown cow variant, retired earlier than Daisy."
+    },
+    {
+      "name": "Chops",
+      "animal_type": "Lamb",
+      "style_number": "4019",
+      "birthday": "1996-05-03",
+      "introduced": "1996",
+      "retired": "1997",
+      "description": "Cream colored lamb with black face",
+      "visual_identifiers": ["cream wool body", "black face", "lamb shape"],
+      "values": {
+        "no_tag": { "min": 5, "max": 12 },
+        "4th_gen_plus": { "min": 15, "max": 40 },
+        "3rd_gen": { "min": 60, "max": 150 },
+        "2nd_gen": { "min": 175, "max": 400 },
+        "1st_gen": { "min": 375, "max": 900 }
+      },
+      "special_notes": "Early retirement makes this valuable. Black face distinctive."
+    },
+    {
+      "name": "Fleece",
+      "animal_type": "Lamb",
+      "style_number": "4125",
+      "birthday": "1996-03-21",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "White woolly lamb",
+      "visual_identifiers": ["white nappy fur", "lamb shape", "pink nose"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Fluffy textured wool. Later production than Chops."
+    },
+    {
+      "name": "Congo",
+      "animal_type": "Gorilla",
+      "style_number": "4160",
+      "birthday": "1996-11-09",
+      "introduced": "1996",
+      "retired": "1999",
+      "description": "Black gorilla",
+      "visual_identifiers": ["black fur", "gorilla shape", "gray face"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 15, "max": 40 },
+        "2nd_gen": { "min": 45, "max": 110 },
+        "1st_gen": { "min": 100, "max": 275 }
+      },
+      "special_notes": "Gorilla design. Relatively common."
+    },
+    {
+      "name": "Roary",
+      "animal_type": "Lion",
+      "style_number": "4069",
+      "birthday": "1996-02-20",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Brown lion with mane",
+      "visual_identifiers": ["brown/tan body", "fluffy mane", "lion shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Lion with fluffy mane."
+    },
+    {
+      "name": "Blizzard",
+      "animal_type": "Tiger",
+      "style_number": "4163",
+      "birthday": "1996-12-12",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "White tiger with black stripes",
+      "visual_identifiers": ["white fur", "black stripes", "tiger shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "White tiger variant of Stripes."
+    },
+    {
+      "name": "Spike",
+      "animal_type": "Rhinoceros",
+      "style_number": "4060",
+      "birthday": "1996-08-13",
+      "introduced": "1996",
+      "retired": "1999",
+      "description": "Gray rhinoceros",
+      "visual_identifiers": ["gray body", "horn", "rhino shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Rhino design."
+    },
+    {
+      "name": "Tank",
+      "animal_type": "Armadillo",
+      "style_number": "4031",
+      "birthday": "1995-02-22",
+      "introduced": "1996",
+      "retired": "1999",
+      "description": "Gray armadillo",
+      "visual_identifiers": ["gray body", "shell pattern", "armadillo shape"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 60 },
+        "2nd_gen": { "min": 75, "max": 175 },
+        "1st_gen": { "min": 160, "max": 400 }
+      },
+      "special_notes": "7-line or 9-line shell versions exist. 7-line slightly more valuable."
+    },
+    {
+      "name": "Ziggy",
+      "animal_type": "Zebra",
+      "style_number": "4063",
+      "birthday": "1995-12-24",
+      "introduced": "1995",
+      "retired": "1998",
+      "description": "Black and white zebra",
+      "visual_identifiers": ["black and white stripes", "zebra shape", "mane"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 60 },
+        "2nd_gen": { "min": 75, "max": 175 },
+        "1st_gen": { "min": 160, "max": 400 }
+      },
+      "special_notes": "Classic zebra stripes."
+    },
+    {
+      "name": "Happy",
+      "animal_type": "Hippo",
+      "style_number": "4061",
+      "birthday": "1994-02-25",
+      "introduced": "1994",
+      "retired": "1998",
+      "description": "Gray or lavender hippo",
+      "visual_identifiers": ["gray or lavender body", "hippo shape"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 60 },
+        "2nd_gen": { "min": 75, "max": 200 },
+        "1st_gen": { "min": 175, "max": 450 }
+      },
+      "special_notes": "Lavender version rarer than gray. Early production."
+    },
+    {
+      "name": "Pouch",
+      "animal_type": "Kangaroo",
+      "style_number": "4161",
+      "birthday": "1996-11-06",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Brown kangaroo with baby joey",
+      "visual_identifiers": ["brown body", "pouch with baby", "kangaroo shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Kangaroo with baby joey in pouch."
+    },
+    {
+      "name": "Mel",
+      "animal_type": "Koala",
+      "style_number": "4162",
+      "birthday": "1996-01-15",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Gray koala",
+      "visual_identifiers": ["gray fur", "koala shape", "big ears", "black nose"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Koala design. Named after Melbourne."
+    },
+    {
+      "name": "Ants",
+      "animal_type": "Anteater",
+      "style_number": "4195",
+      "birthday": "1997-11-07",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Gray anteater with long snout",
+      "visual_identifiers": ["gray body", "long snout", "anteater shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 8 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 55, "max": 140 }
+      },
+      "special_notes": "Anteater with distinctive long snout."
+    },
+    {
+      "name": "Bucky",
+      "animal_type": "Beaver",
+      "style_number": "4016",
+      "birthday": "1995-06-08",
+      "introduced": "1996",
+      "retired": "1998",
+      "description": "Brown beaver with flat tail",
+      "visual_identifiers": ["brown fur", "flat tail", "beaver shape", "buck teeth"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 20, "max": 50 },
+        "2nd_gen": { "min": 60, "max": 150 },
+        "1st_gen": { "min": 130, "max": 350 }
+      },
+      "special_notes": "Beaver with flat tail."
+    },
+    {
+      "name": "Ears",
+      "animal_type": "Rabbit",
+      "style_number": "4018",
+      "birthday": "1995-04-18",
+      "introduced": "1996",
+      "retired": "1998",
+      "description": "Brown rabbit with long ears",
+      "visual_identifiers": ["brown fur", "long ears", "rabbit shape"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 20, "max": 50 },
+        "2nd_gen": { "min": 60, "max": 150 },
+        "1st_gen": { "min": 130, "max": 350 }
+      },
+      "special_notes": "Brown rabbit. Simple classic design."
+    },
+    {
+      "name": "Hippity",
+      "animal_type": "Rabbit",
+      "style_number": "4119",
+      "birthday": "1996-06-01",
+      "introduced": "1997",
+      "retired": "1998",
+      "description": "Mint green rabbit for Easter",
+      "visual_identifiers": ["mint green fur", "rabbit shape", "Easter theme"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 18, "max": 45 },
+        "2nd_gen": { "min": 50, "max": 125 },
+        "1st_gen": { "min": 110, "max": 300 }
+      },
+      "special_notes": "Part of the Easter bunny trio with Hoppity and Floppity."
+    },
+    {
+      "name": "Hoppity",
+      "animal_type": "Rabbit",
+      "style_number": "4117",
+      "birthday": "1996-04-03",
+      "introduced": "1997",
+      "retired": "1998",
+      "description": "Pink rabbit for Easter",
+      "visual_identifiers": ["pink fur", "rabbit shape", "Easter theme"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 18, "max": 45 },
+        "2nd_gen": { "min": 50, "max": 125 },
+        "1st_gen": { "min": 110, "max": 300 }
+      },
+      "special_notes": "Part of the Easter bunny trio with Hippity and Floppity."
+    },
+    {
+      "name": "Floppity",
+      "animal_type": "Rabbit",
+      "style_number": "4118",
+      "birthday": "1996-05-28",
+      "introduced": "1997",
+      "retired": "1998",
+      "description": "Lavender rabbit for Easter",
+      "visual_identifiers": ["lavender/lilac fur", "rabbit shape", "Easter theme"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 18, "max": 45 },
+        "2nd_gen": { "min": 50, "max": 125 },
+        "1st_gen": { "min": 110, "max": 300 }
+      },
+      "special_notes": "Part of the Easter bunny trio with Hippity and Hoppity."
+    },
+    {
+      "name": "Ally",
+      "animal_type": "Alligator",
+      "style_number": "4032",
+      "birthday": "1994-03-14",
+      "introduced": "1994",
+      "retired": "1997",
+      "description": "Green alligator",
+      "visual_identifiers": ["green body", "long snout", "alligator shape", "teeth"],
+      "values": {
+        "no_tag": { "min": 5, "max": 12 },
+        "4th_gen_plus": { "min": 15, "max": 35 },
+        "3rd_gen": { "min": 50, "max": 120 },
+        "2nd_gen": { "min": 140, "max": 325 },
+        "1st_gen": { "min": 300, "max": 750 }
+      },
+      "special_notes": "Early alligator design. Earlier retirement makes it valuable."
+    },
+    {
+      "name": "Lizzy",
+      "animal_type": "Lizard",
+      "style_number": "4033",
+      "birthday": "1995-05-11",
+      "introduced": "1996",
+      "retired": "1998",
+      "description": "Blue tie-dye or black and yellow lizard",
+      "visual_identifiers": ["tie-dye or black/yellow", "lizard shape", "long tail"],
+      "values": {
+        "no_tag": { "min": 3, "max": 8 },
+        "4th_gen_plus": { "min": 10, "max": 25 },
+        "3rd_gen": { "min": 35, "max": 80 },
+        "2nd_gen": { "min": 100, "max": 250 },
+        "1st_gen": { "min": 225, "max": 550 }
+      },
+      "special_notes": "Blue tie-dye version rarer than black/yellow. Earlier versions more valuable."
+    },
+    {
+      "name": "Iggy",
+      "animal_type": "Iguana",
+      "style_number": "4038",
+      "birthday": "1997-08-12",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Tie-dye iguana with or without spine",
+      "visual_identifiers": ["tie-dye pattern", "iguana shape", "with or without spine"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "With spine version. Rainbow tag errors exist that say Rainbow."
+    },
+    {
+      "name": "Rainbow",
+      "animal_type": "Chameleon",
+      "style_number": "4037",
+      "birthday": "1997-10-14",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Tie-dye chameleon with or without tongue",
+      "visual_identifiers": ["tie-dye pattern", "chameleon shape", "curled tail"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Without tongue version. Iggy tag errors exist that say Iggy."
+    },
+    {
+      "name": "Smoochy",
+      "animal_type": "Frog",
+      "style_number": "4039",
+      "birthday": "1997-10-01",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Green frog with red lips",
+      "visual_identifiers": ["green body", "red lips", "frog shape", "kiss theme"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 8 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 55, "max": 140 }
+      },
+      "special_notes": "Frog prince theme with red kissable lips."
+    },
+    {
+      "name": "Slither",
+      "animal_type": "Snake",
+      "style_number": "4031",
+      "birthday": "1995-06-25",
+      "introduced": "1994",
+      "retired": "1996",
+      "description": "Multi-colored snake",
+      "visual_identifiers": ["spotted pattern", "snake shape", "coiled"],
+      "values": {
+        "no_tag": { "min": 50, "max": 125 },
+        "4th_gen_plus": { "min": 150, "max": 350 },
+        "3rd_gen": { "min": 400, "max": 900 },
+        "2nd_gen": { "min": 900, "max": 1800 },
+        "1st_gen": { "min": 1500, "max": 3000 }
+      },
+      "special_notes": "Very early retirement makes this one of the rarer Beanies."
+    },
+    {
+      "name": "Hissy",
+      "animal_type": "Snake",
+      "style_number": "4185",
+      "birthday": "1997-04-04",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Blue coiled snake",
+      "visual_identifiers": ["blue body", "coiled snake shape", "forked tongue"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 8 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 55, "max": 140 }
+      },
+      "special_notes": "Blue snake. Much more common than Slither."
+    },
+    {
+      "name": "Bumble",
+      "animal_type": "Bee",
+      "style_number": "4045",
+      "birthday": "1995-10-16",
+      "introduced": "1996",
+      "retired": "1996",
+      "description": "Yellow and black bee",
+      "visual_identifiers": ["yellow and black stripes", "wings", "bee shape"],
+      "values": {
+        "no_tag": { "min": 100, "max": 250 },
+        "4th_gen_plus": { "min": 300, "max": 650 },
+        "3rd_gen": { "min": 700, "max": 1500 },
+        "2nd_gen": { "min": 1400, "max": 2800 },
+        "1st_gen": { "min": 2500, "max": 5000 }
+      },
+      "special_notes": "Very early retirement makes this extremely valuable. One of the rarer Beanies."
+    },
+    {
+      "name": "Flutter",
+      "animal_type": "Butterfly",
+      "style_number": "4043",
+      "birthday": "1995-06-02",
+      "introduced": "1995",
+      "retired": "1996",
+      "description": "Tie-dye butterfly",
+      "visual_identifiers": ["tie-dye wings", "butterfly shape", "colorful"],
+      "values": {
+        "no_tag": { "min": 150, "max": 350 },
+        "4th_gen_plus": { "min": 400, "max": 850 },
+        "3rd_gen": { "min": 900, "max": 1900 },
+        "2nd_gen": { "min": 1800, "max": 3500 },
+        "1st_gen": { "min": 3000, "max": 6000 }
+      },
+      "special_notes": "Extremely early retirement makes this one of the most valuable Beanies."
+    },
+    {
+      "name": "Spinner",
+      "animal_type": "Spider",
+      "style_number": "4036",
+      "birthday": "1996-10-28",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Black spider with striped legs",
+      "visual_identifiers": ["black body", "striped legs", "spider shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Halloween spider. Replaced Web."
+    },
+    {
+      "name": "Web",
+      "animal_type": "Spider",
+      "style_number": "4041",
+      "birthday": "1995-09-14",
+      "introduced": "1996",
+      "retired": "1996",
+      "description": "Black spider, original version",
+      "visual_identifiers": ["all black", "spider shape", "eight legs"],
+      "values": {
+        "no_tag": { "min": 100, "max": 250 },
+        "4th_gen_plus": { "min": 300, "max": 650 },
+        "3rd_gen": { "min": 700, "max": 1500 },
+        "2nd_gen": { "min": 1400, "max": 2800 },
+        "1st_gen": { "min": 2500, "max": 5000 }
+      },
+      "special_notes": "Very early retirement. Original spider before Spinner."
+    },
+    {
+      "name": "Gigi",
+      "animal_type": "Dog",
+      "style_number": "4191",
+      "birthday": "1997-04-07",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Black poodle",
+      "visual_identifiers": ["black curly fur", "poodle shape", "fancy cut"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 8 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 55, "max": 140 }
+      },
+      "special_notes": "Black poodle design."
+    },
+    {
+      "name": "Bruno",
+      "animal_type": "Dog",
+      "style_number": "4183",
+      "birthday": "1997-09-09",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Brown and white terrier",
+      "visual_identifiers": ["brown and white fur", "terrier shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 8 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 55, "max": 140 }
+      },
+      "special_notes": "Bull terrier design."
+    },
+    {
+      "name": "Fetch",
+      "animal_type": "Dog",
+      "style_number": "4189",
+      "birthday": "1997-02-04",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Golden retriever",
+      "visual_identifiers": ["golden fur", "retriever shape", "floppy ears"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 8 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 55, "max": 140 }
+      },
+      "special_notes": "Golden retriever design."
+    },
+    {
+      "name": "Pugsley",
+      "animal_type": "Dog",
+      "style_number": "4106",
+      "birthday": "1996-05-02",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Tan pug dog",
+      "visual_identifiers": ["tan body", "black face", "pug shape", "curled tail"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Pug dog design."
+    },
+    {
+      "name": "Sparky",
+      "animal_type": "Dog",
+      "style_number": "4100",
+      "birthday": "1996-02-27",
+      "introduced": "1996",
+      "retired": "1997",
+      "description": "Dalmatian with black spots",
+      "visual_identifiers": ["white body", "black spots", "dalmatian pattern"],
+      "values": {
+        "no_tag": { "min": 5, "max": 12 },
+        "4th_gen_plus": { "min": 15, "max": 35 },
+        "3rd_gen": { "min": 50, "max": 120 },
+        "2nd_gen": { "min": 140, "max": 325 },
+        "1st_gen": { "min": 300, "max": 750 }
+      },
+      "special_notes": "Dalmatian retired earlier, replaced by Dotty. More valuable than Dotty."
+    },
+    {
+      "name": "Dotty",
+      "animal_type": "Dog",
+      "style_number": "4100",
+      "birthday": "1996-10-17",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Dalmatian with black spots",
+      "visual_identifiers": ["white body", "black spots", "dalmatian pattern"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Replaced Sparky dalmatian. More common."
+    },
+    {
+      "name": "Nanook",
+      "animal_type": "Dog",
+      "style_number": "4104",
+      "birthday": "1996-11-21",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Gray and white husky",
+      "visual_identifiers": ["gray and white fur", "husky markings", "blue eyes"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Husky dog design."
+    },
+    {
+      "name": "Chip",
+      "animal_type": "Cat",
+      "style_number": "4121",
+      "birthday": "1996-01-26",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Calico cat with patches",
+      "visual_identifiers": ["calico pattern", "orange, black, white patches", "cat shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Calico cat design."
+    },
+    {
+      "name": "Flip",
+      "animal_type": "Cat",
+      "style_number": "4012",
+      "birthday": "1995-02-28",
+      "introduced": "1996",
+      "retired": "1998",
+      "description": "White cat with pink ears",
+      "visual_identifiers": ["white fur", "pink ears", "cat shape"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 20, "max": 50 },
+        "2nd_gen": { "min": 60, "max": 150 },
+        "1st_gen": { "min": 130, "max": 350 }
+      },
+      "special_notes": "White cat. Earlier retirement than later cats."
+    },
+    {
+      "name": "Scat",
+      "animal_type": "Cat",
+      "style_number": "4231",
+      "birthday": "1998-05-27",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Brown cat",
+      "visual_identifiers": ["brown fur", "cat shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 2 },
+        "4th_gen_plus": { "min": 2, "max": 6 },
+        "3rd_gen": { "min": 8, "max": 20 },
+        "2nd_gen": { "min": 20, "max": 50 },
+        "1st_gen": { "min": 45, "max": 115 }
+      },
+      "special_notes": "Later production cat. Very common."
+    },
+    {
+      "name": "Amber",
+      "animal_type": "Cat",
+      "style_number": "4243",
+      "birthday": "1999-02-21",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Gold/orange tabby cat",
+      "visual_identifiers": ["gold/orange tabby pattern", "cat shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 2 },
+        "4th_gen_plus": { "min": 2, "max": 6 },
+        "3rd_gen": { "min": 8, "max": 20 },
+        "2nd_gen": { "min": 20, "max": 50 },
+        "1st_gen": { "min": 45, "max": 115 }
+      },
+      "special_notes": "Orange tabby. Later production."
+    },
+    {
+      "name": "Batty",
+      "animal_type": "Bat",
+      "style_number": "4035",
+      "birthday": "1996-10-29",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Brown or tie-dye bat",
+      "visual_identifiers": ["brown or tie-dye body", "bat wings", "hanging pose"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Tie-dye version slightly more valuable. Halloween theme."
+    },
+    {
+      "name": "Radar",
+      "animal_type": "Bat",
+      "style_number": "4091",
+      "birthday": "1995-10-30",
+      "introduced": "1995",
+      "retired": "1997",
+      "description": "Black bat with big ears",
+      "visual_identifiers": ["black body", "large ears", "bat wings"],
+      "values": {
+        "no_tag": { "min": 15, "max": 35 },
+        "4th_gen_plus": { "min": 45, "max": 100 },
+        "3rd_gen": { "min": 125, "max": 280 },
+        "2nd_gen": { "min": 300, "max": 650 },
+        "1st_gen": { "min": 600, "max": 1300 }
+      },
+      "special_notes": "Original bat before Batty. Earlier retirement makes it more valuable."
+    },
+    {
+      "name": "Spooky",
+      "animal_type": "Ghost",
+      "style_number": "4090",
+      "birthday": "1995-10-31",
+      "introduced": "1995",
+      "retired": "1999",
+      "description": "White ghost with orange nose",
+      "visual_identifiers": ["white body", "ghost shape", "orange nose", "black eyes"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 12 },
+        "3rd_gen": { "min": 18, "max": 45 },
+        "2nd_gen": { "min": 50, "max": 125 },
+        "1st_gen": { "min": 110, "max": 300 }
+      },
+      "special_notes": "Halloween ghost. Named 'Spook' version with 3rd gen tag rare."
+    },
+    {
+      "name": "Snip",
+      "animal_type": "Cat",
+      "style_number": "4120",
+      "birthday": "1996-10-22",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Siamese cat",
+      "visual_identifiers": ["cream body", "dark points", "siamese coloring"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Siamese cat design."
+    },
+    {
+      "name": "Velvet",
+      "animal_type": "Panther",
+      "style_number": "4064",
+      "birthday": "1995-12-16",
+      "introduced": "1995",
+      "retired": "1998",
+      "description": "Black panther",
+      "visual_identifiers": ["all black", "panther shape", "sleek design"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 60 },
+        "2nd_gen": { "min": 75, "max": 175 },
+        "1st_gen": { "min": 160, "max": 400 }
+      },
+      "special_notes": "Black panther design."
+    },
+    {
+      "name": "Whisper",
+      "animal_type": "Deer",
+      "style_number": "4194",
+      "birthday": "1997-04-05",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Brown and white fawn",
+      "visual_identifiers": ["brown body", "white spots", "fawn/deer shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 8 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 55, "max": 140 }
+      },
+      "special_notes": "Deer fawn design."
+    },
+    {
+      "name": "Stilts",
+      "animal_type": "Stork",
+      "style_number": "4221",
+      "birthday": "1998-06-16",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "White stork with long legs",
+      "visual_identifiers": ["white body", "long orange legs", "stork shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 8 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 55, "max": 140 }
+      },
+      "special_notes": "Stork with long legs."
+    },
+    {
+      "name": "Eucalyptus",
+      "animal_type": "Koala",
+      "style_number": "4240",
+      "birthday": "1999-04-28",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Gray koala",
+      "visual_identifiers": ["gray fur", "koala shape", "big ears"],
+      "values": {
+        "no_tag": { "min": 1, "max": 2 },
+        "4th_gen_plus": { "min": 2, "max": 6 },
+        "3rd_gen": { "min": 8, "max": 20 },
+        "2nd_gen": { "min": 20, "max": 50 },
+        "1st_gen": { "min": 45, "max": 115 }
+      },
+      "special_notes": "Later koala. Very common."
+    },
+    {
+      "name": "Slowpoke",
+      "animal_type": "Sloth",
+      "style_number": "4261",
+      "birthday": "1999-05-20",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Brown sloth",
+      "visual_identifiers": ["brown fur", "sloth shape", "long arms"],
+      "values": {
+        "no_tag": { "min": 1, "max": 2 },
+        "4th_gen_plus": { "min": 2, "max": 6 },
+        "3rd_gen": { "min": 8, "max": 20 },
+        "2nd_gen": { "min": 20, "max": 50 },
+        "1st_gen": { "min": 45, "max": 115 }
+      },
+      "special_notes": "Sloth design. Later production."
+    },
+    {
+      "name": "Tiny",
+      "animal_type": "Chihuahua",
+      "style_number": "4234",
+      "birthday": "1998-09-08",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Tan chihuahua",
+      "visual_identifiers": ["tan body", "big ears", "chihuahua shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 2 },
+        "4th_gen_plus": { "min": 2, "max": 6 },
+        "3rd_gen": { "min": 8, "max": 20 },
+        "2nd_gen": { "min": 20, "max": 50 },
+        "1st_gen": { "min": 45, "max": 115 }
+      },
+      "special_notes": "Chihuahua design."
+    },
+    {
+      "name": "Goochy",
+      "animal_type": "Jellyfish",
+      "style_number": "4230",
+      "birthday": "1998-11-18",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Tie-dye jellyfish",
+      "visual_identifiers": ["tie-dye pattern", "jellyfish shape", "tentacles"],
+      "values": {
+        "no_tag": { "min": 1, "max": 2 },
+        "4th_gen_plus": { "min": 2, "max": 6 },
+        "3rd_gen": { "min": 8, "max": 20 },
+        "2nd_gen": { "min": 20, "max": 50 },
+        "1st_gen": { "min": 45, "max": 115 }
+      },
+      "special_notes": "Tie-dye jellyfish."
+    },
+    {
+      "name": "Stinger",
+      "animal_type": "Scorpion",
+      "style_number": "4193",
+      "birthday": "1997-09-29",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Gray scorpion",
+      "visual_identifiers": ["gray body", "scorpion shape", "tail with stinger", "claws"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 8 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 55, "max": 140 }
+      },
+      "special_notes": "Scorpion design."
+    },
+    {
+      "name": "Prickles",
+      "animal_type": "Hedgehog",
+      "style_number": "4220",
+      "birthday": "1998-02-19",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Brown hedgehog",
+      "visual_identifiers": ["brown body", "spiky back", "hedgehog shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 2 },
+        "4th_gen_plus": { "min": 2, "max": 6 },
+        "3rd_gen": { "min": 8, "max": 20 },
+        "2nd_gen": { "min": 20, "max": 50 },
+        "1st_gen": { "min": 45, "max": 115 }
+      },
+      "special_notes": "Hedgehog design."
+    },
+    {
+      "name": "Ewey",
+      "animal_type": "Lamb",
+      "style_number": "4219",
+      "birthday": "1998-03-01",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Cream colored lamb",
+      "visual_identifiers": ["cream wool", "lamb shape", "pink face"],
+      "values": {
+        "no_tag": { "min": 1, "max": 2 },
+        "4th_gen_plus": { "min": 2, "max": 6 },
+        "3rd_gen": { "min": 8, "max": 20 },
+        "2nd_gen": { "min": 20, "max": 50 },
+        "1st_gen": { "min": 45, "max": 115 }
+      },
+      "special_notes": "Later lamb production. Cream colored."
+    },
+    {
+      "name": "Nibbler",
+      "animal_type": "Rabbit",
+      "style_number": "4216",
+      "birthday": "1998-04-06",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Cream rabbit",
+      "visual_identifiers": ["cream fur", "rabbit shape", "Easter theme"],
+      "values": {
+        "no_tag": { "min": 1, "max": 2 },
+        "4th_gen_plus": { "min": 2, "max": 6 },
+        "3rd_gen": { "min": 8, "max": 20 },
+        "2nd_gen": { "min": 20, "max": 50 },
+        "1st_gen": { "min": 45, "max": 115 }
+      },
+      "special_notes": "Cream colored rabbit."
+    },
+    {
+      "name": "Nibbly",
+      "animal_type": "Rabbit",
+      "style_number": "4217",
+      "birthday": "1998-05-07",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Brown rabbit with carrot",
+      "visual_identifiers": ["brown fur", "rabbit shape", "holding carrot"],
+      "values": {
+        "no_tag": { "min": 1, "max": 2 },
+        "4th_gen_plus": { "min": 2, "max": 6 },
+        "3rd_gen": { "min": 8, "max": 20 },
+        "2nd_gen": { "min": 20, "max": 50 },
+        "1st_gen": { "min": 45, "max": 115 }
+      },
+      "special_notes": "Brown rabbit with carrot accessory."
+    },
+    {
+      "name": "Cheeks",
+      "animal_type": "Baboon",
+      "style_number": "4250",
+      "birthday": "1999-05-18",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Brown baboon",
+      "visual_identifiers": ["brown fur", "baboon face", "primate shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 2 },
+        "4th_gen_plus": { "min": 2, "max": 6 },
+        "3rd_gen": { "min": 8, "max": 20 },
+        "2nd_gen": { "min": 20, "max": 50 },
+        "1st_gen": { "min": 45, "max": 115 }
+      },
+      "special_notes": "Baboon design."
+    },
+    {
+      "name": "Mooch",
+      "animal_type": "Monkey",
+      "style_number": "4224",
+      "birthday": "1998-08-01",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Black spider monkey",
+      "visual_identifiers": ["black fur", "long limbs", "spider monkey shape"],
+      "values": {
+        "no_tag": { "min": 1, "max": 2 },
+        "4th_gen_plus": { "min": 2, "max": 6 },
+        "3rd_gen": { "min": 8, "max": 20 },
+        "2nd_gen": { "min": 20, "max": 50 },
+        "1st_gen": { "min": 45, "max": 115 }
+      },
+      "special_notes": "Spider monkey design."
+    },
+    {
+      "name": "Schweetheart",
+      "animal_type": "Orangutan",
+      "style_number": "4252",
+      "birthday": "1999-01-23",
+      "introduced": "1999",
+      "retired": "1999",
+      "description": "Orange orangutan",
+      "visual_identifiers": ["orange fur", "orangutan shape", "long arms"],
+      "values": {
+        "no_tag": { "min": 1, "max": 2 },
+        "4th_gen_plus": { "min": 2, "max": 6 },
+        "3rd_gen": { "min": 8, "max": 20 },
+        "2nd_gen": { "min": 20, "max": 50 },
+        "1st_gen": { "min": 45, "max": 115 }
+      },
+      "special_notes": "Orangutan design."
+    },
+    {
+      "name": "Canyon",
+      "animal_type": "Cougar",
+      "style_number": "4212",
+      "birthday": "1998-05-29",
+      "introduced": "1998",
+      "retired": "1999",
+      "description": "Tan mountain lion",
+      "visual_identifiers": ["tan body", "cougar shape", "long tail"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 8 },
+        "3rd_gen": { "min": 10, "max": 25 },
+        "2nd_gen": { "min": 25, "max": 60 },
+        "1st_gen": { "min": 55, "max": 140 }
+      },
+      "special_notes": "Mountain lion/cougar design."
+    },
+    {
+      "name": "Snip",
+      "animal_type": "Cat",
+      "style_number": "4120",
+      "birthday": "1996-10-22",
+      "introduced": "1997",
+      "retired": "1999",
+      "description": "Siamese cat",
+      "visual_identifiers": ["cream body", "dark points", "siamese coloring"],
+      "values": {
+        "no_tag": { "min": 1, "max": 3 },
+        "4th_gen_plus": { "min": 3, "max": 10 },
+        "3rd_gen": { "min": 12, "max": 30 },
+        "2nd_gen": { "min": 35, "max": 85 },
+        "1st_gen": { "min": 75, "max": 200 }
+      },
+      "special_notes": "Siamese cat design."
+    },
+    {
+      "name": "Seaweed",
+      "animal_type": "Otter",
+      "style_number": "4080",
+      "birthday": "1996-03-19",
+      "introduced": "1996",
+      "retired": "1998",
+      "description": "Brown sea otter",
+      "visual_identifiers": ["brown fur", "otter shape", "floating pose"],
+      "values": {
+        "no_tag": { "min": 2, "max": 5 },
+        "4th_gen_plus": { "min": 5, "max": 15 },
+        "3rd_gen": { "min": 25, "max": 60 },
+        "2nd_gen": { "min": 75, "max": 175 },
+        "1st_gen": { "min": 160, "max": 400 }
+      },
+      "special_notes": "Sea otter design."
     }
   ]
 }

@@ -9,34 +9,6 @@ import { getFlexFlopLabel } from '../lib/humor';
 // App icon
 const APP_ICON = require('../assets/icons/icon-main.png');
 
-// Tier 2 icon variants
-const TIER_2_ICONS = [
-  require('../assets/icons/icon-tier2A.png'),
-  require('../assets/icons/icon-tier2B.png'),
-  require('../assets/icons/icon-tier2C.png'),
-  require('../assets/icons/icon-tier2D.png'),
-  require('../assets/icons/icon-tier2E.png'),
-  require('../assets/icons/icon-tier2F.png'),
-  require('../assets/icons/icon-tier2G.png'),
-  require('../assets/icons/icon-tier2H.png'),
-  require('../assets/icons/icon-tier2I.png'),
-];
-
-// Get a consistent tier 2 icon based on beanie name
-const getTier2Icon = (beanieName: string) => {
-  const hash = beanieName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  return TIER_2_ICONS[hash % TIER_2_ICONS.length];
-};
-
-// Tier icons for best find
-const TIER_ICONS: Record<number, any> = {
-  1: require('../assets/icons/icon-tier1.png'),
-  2: TIER_2_ICONS[0],  // default - overridden dynamically
-  3: require('../assets/icons/icon-tier3.png'),
-  4: require('../assets/icons/icon-tier4.png'),
-  5: require('../assets/icons/icon-tier5.png'),
-};
-
 interface CollectionStatsCardProps {
   collection: CollectionItem[];
   totalXP: number;
@@ -170,9 +142,14 @@ export const CollectionStatsCard = React.forwardRef<View, CollectionStatsCardPro
             <View style={styles.bestFindSection}>
               <Text style={styles.sectionTitle}>BEST FIND</Text>
               <View style={styles.bestFindCard}>
-                <Image source={(bestFind.tier || 1) === 2 ? getTier2Icon(bestFind.name) : TIER_ICONS[bestFind.tier || 1]} style={styles.bestFindIcon} resizeMode="contain" />
+                {bestFind.thumbnail ? (
+                  <Image source={{ uri: bestFind.thumbnail }} style={styles.bestFindPhoto} resizeMode="cover" />
+                ) : null}
                 <View style={styles.bestFindInfo}>
-                  <Text style={styles.bestFindName}>{bestFind.name}</Text>
+                  <Text style={styles.bestFindName}>
+                    {bestFind.name}
+                    {bestFind.animal_type ? ` the ${bestFind.colors?.[0] ? `${bestFind.colors[0].toLowerCase()} ` : ''}${bestFind.animal_type.toLowerCase()}` : ''}
+                  </Text>
                   <Text style={styles.bestFindValue}>${bestFindValue}</Text>
                 </View>
                 {bestFindFlexFlop && (
@@ -383,9 +360,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     gap: 10,
   },
-  bestFindIcon: {
-    width: 36,
-    height: 36,
+  bestFindPhoto: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
   },
   bestFindInfo: {
     flex: 1,

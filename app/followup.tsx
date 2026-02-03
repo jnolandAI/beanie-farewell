@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -296,7 +296,8 @@ export default function FollowUpScreen() {
     if (pelletType) answers.pellet_type = pelletType;
     if (originalPackaging !== null) answers.original_packaging = originalPackaging;
 
-    router.push({
+    // Replace so back button goes home, not back to analysis
+    router.replace({
       pathname: '/result',
       params: {
         name: params.name,
@@ -320,7 +321,7 @@ export default function FollowUpScreen() {
     const hasPhoto = !!photos[question.type];
 
     return (
-      <BlurView key={question.type} intensity={40} tint="light" style={styles.questionCard}>
+      <BlurView intensity={40} tint="light" style={styles.questionCard}>
         <View style={styles.questionCardInner}>
           <View style={styles.questionHeader}>
             <Text style={styles.questionIcon}>📸</Text>
@@ -384,7 +385,7 @@ export default function FollowUpScreen() {
 
   // Render condition selector
   const renderConditionQuestion = (question: FollowUpQuestion) => (
-    <BlurView key={question.type} intensity={40} tint="light" style={styles.questionCard}>
+    <BlurView intensity={40} tint="light" style={styles.questionCard}>
       <View style={styles.questionCardInner}>
         <View style={styles.questionHeader}>
           <Text style={styles.questionIcon}>✨</Text>
@@ -436,7 +437,7 @@ export default function FollowUpScreen() {
 
   // Render pellet type selector
   const renderPelletQuestion = (question: FollowUpQuestion) => (
-    <BlurView key={question.type} intensity={40} tint="light" style={styles.questionCard}>
+    <BlurView intensity={40} tint="light" style={styles.questionCard}>
       <View style={styles.questionCardInner}>
         <View style={styles.questionHeader}>
           <Text style={styles.questionIcon}>🫘</Text>
@@ -494,7 +495,7 @@ export default function FollowUpScreen() {
 
   // Render original packaging question
   const renderPackagingQuestion = (question: FollowUpQuestion) => (
-    <BlurView key={question.type} intensity={40} tint="light" style={styles.questionCard}>
+    <BlurView intensity={40} tint="light" style={styles.questionCard}>
       <View style={styles.questionCardInner}>
         <View style={styles.questionHeader}>
           <Text style={styles.questionIcon}>📦</Text>
@@ -589,9 +590,9 @@ export default function FollowUpScreen() {
             transform: [{ translateY: slideAnim }],
           }}
         >
-          {/* Back button */}
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Text style={styles.backButtonText}>← Back</Text>
+          {/* Back button - go home instead of back to scan */}
+          <Pressable style={styles.backButton} onPress={() => router.replace('/')}>
+            <Text style={styles.backButtonText}>← Home</Text>
           </Pressable>
 
           {/* Header section */}
@@ -626,7 +627,11 @@ export default function FollowUpScreen() {
 
           {/* Questions */}
           <View style={styles.questionsSection}>
-            {followUpQuestions.map((question) => renderQuestion(question))}
+            {followUpQuestions.map((question, index) => (
+              <React.Fragment key={`${question.type}-${index}`}>
+                {renderQuestion(question)}
+              </React.Fragment>
+            ))}
           </View>
         </Animated.View>
       </ScrollView>

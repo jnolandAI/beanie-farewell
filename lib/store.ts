@@ -55,6 +55,7 @@ interface CollectionStore {
   clearPendingLuckyBonus: () => void;
   clearPendingStreakMilestone: () => void;
   clearPendingValueMilestone: () => void;
+  resetAllData: () => void;  // Reset everything for testing
 
   // Computed values
   getTotalValue: () => { low: number; high: number };
@@ -365,6 +366,34 @@ export const useCollectionStore = create<CollectionStore>()(
 
       clearPendingValueMilestone: () => {
         set({ pendingValueMilestone: null });
+      },
+
+      resetAllData: () => {
+        set({
+          collection: [],
+          pendingThumbnail: null,
+          userName: null,
+          hasCompletedOnboarding: false,
+          unlockedAchievements: [],
+          pendingAchievementNotifications: [],
+          achievedMilestones: [],
+          pendingMilestone: null,
+          currentStreak: 0,
+          longestStreak: 0,
+          lastScanDate: null,
+          totalXP: 0,
+          lastKnownLevel: 1,
+          completedChallengeIds: [],
+          pendingChallengeReward: null,
+          pendingLevelUp: null,
+          lastLoginDate: null,
+          pendingLoginBonus: null,
+          pendingLuckyBonus: null,
+          achievedStreakMilestones: [],
+          pendingStreakMilestone: null,
+          achievedValueMilestones: [],
+          pendingValueMilestone: null,
+        });
       },
 
       addXP: (amount: number) => {

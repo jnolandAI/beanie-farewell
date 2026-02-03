@@ -959,117 +959,6 @@ export default function CollectionScreen() {
         </BlurView>
       </Animated.View>
 
-      {/* Portfolio Summary Section */}
-      {portfolioSummary && collection.length >= 2 && (
-        <Animated.View
-          style={[
-            styles.portfolioSummaryContainer,
-            { opacity: fadeAnim },
-          ]}
-        >
-          <Pressable
-            onPress={() => {
-              setShowPortfolioSummary(!showPortfolioSummary);
-              if (Platform.OS !== 'web') {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }
-            }}
-            style={styles.portfolioSummaryToggle}
-          >
-            <BlurView intensity={40} tint="light" style={styles.portfolioSummaryBlur}>
-              <View style={styles.portfolioSummaryHeader}>
-                <Text style={styles.portfolioEmoji}>{portfolioSummary.verdict.emoji}</Text>
-                <View style={styles.portfolioTitleSection}>
-                  <Text style={styles.portfolioTitle}>{portfolioSummary.verdict.title}</Text>
-                  <Text style={styles.portfolioSubtitle}>{portfolioSummary.verdict.subtitle}</Text>
-                </View>
-                <Text style={styles.portfolioExpandIcon}>{showPortfolioSummary ? '▲' : '▼'}</Text>
-              </View>
-            </BlurView>
-          </Pressable>
-
-          {showPortfolioSummary && (
-            <BlurView intensity={40} tint="light" style={styles.portfolioSummaryExpanded}>
-              <View style={styles.portfolioSummaryContent}>
-                {/* The Roast */}
-                <View style={styles.portfolioRoastContainer}>
-                  <Text style={styles.portfolioRoastIcon}>🔥</Text>
-                  <Text style={styles.portfolioRoastText}>{portfolioSummary.roast}</Text>
-                </View>
-
-                {/* Tier Breakdown */}
-                <View style={styles.portfolioSection}>
-                  <Text style={styles.portfolioSectionTitle}>📊 TIER BREAKDOWN</Text>
-                  <View style={styles.tierBarsContainer}>
-                    {portfolioStats && [
-                      { tier: 5, count: portfolioStats.tier5Count, color: '#FF00FF', label: '$1000+' },
-                      { tier: 4, count: portfolioStats.tier4Count, color: '#FF6B35', label: '$200-1K' },
-                      { tier: 3, count: portfolioStats.tier3Count, color: '#00CED1', label: '$50-200' },
-                      { tier: 2, count: portfolioStats.tier2Count, color: '#666666', label: '$15-50' },
-                      { tier: 1, count: portfolioStats.tier1Count, color: '#999999', label: '<$15' },
-                    ].map(({ tier, count, color, label }) => (
-                      <View key={tier} style={styles.tierBarRow}>
-                        <Text style={styles.tierBarLabel}>{label}</Text>
-                        <View style={styles.tierBarBackground}>
-                          <View
-                            style={[
-                              styles.tierBarFill,
-                              {
-                                width: `${Math.max(5, (count / portfolioStats.totalItems) * 100)}%`,
-                                backgroundColor: color,
-                              },
-                            ]}
-                          />
-                        </View>
-                        <Text style={styles.tierBarCount}>{count}</Text>
-                      </View>
-                    ))}
-                  </View>
-                  <Text style={styles.tierBreakdownComment}>{portfolioSummary.tierBreakdown}</Text>
-                </View>
-
-                {/* What You Could Buy */}
-                <View style={styles.portfolioSection}>
-                  <Text style={styles.portfolioSectionTitle}>🛒 WHAT THIS COULD BUY</Text>
-                  <View style={styles.whatYouCouldBuyList}>
-                    {portfolioSummary.whatYouCouldBuy.map((item, index) => (
-                      <Text key={index} style={styles.whatYouCouldBuyItem}>{item}</Text>
-                    ))}
-                  </View>
-                </View>
-
-                {/* S&P 500 Comparison */}
-                <View style={styles.portfolioSection}>
-                  <Text style={styles.portfolioSectionTitle}>📈 THE ALTERNATE TIMELINE</Text>
-                  <Text style={styles.sp500Text}>{portfolioSummary.sp500Comparison.difference}</Text>
-                  <Text style={styles.sp500Subtext}>
-                    Your Beanies: ${totalValue.low} - ${totalValue.high}
-                  </Text>
-                </View>
-
-                {/* Collection Insights */}
-                {collectionInsights.length > 0 && (
-                  <View style={styles.portfolioSection}>
-                    <Text style={styles.portfolioSectionTitle}>💡 YOUR COLLECTION INSIGHTS</Text>
-                    <View style={styles.insightsGrid}>
-                      {collectionInsights.map((insight, index) => (
-                        <View key={index} style={styles.insightCard}>
-                          <Text style={styles.insightEmoji}>{insight.emoji}</Text>
-                          <View style={styles.insightContent}>
-                            <Text style={styles.insightTitle}>{insight.title}</Text>
-                            <Text style={styles.insightDescription}>{insight.description}</Text>
-                          </View>
-                        </View>
-                      ))}
-                    </View>
-                  </View>
-                )}
-              </View>
-            </BlurView>
-          )}
-        </Animated.View>
-      )}
-
       {/* Content */}
       {collection.length === 0 ? (
         <EmptyState />
@@ -1091,6 +980,117 @@ export default function CollectionScreen() {
             ) : undefined
           }
         >
+          {/* Portfolio Summary Section - inside ScrollView */}
+          {portfolioSummary && collection.length >= 2 && (
+            <Animated.View
+              style={[
+                styles.portfolioSummaryContainer,
+                { opacity: fadeAnim },
+              ]}
+            >
+              <Pressable
+                onPress={() => {
+                  setShowPortfolioSummary(!showPortfolioSummary);
+                  if (Platform.OS !== 'web') {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  }
+                }}
+                style={styles.portfolioSummaryToggle}
+              >
+                <BlurView intensity={40} tint="light" style={styles.portfolioSummaryBlur}>
+                  <View style={styles.portfolioSummaryHeader}>
+                    <Text style={styles.portfolioEmoji}>{portfolioSummary.verdict.emoji}</Text>
+                    <View style={styles.portfolioTitleSection}>
+                      <Text style={styles.portfolioTitle}>{portfolioSummary.verdict.title}</Text>
+                      <Text style={styles.portfolioSubtitle}>{portfolioSummary.verdict.subtitle}</Text>
+                    </View>
+                    <Text style={styles.portfolioExpandIcon}>{showPortfolioSummary ? '▲' : '▼'}</Text>
+                  </View>
+                </BlurView>
+              </Pressable>
+
+              {showPortfolioSummary && (
+                <BlurView intensity={40} tint="light" style={styles.portfolioSummaryExpanded}>
+                  <View style={styles.portfolioSummaryContent}>
+                    {/* The Roast */}
+                    <View style={styles.portfolioRoastContainer}>
+                      <Text style={styles.portfolioRoastIcon}>🔥</Text>
+                      <Text style={styles.portfolioRoastText}>{portfolioSummary.roast}</Text>
+                    </View>
+
+                    {/* Tier Breakdown */}
+                    <View style={styles.portfolioSection}>
+                      <Text style={styles.portfolioSectionTitle}>📊 TIER BREAKDOWN</Text>
+                      <View style={styles.tierBarsContainer}>
+                        {portfolioStats && [
+                          { tier: 5, count: portfolioStats.tier5Count, color: '#FF00FF', label: '$1000+' },
+                          { tier: 4, count: portfolioStats.tier4Count, color: '#FF6B35', label: '$200-1K' },
+                          { tier: 3, count: portfolioStats.tier3Count, color: '#00CED1', label: '$50-200' },
+                          { tier: 2, count: portfolioStats.tier2Count, color: '#666666', label: '$15-50' },
+                          { tier: 1, count: portfolioStats.tier1Count, color: '#999999', label: '<$15' },
+                        ].map(({ tier, count, color, label }) => (
+                          <View key={tier} style={styles.tierBarRow}>
+                            <Text style={styles.tierBarLabel}>{label}</Text>
+                            <View style={styles.tierBarBackground}>
+                              <View
+                                style={[
+                                  styles.tierBarFill,
+                                  {
+                                    width: `${Math.max(5, (count / portfolioStats.totalItems) * 100)}%`,
+                                    backgroundColor: color,
+                                  },
+                                ]}
+                              />
+                            </View>
+                            <Text style={styles.tierBarCount}>{count}</Text>
+                          </View>
+                        ))}
+                      </View>
+                      <Text style={styles.tierBreakdownComment}>{portfolioSummary.tierBreakdown}</Text>
+                    </View>
+
+                    {/* What You Could Buy */}
+                    <View style={styles.portfolioSection}>
+                      <Text style={styles.portfolioSectionTitle}>🛒 WHAT THIS COULD BUY</Text>
+                      <View style={styles.whatYouCouldBuyList}>
+                        {portfolioSummary.whatYouCouldBuy.map((item, index) => (
+                          <Text key={index} style={styles.whatYouCouldBuyItem}>{item}</Text>
+                        ))}
+                      </View>
+                    </View>
+
+                    {/* S&P 500 Comparison */}
+                    <View style={styles.portfolioSection}>
+                      <Text style={styles.portfolioSectionTitle}>📈 THE ALTERNATE TIMELINE</Text>
+                      <Text style={styles.sp500Text}>{portfolioSummary.sp500Comparison.difference}</Text>
+                      <Text style={styles.sp500Subtext}>
+                        Your Beanies: ${totalValue.low} - ${totalValue.high}
+                      </Text>
+                    </View>
+
+                    {/* Collection Insights */}
+                    {collectionInsights.length > 0 && (
+                      <View style={styles.portfolioSection}>
+                        <Text style={styles.portfolioSectionTitle}>💡 YOUR COLLECTION INSIGHTS</Text>
+                        <View style={styles.insightsGrid}>
+                          {collectionInsights.map((insight, index) => (
+                            <View key={index} style={styles.insightCard}>
+                              <Text style={styles.insightEmoji}>{insight.emoji}</Text>
+                              <View style={styles.insightContent}>
+                                <Text style={styles.insightTitle}>{insight.title}</Text>
+                                <Text style={styles.insightDescription}>{insight.description}</Text>
+                              </View>
+                            </View>
+                          ))}
+                        </View>
+                      </View>
+                    )}
+                  </View>
+                </BlurView>
+              )}
+            </Animated.View>
+          )}
+
           <View style={styles.grid}>
             {filteredCollection.map((item, index) => (
               <CollectionItemCard
@@ -1540,8 +1540,7 @@ const styles = StyleSheet.create({
   },
   // Portfolio Summary styles
   portfolioSummaryContainer: {
-    paddingHorizontal: 16,
-    marginBottom: 8,
+    marginBottom: 16,
     zIndex: 5,
   },
   portfolioSummaryToggle: {

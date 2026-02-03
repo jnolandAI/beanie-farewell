@@ -385,8 +385,8 @@ export default function ScanScreen() {
       }
 
       if (identification.needs_follow_up && identification.follow_up_questions?.length) {
-        // Route to follow-up screen
-        router.push({
+        // Route to follow-up screen (replace so back doesn't re-analyze)
+        router.replace({
           pathname: '/followup',
           params: {
             name: identification.name,
@@ -404,8 +404,8 @@ export default function ScanScreen() {
           },
         });
       } else {
-        // Route directly to result (existing flow)
-        router.push({
+        // Route directly to result (replace so back doesn't re-analyze)
+        router.replace({
           pathname: '/result',
           params: {
             name: identification.name,
@@ -504,8 +504,8 @@ export default function ScanScreen() {
     setPendingThumbnail('');
 
     if (mockData.needs_follow_up && mockData.follow_up_questions?.length) {
-      // Route to follow-up screen
-      router.push({
+      // Route to follow-up screen (replace so back doesn't re-analyze)
+      router.replace({
         pathname: '/followup',
         params: {
           name: mockData.name,
@@ -522,8 +522,8 @@ export default function ScanScreen() {
         },
       });
     } else {
-      // Route directly to result (existing flow)
-      router.push({
+      // Route directly to result (replace so back doesn't re-analyze)
+      router.replace({
         pathname: '/result',
         params: {
           name: mockData.name,
