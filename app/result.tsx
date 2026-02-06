@@ -645,7 +645,7 @@ export default function ResultScreen() {
       name: params.name || 'Unknown',
       animal_type: params.animal_type || '',
       variant: params.variant || '',
-      colors: params.colors ? JSON.parse(params.colors) : [],
+      colors: safeParseURLParam<string[]>(params.colors, []),
       estimated_value_low: baseValueLow,
       estimated_value_high: baseValueHigh,
       adjusted_value_low: valueLow,
