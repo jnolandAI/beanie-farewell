@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Component, ErrorInfo, ReactNode } from 'react';
 import { View, Text, Pressable, StyleSheet, ScrollView, Animated, Easing, Platform, Dimensions, Image, Modal } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { BlurView } from 'expo-blur';
@@ -23,6 +23,36 @@ import { useCollectionStore, generateId } from '../lib/store';
 import { Achievement } from '../lib/achievements';
 import { DailyChallenge } from '../lib/challenges';
 import { safeParseURLParam, showShareFailedAlert } from '../lib/errors';
+
+// Error boundary to catch crashes and show the error instead of crashing
+class ResultErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: string }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: '' };
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error: `${error.message}\n\n${error.stack || ''}` };
+  }
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('ResultScreen crash:', error, info.componentStack);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 30, backgroundColor: '#FAFAFA' }}>
+          <Text style={{ fontSize: 20, fontWeight: '700', marginBottom: 16, color: '#FF0000' }}>Something went wrong</Text>
+          <ScrollView style={{ maxHeight: 400 }}>
+            <Text style={{ fontSize: 12, color: '#333', fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace' }}>{this.state.error}</Text>
+          </ScrollView>
+          <Pressable onPress={() => router.replace('/')} style={{ marginTop: 20, padding: 16, backgroundColor: '#FF00FF', borderRadius: 12 }}>
+            <Text style={{ color: '#FFF', fontWeight: '600' }}>Go Home</Text>
+          </Pressable>
+        </View>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -307,7 +337,15 @@ function getPelletMultiplier(pelletType: string): { low: number; high: number } 
   }
 }
 
-export default function ResultScreen() {
+export default function ResultScreenWrapper() {
+  return (
+    <ResultErrorBoundary>
+      <ResultScreenInner />
+    </ResultErrorBoundary>
+  );
+}
+
+function ResultScreenInner() {
   const [verdict, setVerdict] = useState<VerdictInfo | null>(null);
   const [flexFlopLabel, setFlexFlopLabel] = useState<FlexFlopLabel | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
