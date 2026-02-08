@@ -179,7 +179,7 @@ export default function WelcomeScreen() {
   const shimmerAnim = useRef(new Animated.Value(0)).current;
 
   // Collection store
-  const { getItemCount, isHydrated, hasCompletedOnboarding, unlockedAchievements, getStreak, getDailyChallenge, totalXP, collection, checkDailyLoginBonus, pendingLoginBonus, clearPendingLoginBonus, pendingStreakMilestone, clearPendingStreakMilestone, longestStreak, userName } = useCollectionStore();
+  const { getItemCount, isHydrated, hasCompletedOnboarding, unlockedAchievements, getStreak, getDailyChallenge, totalXP, collection, checkDailyLoginBonus, pendingLoginBonus, clearPendingLoginBonus, pendingStreakMilestone, clearPendingStreakMilestone, longestStreak, userName, setPendingResultParams } = useCollectionStore();
 
   // Login bonus toast state
   const [showLoginBonus, setShowLoginBonus] = useState<{ xp: number; streak: number } | null>(null);
@@ -659,9 +659,8 @@ export default function WelcomeScreen() {
               if (bestFind) {
                 cards.push({
                   key: 'bestFind',
-                  onPress: () => router.push({
-                    pathname: '/result',
-                    params: {
+                  onPress: () => {
+                    const resultParams: Record<string, string> = {
                       name: bestFind.name,
                       animal_type: bestFind.animal_type,
                       variant: bestFind.variant,
@@ -672,9 +671,11 @@ export default function WelcomeScreen() {
                       confidence: 'High',
                       has_visible_hang_tag: 'true',
                       fromCollection: 'true',
-                      collectionThumbnail: bestFind.thumbnail,
-                    },
-                  }),
+                    };
+                    if (bestFind.thumbnail) resultParams.collectionThumbnail = bestFind.thumbnail;
+                    setPendingResultParams(resultParams);
+                    router.push('/result');
+                  },
                   content: (
                     <>
                       <Text style={styles.infoCardTitle}>💎 Best Find</Text>

@@ -360,7 +360,7 @@ export default function ScanScreen() {
     }
   }, [loading, pulseAnim, dotAnim]);
 
-  const { setPendingThumbnail } = useCollectionStore();
+  const { setPendingThumbnail, setPendingResultParams } = useCollectionStore();
 
   const processImage = async (base64: string) => {
     setLoading(true);
@@ -405,23 +405,23 @@ export default function ScanScreen() {
         });
       } else {
         // Route directly to result (replace so back doesn't re-analyze)
-        router.replace({
-          pathname: '/result',
-          params: {
-            name: identification.name || 'Unknown',
-            animal_type: identification.animal_type || '',
-            variant: identification.variant || 'Standard',
-            colors: JSON.stringify(identification.colors || []),
-            estimated_value_low: String(identification.estimated_value_low || 0),
-            estimated_value_high: String(identification.estimated_value_high || 0),
-            value_notes: identification.value_notes || '',
-            confidence: identification.confidence || 'Low',
-            has_visible_hang_tag: String(identification.has_visible_hang_tag ?? false),
-            value_breakdown: identification.value_breakdown ? JSON.stringify(identification.value_breakdown) : undefined,
-            detected_assumptions: identification.detected_assumptions ? JSON.stringify(identification.detected_assumptions) : undefined,
-            roast: identification.roast || undefined,
-          },
-        });
+        // Pass data via store to bypass expo-router URL param parsing (crashes on Hermes)
+        const resultParams: Record<string, string> = {
+          name: identification.name || 'Unknown',
+          animal_type: identification.animal_type || '',
+          variant: identification.variant || 'Standard',
+          colors: JSON.stringify(identification.colors || []),
+          estimated_value_low: String(identification.estimated_value_low || 0),
+          estimated_value_high: String(identification.estimated_value_high || 0),
+          value_notes: identification.value_notes || '',
+          confidence: identification.confidence || 'Low',
+          has_visible_hang_tag: String(identification.has_visible_hang_tag ?? false),
+        };
+        if (identification.value_breakdown) resultParams.value_breakdown = JSON.stringify(identification.value_breakdown);
+        if (identification.detected_assumptions) resultParams.detected_assumptions = JSON.stringify(identification.detected_assumptions);
+        if (identification.roast) resultParams.roast = identification.roast;
+        setPendingResultParams(resultParams);
+        router.replace('/result');
       }
     } catch (err) {
       // Error haptic
@@ -523,20 +523,18 @@ export default function ScanScreen() {
       });
     } else {
       // Route directly to result (replace so back doesn't re-analyze)
-      router.replace({
-        pathname: '/result',
-        params: {
-          name: mockData.name,
-          animal_type: mockData.animal_type,
-          variant: mockData.variant,
-          colors: JSON.stringify(mockData.colors),
-          estimated_value_low: String(mockData.estimated_value_low),
-          estimated_value_high: String(mockData.estimated_value_high),
-          value_notes: mockData.value_notes,
-          confidence: mockData.confidence,
-          has_visible_hang_tag: String(mockData.has_visible_hang_tag),
-        },
+      setPendingResultParams({
+        name: mockData.name,
+        animal_type: mockData.animal_type,
+        variant: mockData.variant,
+        colors: JSON.stringify(mockData.colors),
+        estimated_value_low: String(mockData.estimated_value_low),
+        estimated_value_high: String(mockData.estimated_value_high),
+        value_notes: mockData.value_notes,
+        confidence: mockData.confidence,
+        has_visible_hang_tag: String(mockData.has_visible_hang_tag),
       });
+      router.replace('/result');
     }
   };
 

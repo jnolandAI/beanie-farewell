@@ -12,6 +12,7 @@ interface CollectionStore {
   collection: CollectionItem[];
   isHydrated: boolean;
   pendingThumbnail: string | null;  // Temporary storage for scan image
+  pendingResultParams: Record<string, string> | null;  // Params for result screen (bypass URL params)
   userName: string | null;  // User's first name for certificates
   hasCompletedOnboarding: boolean;  // Whether user has entered their name
   unlockedAchievements: string[];  // IDs of unlocked achievements
@@ -42,6 +43,7 @@ interface CollectionStore {
   clearCollection: () => void;
   setHydrated: (state: boolean) => void;
   setPendingThumbnail: (thumbnail: string | null) => void;
+  setPendingResultParams: (params: Record<string, string> | null) => void;
   setUserName: (name: string) => void;
   completeOnboarding: () => void;
   checkAndUnlockAchievements: () => Achievement[];  // Returns newly unlocked
@@ -71,6 +73,7 @@ export const useCollectionStore = create<CollectionStore>()(
       collection: [],
       isHydrated: false,
       pendingThumbnail: null,
+      pendingResultParams: null,
       userName: null,
       hasCompletedOnboarding: false,
       unlockedAchievements: [],
@@ -266,6 +269,10 @@ export const useCollectionStore = create<CollectionStore>()(
 
       setPendingThumbnail: (thumbnail: string | null) => {
         set({ pendingThumbnail: thumbnail });
+      },
+
+      setPendingResultParams: (params: Record<string, string> | null) => {
+        set({ pendingResultParams: params });
       },
 
       setUserName: (name: string) => {

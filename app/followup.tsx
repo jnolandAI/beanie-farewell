@@ -22,6 +22,7 @@ import {
   FollowUpAnswers,
 } from '../types/beanie';
 import { safeParseURLParam, showPermissionDeniedAlert } from '../lib/errors';
+import { useCollectionStore } from '../lib/store';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -297,23 +298,23 @@ export default function FollowUpScreen() {
     if (originalPackaging !== null) answers.original_packaging = originalPackaging;
 
     // Replace so back button goes home, not back to analysis
-    router.replace({
-      pathname: '/result',
-      params: {
-        name: params.name,
-        animal_type: params.animal_type,
-        variant: params.variant,
-        colors: params.colors,
-        estimated_value_low: params.estimated_value_low,
-        estimated_value_high: params.estimated_value_high,
-        value_notes: params.value_notes,
-        confidence: params.confidence,
-        has_visible_hang_tag: params.has_visible_hang_tag,
-        followUpAnswers: JSON.stringify(answers),
-        followUpPhotos: JSON.stringify(photos),
-        roast: params.roast || undefined,
-      },
-    });
+    // Pass data via store to bypass expo-router URL param parsing (crashes on Hermes)
+    const resultParams: Record<string, string> = {
+      name: params.name as string,
+      animal_type: params.animal_type as string,
+      variant: params.variant as string,
+      colors: params.colors as string,
+      estimated_value_low: params.estimated_value_low as string,
+      estimated_value_high: params.estimated_value_high as string,
+      value_notes: params.value_notes as string,
+      confidence: params.confidence as string,
+      has_visible_hang_tag: params.has_visible_hang_tag as string,
+      followUpAnswers: JSON.stringify(answers),
+      followUpPhotos: JSON.stringify(photos),
+    };
+    if (params.roast) resultParams.roast = params.roast as string;
+    useCollectionStore.getState().setPendingResultParams(resultParams);
+    router.replace('/result');
   };
 
   // Render a photo question

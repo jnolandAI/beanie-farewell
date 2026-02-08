@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, Component, ErrorInfo, ReactNode } from 'react';
 import { View, Text, Pressable, StyleSheet, ScrollView, Animated, Easing, Platform, Dimensions, Image, Modal } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { captureRef } from 'react-native-view-shot';
@@ -356,7 +356,7 @@ function ResultScreenInner() {
   const [showCertificateModal, setShowCertificateModal] = useState(false);
 
   // Collection store
-  const { addItem, pendingThumbnail, setPendingThumbnail, userName, pendingAchievementNotifications, clearPendingAchievements, pendingChallengeReward, clearPendingChallengeReward, pendingLevelUp, clearPendingLevelUp, pendingMilestone, clearPendingMilestone, pendingLuckyBonus, clearPendingLuckyBonus, pendingValueMilestone, clearPendingValueMilestone } = useCollectionStore();
+  const { addItem, pendingThumbnail, setPendingThumbnail, userName, pendingAchievementNotifications, clearPendingAchievements, pendingChallengeReward, clearPendingChallengeReward, pendingLevelUp, clearPendingLevelUp, pendingMilestone, clearPendingMilestone, pendingLuckyBonus, clearPendingLuckyBonus, pendingValueMilestone, clearPendingValueMilestone, pendingResultParams, setPendingResultParams } = useCollectionStore();
 
   // Achievement toast state
   const [currentAchievement, setCurrentAchievement] = useState<Achievement | null>(null);
@@ -391,25 +391,30 @@ function ResultScreenInner() {
   // Track total XP earned this session (for summary display)
   const [xpEarnedThisScan, setXpEarnedThisScan] = useState(0);
 
-  // URL params - declared early so it can be used in subsequent hooks
-  const params = useLocalSearchParams<{
-    name: string;
-    animal_type: string;
-    variant: string;
-    colors: string;
-    estimated_value_low: string;
-    estimated_value_high: string;
-    value_notes: string;
-    confidence: string;
-    has_visible_hang_tag: string;
-    followUpAnswers?: string;
-    followUpPhotos?: string;
-    value_breakdown?: string;
-    detected_assumptions?: string;
-    fromCollection?: string;  // Flag to prevent re-saving when viewing from collection
-    collectionThumbnail?: string;  // Thumbnail passed from collection view
-    roast?: string;  // Funny roast of this Beanie
-  }>();
+  // Read params from store (bypasses expo-router URL parsing which crashes on Hermes)
+  const [params] = useState(() => {
+    const stored = pendingResultParams || {};
+    // Clear after reading so it's not reused
+    if (pendingResultParams) setPendingResultParams(null);
+    return stored as {
+      name: string;
+      animal_type: string;
+      variant: string;
+      colors: string;
+      estimated_value_low: string;
+      estimated_value_high: string;
+      value_notes: string;
+      confidence: string;
+      has_visible_hang_tag: string;
+      followUpAnswers?: string;
+      followUpPhotos?: string;
+      value_breakdown?: string;
+      detected_assumptions?: string;
+      fromCollection?: string;
+      collectionThumbnail?: string;
+      roast?: string;
+    };
+  });
 
   // Capture the image for the certificate - try multiple approaches for reliability
   // 1. First try: capture synchronously on initial render (or from collection thumbnail)

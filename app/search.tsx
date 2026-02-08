@@ -114,7 +114,7 @@ export default function SearchScreen() {
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const dotAnim = useRef(new Animated.Value(0)).current;
 
-  const { setPendingThumbnail } = useCollectionStore();
+  const { setPendingThumbnail, setPendingResultParams } = useCollectionStore();
 
   useEffect(() => {
     Animated.parallel([
@@ -229,22 +229,21 @@ export default function SearchScreen() {
           },
         });
       } else {
-        router.push({
-          pathname: '/result',
-          params: {
-            name: identification.name || 'Unknown',
-            animal_type: identification.animal_type || '',
-            variant: identification.variant || 'Standard',
-            colors: JSON.stringify(identification.colors || []),
-            estimated_value_low: String(identification.estimated_value_low || 0),
-            estimated_value_high: String(identification.estimated_value_high || 0),
-            value_notes: identification.value_notes || '',
-            confidence: identification.confidence || 'Low',
-            has_visible_hang_tag: String(identification.has_visible_hang_tag ?? false),
-            value_breakdown: identification.value_breakdown ? JSON.stringify(identification.value_breakdown) : undefined,
-            roast: identification.roast || '',
-          },
-        });
+        const resultParams: Record<string, string> = {
+          name: identification.name || 'Unknown',
+          animal_type: identification.animal_type || '',
+          variant: identification.variant || 'Standard',
+          colors: JSON.stringify(identification.colors || []),
+          estimated_value_low: String(identification.estimated_value_low || 0),
+          estimated_value_high: String(identification.estimated_value_high || 0),
+          value_notes: identification.value_notes || '',
+          confidence: identification.confidence || 'Low',
+          has_visible_hang_tag: String(identification.has_visible_hang_tag ?? false),
+          roast: identification.roast || '',
+        };
+        if (identification.value_breakdown) resultParams.value_breakdown = JSON.stringify(identification.value_breakdown);
+        setPendingResultParams(resultParams);
+        router.push('/result');
       }
     } catch (err) {
       // Error haptic

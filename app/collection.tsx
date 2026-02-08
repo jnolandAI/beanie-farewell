@@ -315,7 +315,7 @@ function EmptyState({ searchQuery }: { searchQuery?: string }) {
 
 export default function CollectionScreen() {
   const { showShare } = useLocalSearchParams<{ showShare?: string }>();
-  const { collection, removeItem, clearCollection, getTotalValue, isHydrated, userName, totalXP, getStreak } =
+  const { collection, removeItem, clearCollection, getTotalValue, isHydrated, userName, totalXP, getStreak, setPendingResultParams } =
     useCollectionStore();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(20)).current;
@@ -688,23 +688,22 @@ export default function CollectionScreen() {
       pellet_type: item.pellet_type,
     } : null;
 
-    router.push({
-      pathname: '/result',
-      params: {
-        name: item.name,
-        animal_type: item.animal_type,
-        variant: item.variant,
-        colors: JSON.stringify(item.colors),
-        estimated_value_low: String(item.estimated_value_low),
-        estimated_value_high: String(item.estimated_value_high),
-        value_notes: item.value_notes,
-        confidence: 'High',
-        has_visible_hang_tag: 'true',
-        followUpAnswers: followUpAnswers ? JSON.stringify(followUpAnswers) : undefined,
-        fromCollection: 'true',  // Flag to prevent re-saving
-        collectionThumbnail: item.thumbnail || undefined,  // Pass thumbnail for certificate
-      },
-    });
+    const resultParams: Record<string, string> = {
+      name: item.name,
+      animal_type: item.animal_type,
+      variant: item.variant,
+      colors: JSON.stringify(item.colors),
+      estimated_value_low: String(item.estimated_value_low),
+      estimated_value_high: String(item.estimated_value_high),
+      value_notes: item.value_notes,
+      confidence: 'High',
+      has_visible_hang_tag: 'true',
+      fromCollection: 'true',
+    };
+    if (followUpAnswers) resultParams.followUpAnswers = JSON.stringify(followUpAnswers);
+    if (item.thumbnail) resultParams.collectionThumbnail = item.thumbnail;
+    setPendingResultParams(resultParams);
+    router.push('/result');
   };
 
   // Show loading state while hydrating
