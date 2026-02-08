@@ -891,17 +891,23 @@ function ResultScreenInner() {
   const isJackpotTier = verdict && verdict.tier === 5;
   const currentTier = verdict?.tier || 1;
 
-  // === DIAGNOSTIC BUILD 12: Full layout, NO third-party components ===
-  // BlurView→View, LinearGradient→View, SVG removed, Animated.View→View
-  // No toasts, confetti, celebration, certificate, Image, or Modal
-  // If this works: crash is in one of: BlurView, LinearGradient, SVG, Animated, Image, Modal, or custom components
-  // If this crashes: crash is in the layout/data rendering itself
+  // === BUILD 13: Full layout WITH rendering libs, NO custom overlay components ===
+  // Restored: LinearGradient, BlurView, MemphisPattern SVG, Animated.View, Image
+  // Still removed: toasts, confetti, celebration, certificate Modal
   return (
     <View style={styles.container}>
-      {/* Background - plain View instead of LinearGradient */}
-      <View style={[styles.backgroundGradient, { backgroundColor: tierColors.bg }]} />
+      {/* Background gradient - REAL LinearGradient */}
+      <LinearGradient
+        colors={tierColors.gradient as [string, string, string]}
+        locations={[0, 0.5, 1]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.backgroundGradient}
+      />
 
-      {/* No MemphisPattern SVG */}
+      {/* Memphis pattern overlay - REAL SVG */}
+      <MemphisPattern tier={currentTier} />
+
       {/* No toast components */}
       {/* No confetti */}
       {/* No celebration overlay */}
@@ -916,14 +922,42 @@ function ResultScreenInner() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Verdict Header - plain View instead of Animated.View */}
-        <View style={styles.header}>
-          {/* Tier icon replaced with text placeholder */}
-          <View style={styles.tierIconWrapper}>
-            <Text style={{ fontSize: 48 }}>
-              {currentTier >= 5 ? '🤩' : currentTier >= 4 ? '😮' : currentTier >= 3 ? '🧐' : '😐'}
-            </Text>
-          </View>
+        {/* Verdict Header - REAL Animated.View */}
+        <Animated.View
+          style={[
+            styles.header,
+            {
+              opacity: fadeAnim,
+              transform: [{ scale: scaleAnim }],
+            },
+          ]}
+        >
+          {/* Tier Icon - REAL Animated + Image */}
+          <Animated.View style={[
+            styles.tierIconWrapper,
+            {
+              transform: [
+                {
+                  scale: tierIconBounce.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.3, 1],
+                  }),
+                },
+                {
+                  rotate: tierIconRotate.interpolate({
+                    inputRange: [-1, 0, 1],
+                    outputRange: ['-10deg', '0deg', '10deg'],
+                  }),
+                },
+              ],
+            },
+          ]}>
+            <Image
+              source={currentTier === 2 ? getTier2Icon(params.name || '') : (TIER_ICONS[currentTier] || TIER_ICONS[1])}
+              style={styles.tierIcon}
+              resizeMode="contain"
+            />
+          </Animated.View>
           <Text style={[styles.verdictTitle, { color: tierColors.accent }]}>
             {verdict?.title || 'Analyzing...'}
           </Text>
@@ -943,11 +977,19 @@ function ResultScreenInner() {
               <Text style={styles.rarityLabel}>{TIER_RARITY[currentTier].label}</Text>
             </View>
           )}
-        </View>
+        </Animated.View>
 
-        {/* Main Card - plain View instead of BlurView */}
-        <View style={styles.cardWrapper}>
-          <View style={styles.resultCard}>
+        {/* Main Card - REAL BlurView */}
+        <Animated.View
+          style={[
+            styles.cardWrapper,
+            {
+              opacity: cardFadeAnim,
+              transform: [{ translateY: cardSlideAnim }],
+            },
+          ]}
+        >
+          <BlurView intensity={40} tint="light" style={styles.resultCard}>
             <View style={styles.resultCardInner}>
               {isNotBeanie ? (
                 <>
@@ -974,6 +1016,20 @@ function ResultScreenInner() {
                       },
                     ]}
                   >
+                    {isJackpotTier && (
+                      <Animated.View
+                        style={[
+                          styles.valueGlow,
+                          {
+                            opacity: glowAnim.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [0.3, 0.6],
+                            }),
+                            backgroundColor: tierColors.accent,
+                          },
+                        ]}
+                      />
+                    )}
                     <Text style={styles.valueLabel}>ESTIMATED VALUE</Text>
                     <View style={styles.valueRow}>
                       <Text style={[styles.valueAmount, { color: tierColors.accent }]}>
@@ -999,15 +1055,18 @@ function ResultScreenInner() {
                   {/* What We Detected */}
                   {detectedAssumptions && (
                     <View style={styles.assumptionsContainer}>
-                      <Text style={styles.assumptionsTitle}>WHAT WE SAW</Text>
+                      <Text style={styles.assumptionsTitle}>👁️ WHAT WE SAW</Text>
                       <View style={styles.assumptionsInline}>
                         <View style={styles.assumptionChip}>
+                          <Text style={styles.chipIcon}>🏷️</Text>
                           <Text style={styles.chipText}>{detectedAssumptions.tag_status}</Text>
                         </View>
                         <View style={styles.assumptionChip}>
+                          <Text style={styles.chipIcon}>📅</Text>
                           <Text style={styles.chipText}>{detectedAssumptions.tag_generation}</Text>
                         </View>
                         <View style={styles.assumptionChip}>
+                          <Text style={styles.chipIcon}>✨</Text>
                           <Text style={styles.chipText}>{detectedAssumptions.condition_estimate}</Text>
                         </View>
                       </View>
@@ -1017,7 +1076,7 @@ function ResultScreenInner() {
                       {detectedAssumptions.special_features && detectedAssumptions.special_features.length > 0 && (
                         <View style={styles.specialFeaturesInline}>
                           {detectedAssumptions.special_features.map((feature, index) => (
-                            <Text key={index} style={styles.specialFeatureChip}>{feature}</Text>
+                            <Text key={index} style={styles.specialFeatureChip}>🔍 {feature}</Text>
                           ))}
                         </View>
                       )}
@@ -1032,7 +1091,7 @@ function ResultScreenInner() {
                   {/* Fun Facts */}
                   {funFacts.length > 0 && (
                     <View style={styles.funFactsContainer}>
-                      <Text style={styles.funFactsTitle}>THE FINE PRINT</Text>
+                      <Text style={styles.funFactsTitle}>📜 THE FINE PRINT</Text>
                       {funFacts.slice(0, 2).map((fact, index) => (
                         <Text key={index} style={styles.funFactText}>
                           {fact.text}
@@ -1044,22 +1103,26 @@ function ResultScreenInner() {
                   {/* Value Breakdown */}
                   {valueBreakdown && (
                     <View style={styles.breakdownContainer}>
-                      <Text style={styles.breakdownTitle}>VALUE BY CONDITION</Text>
+                      <Text style={styles.breakdownTitle}>📊 VALUE BY CONDITION</Text>
                       <View style={styles.breakdownGrid}>
                         <View style={styles.breakdownItem}>
+                          <Text style={styles.breakdownEmoji}>❌</Text>
                           <Text style={styles.breakdownItemLabel}>No tag</Text>
                           <Text style={styles.breakdownItemValue}>{valueBreakdown.no_tag}</Text>
                         </View>
                         <View style={styles.breakdownItem}>
+                          <Text style={styles.breakdownEmoji}>🏷️</Text>
                           <Text style={styles.breakdownItemLabel}>Common tag</Text>
                           <Text style={styles.breakdownItemValue}>{valueBreakdown.common_tag}</Text>
                         </View>
                         <View style={styles.breakdownItem}>
+                          <Text style={styles.breakdownEmoji}>⭐</Text>
                           <Text style={styles.breakdownItemLabel}>Early tag</Text>
                           <Text style={styles.breakdownItemValue}>{valueBreakdown.early_tag}</Text>
                         </View>
                         {valueBreakdown.mint_premium && (
                           <View style={styles.breakdownItem}>
+                            <Text style={styles.breakdownEmoji}>💎</Text>
                             <Text style={styles.breakdownItemLabel}>Mint bonus</Text>
                             <Text style={[styles.breakdownItemValue, styles.premiumText]}>{valueBreakdown.mint_premium}</Text>
                           </View>
@@ -1067,7 +1130,7 @@ function ResultScreenInner() {
                       </View>
                       {valueBreakdown.key_factors && valueBreakdown.key_factors.length > 0 && (
                         <View style={styles.keyFactorsSection}>
-                          <Text style={styles.keyFactorsTitle}>Key factors:</Text>
+                          <Text style={styles.keyFactorsTitle}>💡 Key factors:</Text>
                           {valueBreakdown.key_factors.map((factor, index) => (
                             <Text key={index} style={styles.keyFactorItem}>• {factor}</Text>
                           ))}
@@ -1079,7 +1142,7 @@ function ResultScreenInner() {
                   {/* Value Notes */}
                   {params.value_notes && (
                     <View style={styles.notesContainer}>
-                      <Text style={styles.notesLabel}>About this Beanie</Text>
+                      <Text style={styles.notesLabel}>ℹ️ About this Beanie</Text>
                       <Text style={styles.notesText}>{params.value_notes}</Text>
                     </View>
                   )}
@@ -1087,19 +1150,29 @@ function ResultScreenInner() {
                   {/* Value Factors Applied */}
                   {followUpAnswers && (
                     <View style={styles.factorsContainer}>
-                      <Text style={styles.factorsTitle}>FACTORS APPLIED</Text>
+                      <Text style={styles.factorsTitle}>✅ FACTORS APPLIED</Text>
                       <View style={styles.factorsGrid}>
                         {followUpAnswers.condition && (
                           <View style={styles.factorChip}>
+                            <Text style={styles.factorChipIcon}>✨</Text>
                             <Text style={styles.factorChipText}>{formatCondition(followUpAnswers.condition)}</Text>
                           </View>
                         )}
                         {followUpAnswers.pellet_type && (
                           <View style={styles.factorChip}>
+                            <Text style={styles.factorChipIcon}>🫘</Text>
                             <Text style={styles.factorChipText}>{formatPelletType(followUpAnswers.pellet_type)}</Text>
                           </View>
                         )}
                       </View>
+                      {followUpAnswers.pellet_type === 'unknown' && (
+                        <View style={styles.rangeExplanation}>
+                          <Text style={styles.rangeText}>
+                            📈 High: assumes rare PVC pellets{'\n'}
+                            📉 Low: assumes common PE pellets
+                          </Text>
+                        </View>
+                      )}
                     </View>
                   )}
 
@@ -1120,22 +1193,49 @@ function ResultScreenInner() {
                 </>
               )}
             </View>
-          </View>
-        </View>
+          </BlurView>
+        </Animated.View>
 
-        {/* Action Buttons - plain Views instead of BlurView/LinearGradient */}
-        <View style={styles.buttonContainer}>
+        {/* Action Buttons - REAL LinearGradient + BlurView */}
+        <Animated.View
+          style={[
+            styles.buttonContainer,
+            {
+              opacity: cardFadeAnim,
+              transform: [{ translateY: cardSlideAnim }],
+            },
+          ]}
+        >
           <Pressable
             style={({ pressed }) => [styles.primaryButton, pressed && styles.buttonPressed]}
             onPress={() => router.push('/scan')}
           >
-            <View style={[styles.primaryButtonGradient, { backgroundColor: MEMPHIS_COLORS.magenta }]}>
+            <LinearGradient
+              colors={[MEMPHIS_COLORS.magenta, MEMPHIS_COLORS.deepPink]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.primaryButtonGradient}
+            >
               <Text style={styles.primaryButtonText}>{scanButtonText}</Text>
-            </View>
+            </LinearGradient>
           </Pressable>
 
           <View style={styles.secondaryButtonsRow}>
-            <View style={[styles.secondaryButtonBlur, styles.flexButton]}>
+            {Platform.OS !== 'web' && !isNotBeanie && (
+              <BlurView intensity={40} tint="light" style={[styles.secondaryButtonBlur, styles.flexButton]}>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.secondaryButton,
+                    pressed && styles.secondaryButtonPressed,
+                  ]}
+                  onPress={() => setShowCertificateModal(true)}
+                >
+                  <Text style={styles.secondaryButtonText}>View Certificate</Text>
+                </Pressable>
+              </BlurView>
+            )}
+
+            <BlurView intensity={40} tint="light" style={[styles.secondaryButtonBlur, styles.flexButton]}>
               <Pressable
                 style={({ pressed }) => [
                   styles.secondaryButton,
@@ -1145,7 +1245,7 @@ function ResultScreenInner() {
               >
                 <Text style={styles.secondaryButtonText}>My Collection</Text>
               </Pressable>
-            </View>
+            </BlurView>
           </View>
 
           {savedToCollection && !isNotBeanie && !isFromCollection && (
@@ -1161,10 +1261,10 @@ function ResultScreenInner() {
           {isFromCollection && (
             <Text style={styles.savedIndicator}>Viewing from collection</Text>
           )}
-        </View>
+        </Animated.View>
       </ScrollView>
 
-      {/* No Modal, no certificate */}
+      {/* No Modal, no toasts, no confetti, no celebration */}
     </View>
   );
 }
