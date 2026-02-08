@@ -16,6 +16,7 @@ export interface FarewellCertificateProps {
   verdictTitle: string;
   tier: number;
   beanieImage?: string;  // Base64 image of the scanned Beanie
+  animalEmoji?: string;  // Fallback emoji when no photo (e.g. from text search)
   userName?: string;  // User's first name for personalization
   roast?: string;  // Funny roast of this Beanie
 }
@@ -119,7 +120,7 @@ const TIER_ACCENTS: Record<number, { primary: string; text: string }> = {
 // ============================================
 
 export const FarewellCertificate = React.forwardRef<View, FarewellCertificateProps>(
-  ({ name, variant, valueLow, valueHigh, verdictTitle, tier, beanieImage, userName, roast }, ref) => {
+  ({ name, variant, valueLow, valueHigh, verdictTitle, tier, beanieImage, animalEmoji, userName, roast }, ref) => {
     const normalizedTier = Math.max(1, Math.min(5, tier)) as 1 | 2 | 3 | 4 | 5;
     const gradient = TIER_GRADIENTS[normalizedTier];
     const accents = TIER_ACCENTS[normalizedTier];
@@ -147,7 +148,7 @@ export const FarewellCertificate = React.forwardRef<View, FarewellCertificatePro
           <View style={styles.header}>
             <Image source={APP_ICON} style={styles.appIcon} resizeMode="contain" />
             <Text style={[styles.appName, { color: COLORS.primaryPurple }]}>Bean Bye</Text>
-            <Text style={[styles.certificateLabel, { color: accents.primary }]}>{certificateLabel}</Text>
+            <Text style={[styles.certificateLabel, { color: accents.primary }]} numberOfLines={1} adjustsFontSizeToFit>{certificateLabel}</Text>
           </View>
 
           {/* Issued To section - only if userName provided */}
@@ -162,7 +163,7 @@ export const FarewellCertificate = React.forwardRef<View, FarewellCertificatePro
           <View style={[styles.verdictSection, { backgroundColor: `${accents.primary}10` }]}>
             <Image source={tierIcon} style={styles.tierIcon} resizeMode="contain" />
             <View style={styles.verdictContent}>
-              <Text style={[styles.verdictTitle, { color: accents.primary }]}>{verdictTitle}</Text>
+              <Text style={[styles.verdictTitle, { color: accents.primary }]} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.6}>{verdictTitle}</Text>
               {/* Flex/Flop Badge */}
               <View style={[styles.flexFlopBadge, { backgroundColor: flexFlopLabel.color }]}>
                 <Text style={styles.flexFlopEmoji}>{flexFlopLabel.emoji}</Text>
@@ -173,17 +174,21 @@ export const FarewellCertificate = React.forwardRef<View, FarewellCertificatePro
 
           {/* BEANIE SECTION - What was scanned */}
           <View style={styles.beanieSection}>
-            {beanieImage && (
+            {beanieImage ? (
               <View style={styles.beanieImageContainer}>
                 <Image
-                  source={{ uri: `data:image/jpeg;base64,${beanieImage}` }}
+                  source={{ uri: beanieImage.startsWith('data:') ? beanieImage : `data:image/${beanieImage.startsWith('/9j/') ? 'jpeg' : 'png'};base64,${beanieImage}` }}
                   style={styles.beanieImage}
                   resizeMode="cover"
                 />
               </View>
-            )}
+            ) : animalEmoji ? (
+              <View style={[styles.beanieImageContainer, styles.emojiContainer]}>
+                <Text style={styles.animalEmoji}>{animalEmoji}</Text>
+              </View>
+            ) : null}
             <View style={styles.beanieInfo}>
-              <Text style={styles.beanieName}>{name}</Text>
+              <Text style={styles.beanieName} numberOfLines={1} adjustsFontSizeToFit>{name}</Text>
               <Text style={[styles.beanieVariant, { color: accents.text }]}>{variant}</Text>
               <View style={[styles.valueChip, { backgroundColor: `${accents.primary}15` }]}>
                 <Text style={[styles.valueText, { color: accents.primary }]}>${valueLow} - ${valueHigh}</Text>
@@ -204,7 +209,7 @@ export const FarewellCertificate = React.forwardRef<View, FarewellCertificatePro
           {/* Permission text with seal */}
           <View style={styles.permissionWithSeal}>
             <View style={styles.permissionContainer}>
-              <Text style={[styles.permissionText, { color: accents.text }]}>{permission}</Text>
+              <Text style={[styles.permissionText, { color: accents.text }]} numberOfLines={3} adjustsFontSizeToFit minimumFontScale={0.7}>{permission}</Text>
             </View>
             <View style={styles.sealContainer}>
               <OfficialSeal color={accents.primary} />
@@ -214,7 +219,7 @@ export const FarewellCertificate = React.forwardRef<View, FarewellCertificatePro
           {/* Footer */}
           <View style={styles.footer}>
             <Text style={styles.footerUrl}>beanbye.com</Text>
-            <Text style={styles.disclaimer}>{disclaimer}</Text>
+            <Text style={styles.disclaimer} numberOfLines={2} adjustsFontSizeToFit>{disclaimer}</Text>
           </View>
         </View>
       </View>
@@ -356,6 +361,14 @@ const styles = StyleSheet.create({
   beanieImage: {
     width: '100%',
     height: '100%',
+  },
+  emojiContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.03)',
+  },
+  animalEmoji: {
+    fontSize: 48,
   },
   beanieInfo: {
     flex: 1,

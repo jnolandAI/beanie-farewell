@@ -143,7 +143,7 @@ export const CollectionStatsCard = React.forwardRef<View, CollectionStatsCardPro
               <Text style={styles.sectionTitle}>BEST FIND</Text>
               <View style={styles.bestFindCard}>
                 {bestFind.thumbnail ? (
-                  <Image source={{ uri: bestFind.thumbnail }} style={styles.bestFindPhoto} resizeMode="cover" />
+                  <Image source={{ uri: bestFind.thumbnail.startsWith('data:') ? bestFind.thumbnail : `data:image/${bestFind.thumbnail.startsWith('/9j/') ? 'jpeg' : 'png'};base64,${bestFind.thumbnail}` }} style={styles.bestFindPhoto} resizeMode="cover" />
                 ) : null}
                 <View style={styles.bestFindInfo}>
                   <Text style={styles.bestFindName}>
@@ -171,7 +171,7 @@ export const CollectionStatsCard = React.forwardRef<View, CollectionStatsCardPro
                 const width = (count / maxCount) * 100;
                 return (
                   <View key={index} style={styles.tierRow}>
-                    <Text style={styles.tierLabel}>T{index + 1}</Text>
+                    <Text style={styles.tierLabel}>{['Welp', 'Meh', 'Oh?', 'Whoa', '!!!'][index]}</Text>
                     <View style={styles.tierBarContainer}>
                       <View style={[styles.tierBar, { width: `${width}%`, backgroundColor: tierColors[index] }]} />
                     </View>
@@ -403,10 +403,10 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   tierLabel: {
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: '600',
     color: '#666',
-    width: 20,
+    width: 32,
   },
   tierBarContainer: {
     flex: 1,

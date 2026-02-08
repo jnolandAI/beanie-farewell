@@ -222,7 +222,7 @@ function CollectionItemCard({
             <View style={styles.thumbnailContainer}>
               {item.thumbnail ? (
                 <Image
-                  source={{ uri: `data:image/jpeg;base64,${item.thumbnail}` }}
+                  source={{ uri: item.thumbnail.startsWith('data:') ? item.thumbnail : `data:image/${item.thumbnail.startsWith('/9j/') ? 'jpeg' : 'png'};base64,${item.thumbnail}` }}
                   style={styles.thumbnail}
                   resizeMode="cover"
                 />
@@ -1125,7 +1125,7 @@ export default function CollectionScreen() {
               end={{ x: 1, y: 1 }}
               style={styles.primaryButton}
             >
-              <Text style={styles.primaryButtonText}>Scan Another</Text>
+              <Text style={styles.primaryButtonText}>{collection.length > 0 ? 'Scan Another' : 'Scan Your First Beanie'}</Text>
             </LinearGradient>
           </Pressable>
         </Animated.View>

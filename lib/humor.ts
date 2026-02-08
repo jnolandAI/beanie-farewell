@@ -488,7 +488,7 @@ export function generateFunFacts(
         `Current value: about ${Math.round(avgValue / 5)} fancy coffees.`,
         `If you sold this and invested the proceeds, in 27 years you'd have... slightly more.`,
         `This Beanie has depreciated faster than a rental car on a cross-country road trip.`,
-        `Worth roughly what you'd spend on snacks at a gas station.`,
+        `Worth roughly what you'd spend on snacks at a convenience store.`,
       ]),
     } : null,
 
@@ -582,7 +582,7 @@ const TIER_1_MESSAGES = [
   "This one's worth about as much as the memory of buying it. Which is free.",
   "Perfect for donating, gifting, or finally admitting defeat.",
   "Couldn't even buy a gallon of gas with this. Thanks, inflation.",
-  "Worth less than what a Happy Meal costs now. Let that sink in.",
+  "Worth less than a large coffee. Let that sink in.",
   "The Beanie market crashed harder than... well, everything else lately.",
   "At least it didn't charge you a subscription fee to exist.",
   "This Beanie has opinions about you keeping it this long.",
@@ -611,7 +611,7 @@ const TIER_2_TITLES = [
   "Par for the Course",
   "Eh",
   "It's Something",
-  "A Whole $20",
+  "Wait, Really?",
   "Break Even-ish",
   "Participation Award",
   "Silver Lining",
@@ -1205,7 +1205,7 @@ export function getPortfolioVerdict(stats: PortfolioStats): { title: string; sub
     return {
       emoji: '😬',
       title: 'The Reality Check',
-      subtitle: 'Worth roughly one tank of gas. Memories are priceless though!',
+      subtitle: 'Worth roughly one tank of gas. At least it didn\'t need feeding.',
     };
   }
   if (avgValue < 5) {
@@ -1374,7 +1374,7 @@ export function getTierBreakdownComment(stats: PortfolioStats): string {
     return `${tier3Count} decent find${tier3Count > 1 ? 's' : ''}, ${lowTierPercent}% participation trophies.`;
   }
   if (tier1Percent >= 80) {
-    return `${tier1Percent}% of your collection is worth less than a Happy Meal. Classic.`;
+    return `${tier1Percent}% of your collection is worth less than a large coffee. Classic.`;
   }
   if (tier1Percent >= 50) {
     return `Half your collection is in the "why did I keep this" tier.`;
@@ -1694,7 +1694,7 @@ export function getShareCaption(beanieName: string, value: number, flexFlop: Fle
       `My '90s Beanie Baby ${beanieName} is worth $${value} 📉 The dream is dead`,
       `Kept ${beanieName} for 27 years thinking it'd fund my retirement. It's worth $${value}.`,
       `${beanieName} the Beanie Baby: $${value}. So much for that investment strategy.`,
-      `Scanned my childhood ${beanieName}. Worth $${value}. At least the memories are free.`,
+      `Scanned my childhood ${beanieName}. Worth $${value}. The nostalgia hits different.`,
       `${beanieName}: paid $5 in 1998, worth $${value} now. Math isn't mathing.`,
       `Well this is humbling. ${beanieName}: $${value} 📉`,
       `${beanieName} really said "expect nothing and you'll still be disappointed" 💀`,

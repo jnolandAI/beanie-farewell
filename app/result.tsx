@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef, Component, ErrorInfo, ReactNode } from 'react';
-import { View, Text, Pressable, StyleSheet, ScrollView, Animated, Easing, Platform, Dimensions, Image, Modal } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ScrollView, Animated, Easing, Platform, Dimensions, Image, Modal, Share } from 'react-native';
 import { router } from 'expo-router';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
-import * as MediaLibrary from 'expo-media-library';
 import * as Haptics from 'expo-haptics';
 import Svg, { Path, Circle, Polygon } from 'react-native-svg';
 import { getVerdict, getScanAnotherText, getShareButtonText, VerdictInfo, generateFunFacts, getFlexFlopLabel, FlexFlopLabel, getShareCaption, getFlexFlopStatus } from '../lib/humor';
@@ -23,6 +22,7 @@ import { useCollectionStore, generateId } from '../lib/store';
 import { Achievement } from '../lib/achievements';
 import { DailyChallenge } from '../lib/challenges';
 import { safeParseURLParam, showShareFailedAlert } from '../lib/errors';
+import { ANIMAL_EMOJIS } from '../lib/search';
 
 // Error boundary to catch crashes and show the error instead of crashing
 class ResultErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: string }> {
@@ -862,21 +862,21 @@ function ResultScreenInner() {
         quality: 1,
       });
 
-      // Check if sharing is available
-      const isAvailable = await Sharing.isAvailableAsync();
-
-      if (isAvailable) {
-        await Sharing.shareAsync(uri, {
-          mimeType: 'image/png',
-          dialogTitle: 'Share your Beanie valuation',
-        });
-      } else {
-        // Fallback: save to camera roll
-        const { status } = await MediaLibrary.requestPermissionsAsync();
-        if (status === 'granted') {
-          await MediaLibrary.saveToLibraryAsync(uri);
-          // Could show a toast/alert here: "Saved to camera roll!"
+      if (Platform.OS === 'web') {
+        // Web: use expo-sharing (no caption support)
+        const isAvailable = await Sharing.isAvailableAsync();
+        if (isAvailable) {
+          await Sharing.shareAsync(uri, {
+            mimeType: 'image/png',
+            dialogTitle: 'Share your Beanie valuation',
+          });
         }
+      } else {
+        // Native: use RN Share API for image + caption text
+        await Share.share({
+          message: shareCaption || '',
+          url: uri,
+        });
       }
     } catch (error) {
       console.error('Error sharing:', error);
@@ -891,7 +891,6 @@ function ResultScreenInner() {
   const isJackpotTier = verdict && verdict.tier === 5;
   const currentTier = verdict?.tier || 1;
 
-  // === BUILD 14: FULL RESTORE - all components ===
   return (
     <View style={styles.container}>
       {/* Background gradient */}
@@ -1339,6 +1338,7 @@ function ResultScreenInner() {
                 verdictTitle={verdict?.title || ''}
                 tier={verdict?.tier || 1}
                 beanieImage={certificateImage || undefined}
+                animalEmoji={!certificateImage && params.animal_type ? (ANIMAL_EMOJIS[params.animal_type] || '🧸') : undefined}
                 userName={userName || undefined}
                 roast={params.roast || undefined}
               />

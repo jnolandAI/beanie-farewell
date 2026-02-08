@@ -8,11 +8,11 @@ interface TierDistributionChartProps {
 }
 
 const TIER_CONFIG = [
-  { tier: 1, label: 'T1', color: '#9CA3AF', emoji: '😢' },
-  { tier: 2, label: 'T2', color: '#6B7280', emoji: '😐' },
-  { tier: 3, label: 'T3', color: '#00CED1', emoji: '😮' },
-  { tier: 4, label: 'T4', color: '#FF6B35', emoji: '🤩' },
-  { tier: 5, label: 'T5', color: '#FF00FF', emoji: '🤯' },
+  { tier: 1, label: 'Welp', color: '#9CA3AF', emoji: '😢' },
+  { tier: 2, label: 'Meh', color: '#6B7280', emoji: '😐' },
+  { tier: 3, label: 'Oh?', color: '#00CED1', emoji: '😮' },
+  { tier: 4, label: 'Whoa', color: '#FF6B35', emoji: '🤩' },
+  { tier: 5, label: '!!!', color: '#FF00FF', emoji: '🤯' },
 ];
 
 export function TierDistributionChart({ collection, compact = false }: TierDistributionChartProps) {
@@ -66,7 +66,7 @@ export function TierDistributionChart({ collection, compact = false }: TierDistr
         </View>
         {dominantTier.count > 0 && (
           <Text style={styles.compactInsight}>
-            Mostly {TIER_CONFIG[dominantTier.tier - 1].emoji} Tier {dominantTier.tier} ({Math.round((dominantTier.count / totalItems) * 100)}%)
+            Mostly {TIER_CONFIG[dominantTier.tier - 1].emoji} {TIER_CONFIG[dominantTier.tier - 1].label} ({Math.round((dominantTier.count / totalItems) * 100)}%)
           </Text>
         )}
       </View>
@@ -107,7 +107,7 @@ export function TierDistributionChart({ collection, compact = false }: TierDistr
       <View style={styles.legend}>
         <Text style={styles.legendText}>
           {dominantTier.count > 0
-            ? `Your collection is mostly Tier ${dominantTier.tier} (${Math.round((dominantTier.count / totalItems) * 100)}%)`
+            ? `Your collection is mostly ${TIER_CONFIG[dominantTier.tier - 1].label} (${Math.round((dominantTier.count / totalItems) * 100)}%)`
             : 'Start scanning to see your tier breakdown!'
           }
         </Text>
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   tierLabel: {
-    fontSize: 11,
+    fontSize: 9,
     fontWeight: '600',
     color: '#999',
     marginTop: 2,
