@@ -38,13 +38,18 @@ class ResultErrorBoundary extends Component<{ children: ReactNode }, { hasError:
   }
   render() {
     if (this.state.hasError) {
+      // Extract just the error message (first line) for easy reading
+      const errorMsg = this.state.error.split('\n')[0] || 'Unknown error';
       return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 30, backgroundColor: '#FAFAFA' }}>
-          <Text style={{ fontSize: 20, fontWeight: '700', marginBottom: 16, color: '#FF0000' }}>Something went wrong</Text>
-          <ScrollView style={{ maxHeight: 400 }}>
-            <Text style={{ fontSize: 12, color: '#333', fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace' }}>{this.state.error}</Text>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: '#FAFAFA' }}>
+          <Text style={{ fontSize: 18, fontWeight: '700', marginBottom: 12, color: '#FF0000' }}>Something went wrong</Text>
+          <View style={{ backgroundColor: '#FFF3F3', padding: 16, borderRadius: 12, marginBottom: 12, width: '100%' }}>
+            <Text style={{ fontSize: 16, fontWeight: '600', color: '#CC0000' }}>{errorMsg}</Text>
+          </View>
+          <ScrollView style={{ maxHeight: 300, width: '100%' }}>
+            <Text style={{ fontSize: 11, color: '#666', fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace' }}>{this.state.error}</Text>
           </ScrollView>
-          <Pressable onPress={() => router.replace('/')} style={{ marginTop: 20, padding: 16, backgroundColor: '#FF00FF', borderRadius: 12 }}>
+          <Pressable onPress={() => router.replace('/')} style={{ marginTop: 16, padding: 16, backgroundColor: '#FF00FF', borderRadius: 12 }}>
             <Text style={{ color: '#FFF', fontWeight: '600' }}>Go Home</Text>
           </Pressable>
         </View>
@@ -392,10 +397,9 @@ function ResultScreenInner() {
   const [xpEarnedThisScan, setXpEarnedThisScan] = useState(0);
 
   // Read params from store (bypasses expo-router URL parsing which crashes on Hermes)
+  // Use getState() directly to avoid any hook timing issues
   const [params] = useState(() => {
-    const stored = pendingResultParams || {};
-    // Clear after reading so it's not reused
-    if (pendingResultParams) setPendingResultParams(null);
+    const stored = useCollectionStore.getState().pendingResultParams || {};
     return stored as {
       name: string;
       animal_type: string;
@@ -415,6 +419,13 @@ function ResultScreenInner() {
       roast?: string;
     };
   });
+
+  // Clear pending params after reading (in useEffect, not during render)
+  useEffect(() => {
+    if (useCollectionStore.getState().pendingResultParams) {
+      setPendingResultParams(null);
+    }
+  }, []);
 
   // Capture the image for the certificate - try multiple approaches for reliability
   // 1. First try: capture synchronously on initial render (or from collection thumbnail)
