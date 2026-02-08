@@ -891,12 +891,10 @@ function ResultScreenInner() {
   const isJackpotTier = verdict && verdict.tier === 5;
   const currentTier = verdict?.tier || 1;
 
-  // === BUILD 13: Full layout WITH rendering libs, NO custom overlay components ===
-  // Restored: LinearGradient, BlurView, MemphisPattern SVG, Animated.View, Image
-  // Still removed: toasts, confetti, celebration, certificate Modal
+  // === BUILD 14: FULL RESTORE - all components ===
   return (
     <View style={styles.container}>
-      {/* Background gradient - REAL LinearGradient */}
+      {/* Background gradient */}
       <LinearGradient
         colors={tierColors.gradient as [string, string, string]}
         locations={[0, 0.5, 1]}
@@ -905,24 +903,83 @@ function ResultScreenInner() {
         style={styles.backgroundGradient}
       />
 
-      {/* Memphis pattern overlay - REAL SVG */}
+      {/* Memphis pattern overlay */}
       <MemphisPattern tier={currentTier} />
-
-      {/* No toast components */}
-      {/* No confetti */}
-      {/* No celebration overlay */}
 
       {/* Home Button */}
       <Pressable style={styles.homeButton} onPress={() => router.replace('/')}>
         <Text style={styles.homeButtonText}>← Home</Text>
       </Pressable>
 
+      {/* Achievement Toast */}
+      {currentAchievement && (
+        <AchievementToast
+          achievement={currentAchievement}
+          onDismiss={handleAchievementDismiss}
+        />
+      )}
+
+      {/* Challenge Toast */}
+      {currentChallenge && !currentAchievement && (
+        <ChallengeToast
+          challenge={currentChallenge}
+          onDismiss={handleChallengeDismiss}
+        />
+      )}
+
+      {/* Level Up Toast */}
+      {showLevelUp && !currentAchievement && !currentChallenge && (
+        <LevelUpToast
+          level={showLevelUp.level}
+          title={showLevelUp.title}
+          emoji={showLevelUp.emoji}
+          color={showLevelUp.color}
+          onDismiss={handleLevelUpDismiss}
+        />
+      )}
+
+      {/* Milestone Toast */}
+      {showMilestone && !currentAchievement && !currentChallenge && !showLevelUp && (
+        <MilestoneToast
+          milestone={showMilestone}
+          onDismiss={handleMilestoneDismiss}
+        />
+      )}
+
+      {/* Rare Find Celebration Overlay */}
+      {showCelebration && verdict && (verdict.tier === 4 || verdict.tier === 5) && (
+        <RareFindCelebration
+          tier={verdict.tier as 4 | 5}
+          onComplete={() => setShowCelebration(false)}
+        />
+      )}
+
+      {/* Lucky Scan Bonus Toast */}
+      {showLuckyBonus && !currentAchievement && !currentChallenge && !showLevelUp && !showMilestone && (
+        <LuckyScanToast
+          xp={showLuckyBonus.xp}
+          multiplier={showLuckyBonus.multiplier}
+          onDismiss={handleLuckyBonusDismiss}
+        />
+      )}
+
+      {/* Value Milestone Toast */}
+      {showValueMilestone && !currentAchievement && !currentChallenge && !showLevelUp && !showMilestone && !showLuckyBonus && (
+        <ValueMilestoneToast
+          milestone={showValueMilestone}
+          onDismiss={handleValueMilestoneDismiss}
+        />
+      )}
+
+      {/* Confetti for high-value discoveries */}
+      {showConfetti && <Confetti count={60} />}
+
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Verdict Header - REAL Animated.View */}
+        {/* Verdict Header */}
         <Animated.View
           style={[
             styles.header,
@@ -932,7 +989,7 @@ function ResultScreenInner() {
             },
           ]}
         >
-          {/* Tier Icon - REAL Animated + Image */}
+          {/* Tier Icon */}
           <Animated.View style={[
             styles.tierIconWrapper,
             {
@@ -979,7 +1036,7 @@ function ResultScreenInner() {
           )}
         </Animated.View>
 
-        {/* Main Card - REAL BlurView */}
+        {/* Main Card */}
         <Animated.View
           style={[
             styles.cardWrapper,
@@ -1000,7 +1057,6 @@ function ResultScreenInner() {
                 </>
               ) : (
                 <>
-                  {/* Beanie Name */}
                   <Text style={styles.cardTitle}>{params.name}</Text>
                   <Text style={styles.cardSubtitle}>
                     {hasSpecialVariant ? params.variant : params.animal_type}
@@ -1196,7 +1252,7 @@ function ResultScreenInner() {
           </BlurView>
         </Animated.View>
 
-        {/* Action Buttons - REAL LinearGradient + BlurView */}
+        {/* Action Buttons */}
         <Animated.View
           style={[
             styles.buttonContainer,
@@ -1264,7 +1320,69 @@ function ResultScreenInner() {
         </Animated.View>
       </ScrollView>
 
-      {/* No Modal, no toasts, no confetti, no celebration */}
+      {/* Certificate Preview Modal */}
+      <Modal
+        visible={showCertificateModal}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setShowCertificateModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.certificatePreview}>
+              <FarewellCertificate
+                ref={certificateRef}
+                name={params.name || ''}
+                variant={hasSpecialVariant ? params.variant || '' : params.animal_type || ''}
+                valueLow={valueLow}
+                valueHigh={valueHigh}
+                verdictTitle={verdict?.title || ''}
+                tier={verdict?.tier || 1}
+                beanieImage={certificateImage || undefined}
+                userName={userName || undefined}
+                roast={params.roast || undefined}
+              />
+            </View>
+
+            {shareCaption && (
+              <View style={styles.shareCaptionContainer}>
+                <Text style={styles.shareCaptionLabel}>📋 Copy for socials:</Text>
+                <Text style={styles.shareCaptionText}>{shareCaption}</Text>
+              </View>
+            )}
+
+            <View style={styles.modalButtons}>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.modalShareButton,
+                  pressed && styles.buttonPressed,
+                  isSharing && styles.buttonDisabled,
+                ]}
+                onPress={handleShare}
+                disabled={isSharing}
+              >
+                <LinearGradient
+                  colors={[MEMPHIS_COLORS.magenta, MEMPHIS_COLORS.deepPink]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.modalShareButtonGradient}
+                >
+                  <Text style={styles.modalShareButtonText}>
+                    {isSharing ? 'Sharing...' : 'Share Certificate'}
+                  </Text>
+                </LinearGradient>
+              </Pressable>
+
+              <Pressable
+                style={styles.modalCloseButton}
+                onPress={() => setShowCertificateModal(false)}
+              >
+                <Text style={styles.modalCloseButtonText}>Close</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
