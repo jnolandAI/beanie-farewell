@@ -16,7 +16,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.beanbye.app",
-      "buildNumber": "8",
+      "buildNumber": "9",
       "infoPlist": {
         "NSCameraUsageDescription": "Bean Bye uses your camera to photograph and identify your Beanie Babies.",
         "NSPhotoLibraryUsageDescription": "Select pictures of your Beanie Babies for identification.",
