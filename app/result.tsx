@@ -415,9 +415,7 @@ function ResultScreenInner() {
   // 1. First try: capture synchronously on initial render (or from collection thumbnail)
   const [certificateImage, setCertificateImage] = useState<string | null>(() => {
     // If coming from collection, use the passed thumbnail
-    const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
-    const collectionThumb = searchParams.get('collectionThumbnail');
-    if (collectionThumb) return collectionThumb;
+    if (params.collectionThumbnail) return params.collectionThumbnail;
 
     // Otherwise try pendingThumbnail from store
     const store = useCollectionStore.getState();
