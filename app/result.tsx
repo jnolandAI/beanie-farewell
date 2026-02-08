@@ -891,53 +891,280 @@ function ResultScreenInner() {
   const isJackpotTier = verdict && verdict.tier === 5;
   const currentTier = verdict?.tier || 1;
 
-  // === DIAGNOSTIC BUILD 11: All hooks active, simplified JSX ===
-  // If this works: crash is in the JSX/child components
-  // If this crashes: crash is in one of the hooks above
+  // === DIAGNOSTIC BUILD 12: Full layout, NO third-party components ===
+  // BlurView→View, LinearGradient→View, SVG removed, Animated.View→View
+  // No toasts, confetti, celebration, certificate, Image, or Modal
+  // If this works: crash is in one of: BlurView, LinearGradient, SVG, Animated, Image, Modal, or custom components
+  // If this crashes: crash is in the layout/data rendering itself
   return (
-    <View style={{ flex: 1, backgroundColor: '#FAFAFA', paddingTop: 80, paddingHorizontal: 20 }}>
-      <ScrollView>
-        <Text style={{ fontSize: 20, fontWeight: '700', marginBottom: 16, color: '#FF00FF' }}>
-          BUILD 11: All Hooks Test
-        </Text>
-        <Text style={{ fontSize: 14, marginBottom: 8, color: '#333' }}>
-          All hooks are running. If you see this, hooks are NOT the problem.
-        </Text>
-        <View style={{ backgroundColor: '#F0F0F0', padding: 12, borderRadius: 8, marginBottom: 12 }}>
-          <Text style={{ fontSize: 13, fontWeight: '600', marginBottom: 4 }}>Params:</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>Name: {params.name || '(none)'}</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>Type: {params.animal_type || '(none)'}</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>Value: ${valueLow} - ${valueHigh}</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>Confidence: {params.confidence || '(none)'}</Text>
+    <View style={styles.container}>
+      {/* Background - plain View instead of LinearGradient */}
+      <View style={[styles.backgroundGradient, { backgroundColor: tierColors.bg }]} />
+
+      {/* No MemphisPattern SVG */}
+      {/* No toast components */}
+      {/* No confetti */}
+      {/* No celebration overlay */}
+
+      {/* Home Button */}
+      <Pressable style={styles.homeButton} onPress={() => router.replace('/')}>
+        <Text style={styles.homeButtonText}>← Home</Text>
+      </Pressable>
+
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Verdict Header - plain View instead of Animated.View */}
+        <View style={styles.header}>
+          {/* Tier icon replaced with text placeholder */}
+          <View style={styles.tierIconWrapper}>
+            <Text style={{ fontSize: 48 }}>
+              {currentTier >= 5 ? '🤩' : currentTier >= 4 ? '😮' : currentTier >= 3 ? '🧐' : '😐'}
+            </Text>
+          </View>
+          <Text style={[styles.verdictTitle, { color: tierColors.accent }]}>
+            {verdict?.title || 'Analyzing...'}
+          </Text>
+
+          {/* Flex/Flop Badge */}
+          {flexFlopLabel && !isNotBeanie && (
+            <View style={[styles.flexFlopBadge, { backgroundColor: flexFlopLabel.color }]}>
+              <Text style={styles.flexFlopEmoji}>{flexFlopLabel.emoji}</Text>
+              <Text style={styles.flexFlopLabel}>{flexFlopLabel.label}</Text>
+            </View>
+          )}
+
+          {/* Rarity Indicator */}
+          {!isNotBeanie && (
+            <View style={[styles.rarityBadge, { borderColor: `${tierColors.accent}40` }]}>
+              <Text style={styles.rarityPercent}>{TIER_RARITY[currentTier].percent}</Text>
+              <Text style={styles.rarityLabel}>{TIER_RARITY[currentTier].label}</Text>
+            </View>
+          )}
         </View>
-        <View style={{ backgroundColor: '#F0F0F0', padding: 12, borderRadius: 8, marginBottom: 12 }}>
-          <Text style={{ fontSize: 13, fontWeight: '600', marginBottom: 4 }}>State:</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>Verdict: {verdict?.title || '(loading)'}</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>Tier: {currentTier}</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>FlexFlop: {flexFlopLabel?.label || '(none)'}</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>Saved: {savedToCollection ? 'Yes' : 'No'}</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>Certificate img: {certificateImage ? 'Yes' : 'No'}</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>Display values: ${displayValueLow}-${displayValueHigh}</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>XP earned: {xpEarnedThisScan}</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>Fun facts: {funFacts.length}</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>FollowUp: {followUpAnswers ? 'Yes' : 'No'}</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>Breakdown: {valueBreakdown ? 'Yes' : 'No'}</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>Assumptions: {detectedAssumptions ? 'Yes' : 'No'}</Text>
-          <Text style={{ fontSize: 12, color: '#666' }}>Roast: {params.roast ? 'Yes' : 'No'}</Text>
+
+        {/* Main Card - plain View instead of BlurView */}
+        <View style={styles.cardWrapper}>
+          <View style={styles.resultCard}>
+            <View style={styles.resultCardInner}>
+              {isNotBeanie ? (
+                <>
+                  <Text style={styles.cardTitle}>Not a Beanie Baby</Text>
+                  <Text style={styles.cardMessage}>
+                    This doesn't appear to be a Ty Beanie Baby. Try again with a real one!
+                  </Text>
+                </>
+              ) : (
+                <>
+                  {/* Beanie Name */}
+                  <Text style={styles.cardTitle}>{params.name}</Text>
+                  <Text style={styles.cardSubtitle}>
+                    {hasSpecialVariant ? params.variant : params.animal_type}
+                  </Text>
+
+                  {/* Value Display */}
+                  <View
+                    style={[
+                      styles.valueContainer,
+                      {
+                        backgroundColor: tierColors.bg,
+                        borderColor: `${tierColors.accent}30`,
+                      },
+                    ]}
+                  >
+                    <Text style={styles.valueLabel}>ESTIMATED VALUE</Text>
+                    <View style={styles.valueRow}>
+                      <Text style={[styles.valueAmount, { color: tierColors.accent }]}>
+                        ${displayValueLow}
+                      </Text>
+                      <Text style={styles.valueDash}>-</Text>
+                      <Text style={[styles.valueAmount, { color: tierColors.accent }]}>
+                        ${displayValueHigh}
+                      </Text>
+                    </View>
+                  </View>
+
+                  {/* THE ROAST */}
+                  {params.roast && (
+                    <View style={[styles.roastContainer, { borderColor: `${tierColors.accent}40` }]}>
+                      <Text style={styles.roastIcon}>🔥</Text>
+                      <Text style={[styles.roastText, { color: tierColors.accent }]}>
+                        {params.roast}
+                      </Text>
+                    </View>
+                  )}
+
+                  {/* What We Detected */}
+                  {detectedAssumptions && (
+                    <View style={styles.assumptionsContainer}>
+                      <Text style={styles.assumptionsTitle}>WHAT WE SAW</Text>
+                      <View style={styles.assumptionsInline}>
+                        <View style={styles.assumptionChip}>
+                          <Text style={styles.chipText}>{detectedAssumptions.tag_status}</Text>
+                        </View>
+                        <View style={styles.assumptionChip}>
+                          <Text style={styles.chipText}>{detectedAssumptions.tag_generation}</Text>
+                        </View>
+                        <View style={styles.assumptionChip}>
+                          <Text style={styles.chipText}>{detectedAssumptions.condition_estimate}</Text>
+                        </View>
+                      </View>
+                      {detectedAssumptions.condition_notes && (
+                        <Text style={styles.conditionNotes}>{detectedAssumptions.condition_notes}</Text>
+                      )}
+                      {detectedAssumptions.special_features && detectedAssumptions.special_features.length > 0 && (
+                        <View style={styles.specialFeaturesInline}>
+                          {detectedAssumptions.special_features.map((feature, index) => (
+                            <Text key={index} style={styles.specialFeatureChip}>{feature}</Text>
+                          ))}
+                        </View>
+                      )}
+                    </View>
+                  )}
+
+                  {/* Verdict Message */}
+                  <View style={styles.messageContainer}>
+                    <Text style={styles.messageText}>{verdict?.message || ''}</Text>
+                  </View>
+
+                  {/* Fun Facts */}
+                  {funFacts.length > 0 && (
+                    <View style={styles.funFactsContainer}>
+                      <Text style={styles.funFactsTitle}>THE FINE PRINT</Text>
+                      {funFacts.slice(0, 2).map((fact, index) => (
+                        <Text key={index} style={styles.funFactText}>
+                          {fact.text}
+                        </Text>
+                      ))}
+                    </View>
+                  )}
+
+                  {/* Value Breakdown */}
+                  {valueBreakdown && (
+                    <View style={styles.breakdownContainer}>
+                      <Text style={styles.breakdownTitle}>VALUE BY CONDITION</Text>
+                      <View style={styles.breakdownGrid}>
+                        <View style={styles.breakdownItem}>
+                          <Text style={styles.breakdownItemLabel}>No tag</Text>
+                          <Text style={styles.breakdownItemValue}>{valueBreakdown.no_tag}</Text>
+                        </View>
+                        <View style={styles.breakdownItem}>
+                          <Text style={styles.breakdownItemLabel}>Common tag</Text>
+                          <Text style={styles.breakdownItemValue}>{valueBreakdown.common_tag}</Text>
+                        </View>
+                        <View style={styles.breakdownItem}>
+                          <Text style={styles.breakdownItemLabel}>Early tag</Text>
+                          <Text style={styles.breakdownItemValue}>{valueBreakdown.early_tag}</Text>
+                        </View>
+                        {valueBreakdown.mint_premium && (
+                          <View style={styles.breakdownItem}>
+                            <Text style={styles.breakdownItemLabel}>Mint bonus</Text>
+                            <Text style={[styles.breakdownItemValue, styles.premiumText]}>{valueBreakdown.mint_premium}</Text>
+                          </View>
+                        )}
+                      </View>
+                      {valueBreakdown.key_factors && valueBreakdown.key_factors.length > 0 && (
+                        <View style={styles.keyFactorsSection}>
+                          <Text style={styles.keyFactorsTitle}>Key factors:</Text>
+                          {valueBreakdown.key_factors.map((factor, index) => (
+                            <Text key={index} style={styles.keyFactorItem}>• {factor}</Text>
+                          ))}
+                        </View>
+                      )}
+                    </View>
+                  )}
+
+                  {/* Value Notes */}
+                  {params.value_notes && (
+                    <View style={styles.notesContainer}>
+                      <Text style={styles.notesLabel}>About this Beanie</Text>
+                      <Text style={styles.notesText}>{params.value_notes}</Text>
+                    </View>
+                  )}
+
+                  {/* Value Factors Applied */}
+                  {followUpAnswers && (
+                    <View style={styles.factorsContainer}>
+                      <Text style={styles.factorsTitle}>FACTORS APPLIED</Text>
+                      <View style={styles.factorsGrid}>
+                        {followUpAnswers.condition && (
+                          <View style={styles.factorChip}>
+                            <Text style={styles.factorChipText}>{formatCondition(followUpAnswers.condition)}</Text>
+                          </View>
+                        )}
+                        {followUpAnswers.pellet_type && (
+                          <View style={styles.factorChip}>
+                            <Text style={styles.factorChipText}>{formatPelletType(followUpAnswers.pellet_type)}</Text>
+                          </View>
+                        )}
+                      </View>
+                    </View>
+                  )}
+
+                  {/* Details Row */}
+                  <View style={styles.detailsRow}>
+                    <View style={styles.detailItem}>
+                      <Text style={styles.detailLabel}>Confidence</Text>
+                      <Text style={styles.detailValue}>{params.confidence}</Text>
+                    </View>
+                    <View style={styles.detailDivider} />
+                    <View style={styles.detailItem}>
+                      <Text style={styles.detailLabel}>Tag Visible</Text>
+                      <Text style={styles.detailValue}>
+                        {params.has_visible_hang_tag === 'true' ? 'Yes' : 'No'}
+                      </Text>
+                    </View>
+                  </View>
+                </>
+              )}
+            </View>
+          </View>
         </View>
-        <Pressable
-          style={{ backgroundColor: '#FF00FF', padding: 16, borderRadius: 12, alignItems: 'center', marginTop: 12 }}
-          onPress={() => router.replace('/')}
-        >
-          <Text style={{ color: '#FFF', fontWeight: '600', fontSize: 16 }}>Go Home</Text>
-        </Pressable>
-        <Pressable
-          style={{ backgroundColor: '#00CED1', padding: 16, borderRadius: 12, alignItems: 'center', marginTop: 12 }}
-          onPress={() => router.push('/scan')}
-        >
-          <Text style={{ color: '#FFF', fontWeight: '600', fontSize: 16 }}>Scan Another</Text>
-        </Pressable>
+
+        {/* Action Buttons - plain Views instead of BlurView/LinearGradient */}
+        <View style={styles.buttonContainer}>
+          <Pressable
+            style={({ pressed }) => [styles.primaryButton, pressed && styles.buttonPressed]}
+            onPress={() => router.push('/scan')}
+          >
+            <View style={[styles.primaryButtonGradient, { backgroundColor: MEMPHIS_COLORS.magenta }]}>
+              <Text style={styles.primaryButtonText}>{scanButtonText}</Text>
+            </View>
+          </Pressable>
+
+          <View style={styles.secondaryButtonsRow}>
+            <View style={[styles.secondaryButtonBlur, styles.flexButton]}>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.secondaryButton,
+                  pressed && styles.secondaryButtonPressed,
+                ]}
+                onPress={() => router.push('/collection')}
+              >
+                <Text style={styles.secondaryButtonText}>My Collection</Text>
+              </Pressable>
+            </View>
+          </View>
+
+          {savedToCollection && !isNotBeanie && !isFromCollection && (
+            <View style={styles.savedRow}>
+              <Text style={styles.savedIndicator}>Added to collection</Text>
+              {xpEarnedThisScan > 0 && (
+                <View style={styles.xpEarnedBadge}>
+                  <Text style={styles.xpEarnedText}>+{xpEarnedThisScan} XP</Text>
+                </View>
+              )}
+            </View>
+          )}
+          {isFromCollection && (
+            <Text style={styles.savedIndicator}>Viewing from collection</Text>
+          )}
+        </View>
       </ScrollView>
+
+      {/* No Modal, no certificate */}
     </View>
   );
 }
